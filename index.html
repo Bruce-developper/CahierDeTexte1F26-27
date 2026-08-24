@@ -137,7 +137,6 @@
       color: #f472b6;
     }
 
-    /* Rappel des urgences */
     .urgent-banner {
       width: 100%;
       background: var(--card-bg);
@@ -284,7 +283,6 @@
       margin-bottom: 8px;
     }
 
-    /* Carte de tâche */
     .task-card {
       background: var(--task-bg);
       border-radius: 8px;
@@ -293,7 +291,6 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     }
 
-    /* Couleurs des Matières */
     .task-card.matiere-Francais { border-left-color: #e11d48; }
     .task-card.matiere-Math { border-left-color: #2563eb; }
     .task-card.matiere-ENS-SPC { border-left-color: #0284c7; }
@@ -404,7 +401,6 @@
       z-index: 2;
     }
 
-    /* Modals */
     .modal {
       display: none;
       position: fixed;
@@ -516,7 +512,6 @@
       </div>
     </div>
 
-    <!-- Bannière des urgences / devoirs à venir -->
     <div class="urgent-banner">
       <div class="urgent-title">⚡ Devoirs & Évaluations à venir</div>
       <div class="urgent-list" id="urgentList">
@@ -649,14 +644,14 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
   <script>
-   const firebaseConfig = {
-  apiKey: "AIzaSyDF7Yw-pBNz1lD6TaGa4Voc06xNGUD9N20",
-  authDomain: "cahier-de-texte-1f.firebaseapp.com",
-  projectId: "cahier-de-texte-1f",
-  storageBucket: "cahier-de-texte-1f.firebasestorage.app",
-  messagingSenderId: "172648732465",
-  appId: "1:172648732465:web:67e13608d1c489735e4210"
-};
+    const firebaseConfig = {
+      apiKey: "AIzaSyDF7Yw-pBNz1lD6TaGa4Voc06xNGUD9N20",
+      authDomain: "cahier-de-texte-1f.firebaseapp.com",
+      projectId: "cahier-de-texte-1f",
+      storageBucket: "cahier-de-texte-1f.firebasestorage.app",
+      messagingSenderId: "172648732465",
+      appId: "1:172648732465:web:67e13608d1c489735e4210"
+    };
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
@@ -789,7 +784,10 @@
     }
 
     function formatDateKey(date) {
-      return date.toISOString().split('T')[0];
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
     }
 
     function getVacancesObject(dateKey) {
@@ -859,10 +857,8 @@
 
       const userSpes = getUserSpes() || [];
 
-      // Filtrer les tâches non complétées après ou aujourd'hui
       const upcoming = currentTasks.filter(t => {
         if (t.completed || t.dateKey < todayKey || t.type === 'info') return false;
-        // Vérifier si c'est du tronc commun ou dans ses spés
         const isTronc = troncCommun.some(tc => tc.code === t.matiere);
         const isUserSpe = userSpes.includes(t.matiere);
         return isTronc || isUserSpe || !t.matiere;
@@ -874,7 +870,8 @@
       }
 
       upcoming.forEach(task => {
-        const d = new Date(task.dateKey);
+        const parts = task.dateKey.split('-');
+        const d = new Date(parts[0], parts[1] - 1, parts[2]);
         const dateFormatted = d.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
         
         const item = document.createElement('div');
