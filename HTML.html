@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cahier de Texte - 1F</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    body {
+      /* Fond style PS5 avec spot de lumière volumétrique en haut à gauche */
+      background: 
+        radial-gradient(ellipse 70% 60% at 10% 0%, rgba(212, 175, 120, 0.25) 0%, rgba(120, 90, 60, 0.12) 40%, transparent 80%),
+        radial-gradient(ellipse 50% 50% at 90% 90%, rgba(30, 40, 60, 0.4) 0%, transparent 80%),
+        linear-gradient(145deg, #12141a 0%, #0a0b0e 100%);
+      margin: 0;
+      padding: 10px 20px 20px;
+      color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Effet d'ambiance lumineuse diffuse */
+    body::before {
+      content: '';
+      position: absolute;
+      top: -150px;
+      left: -150px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(230, 190, 138, 0.18) 0%, transparent 70%);
+      pointer-events: none;
+      filter: blur(40px);
+    }
+
+    /* Container principal centré */
+    .app-container {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: auto 0;
+      z-index: 1;
+    }
+
+    /* En-tête remonté */
+    .header-container {
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 20px;
+      width: 100%;
+    }
+    h1 {
+      color: #ffffff;
+      margin: 0 0 8px 0;
+      font-size: 2.2em;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+    .info-pf {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #38bdf8;
+      padding: 6px 16px;
+      border-radius: 20px;
+      display: inline-block;
+      font-size: 0.88em;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    /* Navigation */
+    .nav-week {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 20px;
+      background: rgba(20, 25, 35, 0.65);
+      backdrop-filter: blur(16px);
+      padding: 12px 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
+    .btn-nav {
+      background: #6366f1;
+      color: #ffffff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.85em;
+      transition: all 0.2s;
+    }
+    .btn-nav:hover {
+      background: #4f46e5;
+      transform: translateY(-1px);
+    }
+    .current-week-title {
+      font-size: 1em;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    /* Grille d'emploi du temps */
+    .timetable {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      width: 100%;
+    }
+    @media (max-width: 960px) {
+      .timetable { grid-template-columns: 1fr; }
+    }
+
+    .day-column {
+      background: rgba(22, 28, 40, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Styles jours off */
+    .day-column.off-day {
+      background: rgba(12, 16, 24, 0.6);
+      border-color: rgba(255, 255, 255, 0.04);
+    }
+    .day-column.off-day .day-header {
+      background: rgba(35, 45, 60, 0.4);
+    }
+
+    .day-header {
+      background: rgba(40, 50, 70, 0.6);
+      padding: 14px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .day-name {
+      font-size: 1em;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .day-date {
+      font-size: 0.8em;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    .task-list {
+      padding: 12px;
+      flex-grow: 1;
+      min-height: 250px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .off-banner {
+      margin: auto 0;
+      text-align: center;
+      color: #94a3b8;
+      font-weight: 600;
+      font-size: 0.9em;
+      padding: 16px 8px;
+    }
+    .off-banner span {
+      display: block;
+      font-size: 2em;
+      margin-bottom: 8px;
+    }
+
+    /* Carte de tâche */
+    .task-card {
+      background: rgba(10, 14, 22, 0.85);
+      border-radius: 8px;
+      padding: 12px;
+      border-left: 4px solid #94a3b8;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+    .task-card.devoir { border-left-color: #f59e0b; }
+    .task-card.controle { border-left-color: #ef4444; }
+    .task-card.info { border-left-color: #3b82f6; }
+
+    .task-type {
+      font-size: 0.7em;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .task-card.devoir .task-type { color: #fbbf24; }
+    .task-card.controle .task-type { color: #f87171; }
+    .task-card.info .task-type { color: #60a5fa; }
+
+    .task-title {
+      font-size: 0.95em;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+    .task-desc {
+      font-size: 0.85em;
+      color: #cbd5e1;
+      white-space: pre-wrap;
+      line-height: 1.4;
+    }
+    .task-card.completed {
+      opacity: 0.4;
+    }
+    .task-card.completed .task-title {
+      text-decoration: line-through;
+    }
+    
+    .task-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .btn-action {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.75em;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+    .btn-action:hover { color: #ffffff; }
+
+    /* Bouton ajouter */
+    .add-btn {
+      background: rgba(99, 102, 241, 0.15);
+      color: #818cf8;
+      border: 1px dashed rgba(129, 140, 248, 0.4);
+      padding: 10px;
+      width: calc(100% - 24px);
+      margin: 0 12px 12px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85em;
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+    .add-btn:hover {
+      background: rgba(99, 102, 241, 0.3);
+      color: #ffffff;
+    }
+    .add-btn:disabled {
+      display: none;
+    }
+
+    /* Signature */
+    .author-signature {
+      position: fixed;
+      bottom: 14px;
+      right: 18px;
+      font-size: 0.8em;
+      font-weight: 800;
+      color: #818cf8;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Modal Form */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(10, 12, 18, 0.85);
+      backdrop-filter: blur(8px);
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+    .modal-content {
+      background: #1a202c;
+      padding: 24px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 400px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 30px rgba(0, 0, 0, 0.6);
+    }
+    .modal-content h2 {
+      margin-top: 0;
+      font-size: 1.2em;
+      color: #ffffff;
+    }
+    .form-group { margin-bottom: 14px; }
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.8em;
+      font-weight: 700;
+      color: #cbd5e1;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      color: #ffffff;
+      font-size: 0.9em;
+      outline: none;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: #6366f1;
+    }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .btn-cancel {
+      background: #334155;
+      color: #ffffff;
+      border: none;
+      padding: 9px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85em;
+      font-weight: 600;
+    }
+    .btn-save {
+      background: #6366f1;
+      color: #ffffff;
+      border: none;
+      padding: 9px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85em;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <div class="header-container">
+      <h1>Cahier de Texte</h1>
+      <div class="info-pf" id="pfInfoBox">Chargement...</div>
+    </div>
+
+    <div class="nav-week">
+      <button class="btn-nav" onclick="changeWeek(-1)">❮ Semaine précédente</button>
+      <div class="current-week-title" id="weekRangeTitle">...</div>
+      <button class="btn-nav" onclick="changeWeek(1)">Semaine suivante ❯</button>
+    </div>
+
+    <div class="timetable">
+      <div class="day-column" data-dayindex="0">
+        <div class="day-header">
+          <div class="day-name">Lundi</div>
+          <div class="day-date" id="date-0">-</div>
+        </div>
+        <div class="task-list"></div>
+        <button class="add-btn" id="add-btn-0" onclick="openModal(0)">+ Ajouter une tâche</button>
+      </div>
+
+      <div class="day-column" data-dayindex="1">
+        <div class="day-header">
+          <div class="day-name">Mardi</div>
+          <div class="day-date" id="date-1">-</div>
+        </div>
+        <div class="task-list"></div>
+        <button class="add-btn" id="add-btn-1" onclick="openModal(1)">+ Ajouter une tâche</button>
+      </div>
+
+      <div class="day-column" data-dayindex="2">
+        <div class="day-header">
+          <div class="day-name">Mercredi</div>
+          <div class="day-date" id="date-2">-</div>
+        </div>
+        <div class="task-list"></div>
+        <button class="add-btn" id="add-btn-2" onclick="openModal(2)">+ Ajouter une tâche</button>
+      </div>
+
+      <div class="day-column" data-dayindex="3">
+        <div class="day-header">
+          <div class="day-name">Jeudi</div>
+          <div class="day-date" id="date-3">-</div>
+        </div>
+        <div class="task-list"></div>
+        <button class="add-btn" id="add-btn-3" onclick="openModal(3)">+ Ajouter une tâche</button>
+      </div>
+
+      <div class="day-column" data-dayindex="4">
+        <div class="day-header">
+          <div class="day-name">Vendredi</div>
+          <div class="day-date" id="date-4">-</div>
+        </div>
+        <div class="task-list"></div>
+        <button class="add-btn" id="add-btn-4" onclick="openModal(4)">+ Ajouter une tâche</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="author-signature">BRUCE DOOM</div>
+
+  <div class="modal" id="taskModal">
+    <div class="modal-content">
+      <h2>Nouvelle entrée</h2>
+      <form id="taskForm">
+        <input type="hidden" id="selectedDate">
+        <div class="form-group">
+          <label for="taskType">Catégorie</label>
+          <select id="taskType">
+            <option value="devoir">Devoir à faire</option>
+            <option value="controle">Évaluation / Examen</option>
+            <option value="info">Information</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="taskTitle">Matière / Intitulé</label>
+          <input type="text" id="taskTitle" required placeholder="Ex: Mathématiques">
+        </div>
+        <div class="form-group">
+          <label for="taskDesc">Consignes</label>
+          <textarea id="taskDesc" rows="3" placeholder="Ex: Exercices p. 52"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" onclick="closeModal()">Annuler</button>
+          <button type="submit" class="btn-save">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "VOTRE_API_KEY",
+      authDomain: "VOTRE_PROJECT.firebaseapp.com",
+      projectId: "VOTRE_PROJECT_ID",
+      storageBucket: "VOTRE_PROJECT.appspot.com",
+      messagingSenderId: "xxxxxx",
+      appId: "xxxxxx"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    let currentMonday = getMonday(new Date());
+    let currentTasks = [];
+
+    const vacancesPF = [
+      { name: "Vacances de Septembre", icon: "🌴", start: "2026-09-14", end: "2026-09-20" },
+      { name: "Vacances d'Octobre", icon: "🏖️", start: "2026-10-26", end: "2026-11-08" },
+      { name: "Vacances de Noël", icon: "🎄", start: "2026-12-14", end: "2027-01-10" },
+      { name: "Vacances de Février", icon: "🌺", start: "2027-02-15", end: "2027-02-21" },
+      { name: "Vacances de Pâques", icon: "🍫", start: "2027-03-29", end: "2027-04-11" },
+      { name: "Vacances de Mai", icon: "🏝️", start: "2027-05-17", end: "2027-05-23" },
+      { name: "Grandes Vacances", icon: "☀️", start: "2027-07-05", end: "2027-08-22" }
+    ];
+
+    const feriesPF = {
+      "2026-08-15": { name: "Assomption", icon: "⛪" },
+      "2026-11-01": { name: "Toussaint", icon: "🕯️" },
+      "2026-11-11": { name: "Armistice 1918", icon: "🕊️" },
+      "2026-11-20": { name: "Matari'i - Fête de l'Abondance", icon: "🌺" },
+      "2026-12-25": { name: "Noël", icon: "🎄" },
+      "2027-01-01": { name: "Jour de l'An", icon: "🎉" },
+      "2027-03-05": { name: "Arrivée de l'Évangile", icon: "✝️" },
+      "2027-03-26": { name: "Vendredi Saint", icon: "✝️" },
+      "2027-03-28": { name: "Pâques", icon: "🥚" },
+      "2027-03-29": { name: "Lundi de Pâques", icon: "🍫" },
+      "2027-05-01": { name: "Fête du Travail", icon: "🛠️" },
+      "2027-05-06": { name: "Ascension", icon: "✝️" },
+      "2027-05-08": { name: "Victoire 1945", icon: "🕊️" },
+      "2027-05-16": { name: "Pentecôte", icon: "🕊️" },
+      "2027-05-17": { name: "Lundi de Pentecôte", icon: "🕊️" },
+      "2027-06-29": { name: "Fête de l'Autonomie", icon: "🇵🇫" },
+      "2027-07-14": { name: "Fête Nationale", icon: "🎆" }
+    };
+
+    function getMonday(d) {
+      d = new Date(d);
+      const day = d.getDay();
+      const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+      return new Date(d.setDate(diff));
+    }
+
+    function formatDateKey(date) {
+      return date.toISOString().split('T')[0];
+    }
+
+    function getVacancesObject(dateKey) {
+      for (let v of vacancesPF) {
+        if (dateKey >= v.start && dateKey <= v.end) {
+          return v;
+        }
+      }
+      return null;
+    }
+
+    function changeWeek(direction) {
+      currentMonday.setDate(currentMonday.getDate() + (direction * 7));
+      renderTimetable();
+    }
+
+    function renderTimetable() {
+      const daysOfWeek = [];
+      for (let i = 0; i < 5; i++) {
+        const day = new Date(currentMonday);
+        day.setDate(currentMonday.getDate() + i);
+        daysOfWeek.push(day);
+      }
+
+      const options = { day: 'numeric', month: 'long' };
+      const startStr = daysOfWeek[0].toLocaleDateString('fr-FR', options);
+      const endStr = daysOfWeek[4].toLocaleDateString('fr-FR', options);
+      document.getElementById('weekRangeTitle').innerText = `Semaine du ${startStr} au ${endStr}`;
+
+      let countSchoolDays = 0;
+      let currentVacation = null;
+
+      daysOfWeek.forEach((date, index) => {
+        const dateKey = formatDateKey(date);
+        const dateStr = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+        document.getElementById(`date-${index}`).innerText = dateStr;
+
+        const vacObj = getVacancesObject(dateKey);
+        if (vacObj) {
+          currentVacation = vacObj;
+        } else if (!feriesPF[dateKey]) {
+          countSchoolDays++;
+        }
+      });
+
+      const pfInfoBox = document.getElementById('pfInfoBox');
+      if (countSchoolDays === 0 && currentVacation) {
+        pfInfoBox.innerText = `${currentVacation.icon} Polynésie Française — ${currentVacation.name}`;
+      } else {
+        pfInfoBox.innerText = `📍 Polynésie Française — Année Scolaire 2026-2027`;
+      }
+
+      renderTasks();
+    }
+
+    db.collection("tasks").onSnapshot((snapshot) => {
+      currentTasks = [];
+      snapshot.forEach((doc) => {
+        currentTasks.push({ id: doc.id, ...doc.data() });
+      });
+      renderTasks();
+    });
+
+    function renderTasks() {
+      for (let i = 0; i < 5; i++) {
+        const dayDate = new Date(currentMonday);
+        dayDate.setDate(currentMonday.getDate() + i);
+        const dateKey = formatDateKey(dayDate);
+
+        const col = document.querySelector(`.day-column[data-dayindex="${i}"]`);
+        const container = col.querySelector('.task-list');
+        const addBtn = document.getElementById(`add-btn-${i}`);
+
+        container.innerHTML = '';
+        const vacObj = getVacancesObject(dateKey);
+        const ferieObj = feriesPF[dateKey];
+
+        if (vacObj) {
+          col.classList.add('off-day');
+          container.innerHTML = `<div class="off-banner"><span>${vacObj.icon}</span>${vacObj.name}</div>`;
+          addBtn.disabled = true;
+        } else if (ferieObj) {
+          col.classList.add('off-day');
+          container.innerHTML = `<div class="off-banner"><span>${ferieObj.icon}</span>Férié : ${ferieObj.name}</div>`;
+          addBtn.disabled = true;
+        } else {
+          col.classList.remove('off-day');
+          addBtn.disabled = false;
+
+          const dayTasks = currentTasks.filter(t => t.dateKey === dateKey);
+          dayTasks.forEach(task => {
+            const card = document.createElement('div');
+            card.className = `task-card ${task.type} ${task.completed ? 'completed' : ''}`;
+            card.innerHTML = `
+              <div class="task-type">${task.type}</div>
+              <div class="task-title">${task.title}</div>
+              <div class="task-desc">${task.desc}</div>
+              <div class="task-actions">
+                <button class="btn-action" onclick="toggleTask('${task.id}', ${task.completed})">${task.completed ? 'Rétablir' : 'Fait'}</button>
+                <button class="btn-action" onclick="deleteTask('${task.id}')">Supprimer</button>
+              </div>
+            `;
+            container.appendChild(card);
+          });
+        }
+      }
+    }
+
+    function openModal(dayIndex) {
+      const selectedDate = new Date(currentMonday);
+      selectedDate.setDate(currentMonday.getDate() + dayIndex);
+      document.getElementById('selectedDate').value = formatDateKey(selectedDate);
+      document.getElementById('taskForm').reset();
+      document.getElementById('taskModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('taskModal').style.display = 'none';
+    }
+
+    document.getElementById('taskForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      db.collection("tasks").add({
+        dateKey: document.getElementById('selectedDate').value,
+        type: document.getElementById('taskType').value,
+        title: document.getElementById('taskTitle').value,
+        desc: document.getElementById('taskDesc').value,
+        completed: false
+      });
+      closeModal();
+    });
+
+    function toggleTask(id, currentStatus) {
+      db.collection("tasks").doc(id).update({ completed: !currentStatus });
+    }
+
+    function deleteTask(id) {
+      db.collection("tasks").doc(id).delete();
+    }
+
+    renderTimetable();
+  </script>
+</body>
+</html>
