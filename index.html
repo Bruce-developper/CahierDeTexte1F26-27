@@ -12,15 +12,40 @@
       box-sizing: border-box;
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
+
+    :root {
+      --bg-gradient: radial-gradient(ellipse 70% 60% at 10% 0%, rgba(212, 175, 120, 0.25) 0%, rgba(120, 90, 60, 0.12) 40%, transparent 80%),
+                      radial-gradient(ellipse 50% 50% at 90% 90%, rgba(30, 40, 60, 0.4) 0%, transparent 80%),
+                      linear-gradient(145deg, #12141a 0%, #0a0b0e 100%);
+      --text-color: #f8fafc;
+      --card-bg: rgba(22, 28, 40, 0.8);
+      --task-bg: rgba(10, 14, 22, 0.85);
+      --nav-bg: rgba(20, 25, 35, 0.65);
+      --modal-bg: #1a202c;
+      --input-bg: #0f172a;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --title-color: #ffffff;
+      --subtext-color: #94a3b8;
+    }
+
+    body.light-mode {
+      --bg-gradient: linear-gradient(145deg, #e2e8f0 0%, #f1f5f9 100%);
+      --text-color: #0f172a;
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --task-bg: #ffffff;
+      --nav-bg: rgba(255, 255, 255, 0.8);
+      --modal-bg: #ffffff;
+      --input-bg: #f8fafc;
+      --border-color: rgba(0, 0, 0, 0.1);
+      --title-color: #0f172a;
+      --subtext-color: #475569;
+    }
+
     body {
-      /* Fond style PS5 avec spot de lumière volumétrique en haut à gauche */
-      background: 
-        radial-gradient(ellipse 70% 60% at 10% 0%, rgba(212, 175, 120, 0.25) 0%, rgba(120, 90, 60, 0.12) 40%, transparent 80%),
-        radial-gradient(ellipse 50% 50% at 90% 90%, rgba(30, 40, 60, 0.4) 0%, transparent 80%),
-        linear-gradient(145deg, #12141a 0%, #0a0b0e 100%);
+      background: var(--bg-gradient);
       margin: 0;
       padding: 10px 20px 20px;
-      color: #f8fafc;
+      color: var(--text-color);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -28,9 +53,9 @@
       min-height: 100vh;
       position: relative;
       overflow-x: hidden;
+      transition: background 0.3s, color 0.3s;
     }
 
-    /* Effet d'ambiance lumineuse diffuse */
     body::before {
       content: '';
       position: absolute;
@@ -43,7 +68,6 @@
       filter: blur(40px);
     }
 
-    /* Container principal centré */
     .app-container {
       width: 100%;
       max-width: 1200px;
@@ -54,47 +78,126 @@
       z-index: 1;
     }
 
-    /* En-tête remonté */
     .header-container {
       text-align: center;
       margin-top: 0;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       width: 100%;
+      position: relative;
     }
     h1 {
-      color: #ffffff;
+      color: var(--title-color);
       margin: 0 0 8px 0;
       font-size: 2.2em;
       font-weight: 800;
       letter-spacing: -0.02em;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
     .info-pf {
       background: rgba(255, 255, 255, 0.08);
       backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border: 1px solid var(--border-color);
       color: #38bdf8;
       padding: 6px 16px;
       border-radius: 20px;
       display: inline-block;
       font-size: 0.88em;
       font-weight: 600;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
 
-    /* Navigation */
+    .header-actions {
+      position: absolute;
+      right: 0;
+      top: 0;
+      display: flex;
+      gap: 8px;
+    }
+
+    .header-btn {
+      background: var(--nav-bg);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      padding: 8px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.8em;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+    .header-btn:hover {
+      transform: scale(1.05);
+    }
+    .header-btn.padlet-btn {
+      background: rgba(236, 72, 153, 0.2);
+      border-color: rgba(236, 72, 153, 0.4);
+      color: #f472b6;
+    }
+
+    /* Rappel des urgences */
+    .urgent-banner {
+      width: 100%;
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    .urgent-title {
+      font-size: 0.85em;
+      font-weight: 800;
+      color: #f87171;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .urgent-list {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .urgent-item {
+      background: var(--task-bg);
+      border: 1px solid var(--border-color);
+      border-left: 4px solid #f87171;
+      border-radius: 6px;
+      padding: 8px 12px;
+      min-width: 200px;
+      font-size: 0.82em;
+      flex-shrink: 0;
+    }
+    .urgent-item .urgent-date {
+      color: var(--subtext-color);
+      font-size: 0.85em;
+      margin-top: 2px;
+    }
+    .urgent-empty {
+      font-size: 0.85em;
+      color: var(--subtext-color);
+      font-style: italic;
+    }
+
     .nav-week {
       display: flex;
       justify-content: space-between;
       align-items: center;
       width: 100%;
       margin-bottom: 20px;
-      background: rgba(20, 25, 35, 0.65);
+      background: var(--nav-bg);
       backdrop-filter: blur(16px);
       padding: 12px 20px;
       border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     }
     .btn-nav {
       background: #6366f1;
@@ -114,10 +217,9 @@
     .current-week-title {
       font-size: 1em;
       font-weight: 700;
-      color: #ffffff;
+      color: var(--title-color);
     }
 
-    /* Grille d'emploi du temps */
     .timetable {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -126,42 +228,36 @@
     }
     @media (max-width: 960px) {
       .timetable { grid-template-columns: 1fr; }
+      .header-actions { position: static; margin-top: 10px; justify-content: center; }
     }
 
     .day-column {
-      background: rgba(22, 28, 40, 0.8);
+      background: var(--card-bg);
       backdrop-filter: blur(10px);
       border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
       display: flex;
       flex-direction: column;
       overflow: hidden;
     }
 
-    /* Styles jours off */
-    .day-column.off-day {
-      background: rgba(12, 16, 24, 0.6);
-      border-color: rgba(255, 255, 255, 0.04);
-    }
-    .day-column.off-day .day-header {
-      background: rgba(35, 45, 60, 0.4);
-    }
+    .day-column.off-day { opacity: 0.7; }
 
     .day-header {
-      background: rgba(40, 50, 70, 0.6);
+      background: rgba(40, 50, 70, 0.3);
       padding: 14px;
       text-align: left;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid var(--border-color);
     }
     .day-name {
       font-size: 1em;
       font-weight: 700;
-      color: #ffffff;
+      color: var(--title-color);
     }
     .day-date {
       font-size: 0.8em;
-      color: #94a3b8;
+      color: var(--subtext-color);
       margin-top: 2px;
     }
 
@@ -177,7 +273,7 @@
     .off-banner {
       margin: auto 0;
       text-align: center;
-      color: #94a3b8;
+      color: var(--subtext-color);
       font-weight: 600;
       font-size: 0.9em;
       padding: 16px 8px;
@@ -190,14 +286,25 @@
 
     /* Carte de tâche */
     .task-card {
-      background: rgba(10, 14, 22, 0.85);
+      background: var(--task-bg);
       border-radius: 8px;
       padding: 12px;
-      border-left: 4px solid #94a3b8;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      border-left: 5px solid #94a3b8;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     }
-    .task-card.devoir { border-left-color: #f59e0b; }
-    .task-card.controle { border-left-color: #ef4444; }
+
+    /* Couleurs des Matières */
+    .task-card.matiere-Math { border-left-color: #2563eb; }
+    .task-card.matiere-ENS-SPC { border-left-color: #0284c7; }
+    .task-card.matiere-ENS-SVT { border-left-color: #059669; }
+    .task-card.matiere-HG { border-left-color: #d97706; }
+    .task-card.matiere-EMC { border-left-color: #b45309; }
+    .task-card.matiere-Anglais { border-left-color: #dc2626; }
+    .task-card.matiere-SES { border-left-color: #7c3aed; }
+    .task-card.matiere-AMC { border-left-color: #9333ea; }
+    .task-card.matiere-Spe-SPC { border-left-color: #0891b2; }
+    .task-card.matiere-Spe-SVT { border-left-color: #16a34a; }
+    .task-card.matiere-HGGSP { border-left-color: #ea580c; }
     .task-card.info { border-left-color: #3b82f6; }
 
     .task-type {
@@ -206,29 +313,45 @@
       letter-spacing: 0.05em;
       text-transform: uppercase;
       margin-bottom: 4px;
+      color: #60a5fa;
     }
     .task-card.devoir .task-type { color: #fbbf24; }
     .task-card.controle .task-type { color: #f87171; }
-    .task-card.info .task-type { color: #60a5fa; }
 
     .task-title {
       font-size: 0.95em;
       font-weight: 700;
-      color: #ffffff;
+      color: var(--title-color);
       margin-bottom: 4px;
     }
     .task-desc {
       font-size: 0.85em;
-      color: #cbd5e1;
+      color: var(--text-color);
+      opacity: 0.9;
       white-space: pre-wrap;
       line-height: 1.4;
     }
-    .task-card.completed {
-      opacity: 0.4;
+
+    .task-link {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 4px 10px;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #38bdf8;
+      border-radius: 6px;
+      font-size: 0.75em;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
     }
-    .task-card.completed .task-title {
-      text-decoration: line-through;
+    .task-link:hover {
+      background: rgba(56, 189, 248, 0.3);
+      color: #ffffff;
     }
+
+    .task-card.completed { opacity: 0.4; }
+    .task-card.completed .task-title { text-decoration: line-through; }
     
     .task-actions {
       display: flex;
@@ -236,19 +359,18 @@
       gap: 10px;
       margin-top: 10px;
       padding-top: 8px;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-top: 1px solid var(--border-color);
     }
     .btn-action {
       background: none;
       border: none;
       cursor: pointer;
       font-size: 0.75em;
-      color: #94a3b8;
+      color: var(--subtext-color);
       font-weight: 600;
     }
-    .btn-action:hover { color: #ffffff; }
+    .btn-action:hover { color: var(--title-color); }
 
-    /* Bouton ajouter */
     .add-btn {
       background: rgba(99, 102, 241, 0.15);
       color: #818cf8;
@@ -266,11 +388,8 @@
       background: rgba(99, 102, 241, 0.3);
       color: #ffffff;
     }
-    .add-btn:disabled {
-      display: none;
-    }
+    .add-btn:disabled { display: none; }
 
-    /* Signature */
     .author-signature {
       position: fixed;
       bottom: 14px;
@@ -284,7 +403,7 @@
       z-index: 2;
     }
 
-    /* Modal Form */
+    /* Modals */
     .modal {
       display: none;
       position: fixed;
@@ -296,40 +415,65 @@
       z-index: 10;
     }
     .modal-content {
-      background: #1a202c;
+      background: var(--modal-bg);
       padding: 24px;
       border-radius: 12px;
       width: 100%;
-      max-width: 400px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      max-width: 420px;
+      border: 1px solid var(--border-color);
       box-shadow: 0 20px 30px rgba(0, 0, 0, 0.6);
     }
     .modal-content h2 {
       margin-top: 0;
       font-size: 1.2em;
-      color: #ffffff;
+      color: var(--title-color);
+    }
+    .modal-content p {
+      font-size: 0.85em;
+      color: var(--subtext-color);
+      margin-bottom: 15px;
     }
     .form-group { margin-bottom: 14px; }
+    .form-group.hidden { display: none; }
     .form-group label {
       display: block;
       margin-bottom: 6px;
       font-size: 0.8em;
       font-weight: 700;
-      color: #cbd5e1;
+      color: var(--subtext-color);
     }
     .form-group input, .form-group select, .form-group textarea {
       width: 100%;
       padding: 10px;
-      background: #0f172a;
-      border: 1px solid #334155;
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
       border-radius: 6px;
-      color: #ffffff;
+      color: var(--title-color);
       font-size: 0.9em;
       outline: none;
     }
     .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
       border-color: #6366f1;
     }
+    
+    .spe-checkboxes {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+    .spe-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--input-bg);
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      cursor: pointer;
+    }
+    .spe-option input { width: auto; }
+
     .modal-actions {
       display: flex;
       justify-content: flex-end;
@@ -364,6 +508,19 @@
     <div class="header-container">
       <h1>Cahier de Texte</h1>
       <div class="info-pf" id="pfInfoBox">Chargement...</div>
+      <div class="header-actions">
+        <a href="https://padlet.com/iris_joussin1/padlet-de-la-1ere-f-dgu45v9kkx2egjch" target="_blank" class="header-btn padlet-btn">📋 Padlet 1F</a>
+        <button class="header-btn" onclick="openSpeModal()">🎓 Mes Spés</button>
+        <button class="header-btn" onclick="toggleTheme()">⚙️ Thème</button>
+      </div>
+    </div>
+
+    <!-- Bannière des urgences / devoirs à venir -->
+    <div class="urgent-banner">
+      <div class="urgent-title">⚡ Devoirs & Évaluations à venir</div>
+      <div class="urgent-list" id="urgentList">
+        <div class="urgent-empty">Aucun devoir à venir.</div>
+      </div>
     </div>
 
     <div class="nav-week">
@@ -422,32 +579,68 @@
 
   <div class="author-signature">BRUCE DOOM</div>
 
+  <!-- Modal Tâche -->
   <div class="modal" id="taskModal">
     <div class="modal-content">
       <h2>Nouvelle entrée</h2>
       <form id="taskForm">
         <input type="hidden" id="selectedDate">
+        
         <div class="form-group">
           <label for="taskType">Catégorie</label>
-          <select id="taskType">
+          <select id="taskType" onchange="checkMatiereVisibility()">
             <option value="devoir">Devoir à faire</option>
             <option value="controle">Évaluation / Examen</option>
             <option value="info">Information</option>
           </select>
         </div>
-        <div class="form-group">
-          <label for="taskTitle">Matière / Intitulé</label>
-          <input type="text" id="taskTitle" required placeholder="Ex: Mathématiques">
+
+        <div class="form-group" id="matiereGroup">
+          <label for="taskMatiere">Matière</label>
+          <select id="taskMatiere"></select>
         </div>
+
+        <div class="form-group">
+          <label for="taskTitle">Intitulé / Titre</label>
+          <input type="text" id="taskTitle" required placeholder="Ex: Chapitre 2 - Exercices">
+        </div>
+
         <div class="form-group">
           <label for="taskDesc">Consignes</label>
           <textarea id="taskDesc" rows="3" placeholder="Ex: Exercices p. 52"></textarea>
         </div>
+
+        <div class="form-group">
+          <label for="taskLink">Lien utile (optionnel)</label>
+          <input type="url" id="taskLink" placeholder="https://docs.google.com/...">
+        </div>
+
         <div class="modal-actions">
           <button type="button" class="btn-cancel" onclick="closeModal()">Annuler</button>
           <button type="submit" class="btn-save">Enregistrer</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- Modal Première Visite / Choix Spés -->
+  <div class="modal" id="speModal">
+    <div class="modal-content">
+      <h2>🎓 Tes Spécialités</h2>
+      <p>Sélectionne les spécialités que tu suis cette année pour personnaliser ton cahier de texte :</p>
+      
+      <div class="spe-checkboxes">
+        <label class="spe-option"><input type="checkbox" value="Math" class="spe-check"> Mathématiques</label>
+        <label class="spe-option"><input type="checkbox" value="Spé SPC" class="spe-check"> Spé SPC</label>
+        <label class="spe-option"><input type="checkbox" value="Spé SVT" class="spe-check"> Spé SVT</label>
+        <label class="spe-option"><input type="checkbox" value="SES" class="spe-check"> SES</label>
+        <label class="spe-option"><input type="checkbox" value="HGGSP" class="spe-check"> HGGSP</label>
+        <label class="spe-option"><input type="checkbox" value="AMC" class="spe-check"> AMC</label>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-save" onclick="saveUserSpes()">Valider mes choix</button>
+      </div>
     </div>
   </div>
 
@@ -469,6 +662,92 @@
 
     let currentMonday = getMonday(new Date());
     let currentTasks = [];
+
+    const troncCommun = [
+      { code: "ENS SPC", label: "ENS SPC" },
+      { code: "ENS SVT", label: "ENS SVT" },
+      { code: "HG", label: "Histoire-Géo" },
+      { code: "EMC", label: "EMC" },
+      { code: "Anglais", label: "Anglais" }
+    ];
+
+    const toutesLesSpes = [
+      { code: "Math", label: "Maths" },
+      { code: "Spé SPC", label: "Spé SPC" },
+      { code: "Spé SVT", label: "Spé SVT" },
+      { code: "SES", label: "SES" },
+      { code: "HGGSP", label: "HGGSP" },
+      { code: "AMC", label: "AMC" }
+    ];
+
+    function toggleTheme() {
+      document.body.classList.toggle('light-mode');
+    }
+
+    function getUserSpes() {
+      const saved = localStorage.getItem('user_spes');
+      return saved ? JSON.parse(saved) : null;
+    }
+
+    function checkFirstVisit() {
+      const spes = getUserSpes();
+      if (!spes) {
+        openSpeModal();
+      } else {
+        updateMatiereDropdown();
+      }
+    }
+
+    function openSpeModal() {
+      const userSpes = getUserSpes() || [];
+      document.querySelectorAll('.spe-check').forEach(chk => {
+        chk.checked = userSpes.includes(chk.value);
+      });
+      document.getElementById('speModal').style.display = 'flex';
+    }
+
+    function saveUserSpes() {
+      const selected = [];
+      document.querySelectorAll('.spe-check:checked').forEach(chk => {
+        selected.push(chk.value);
+      });
+      localStorage.setItem('user_spes', JSON.stringify(selected));
+      document.getElementById('speModal').style.display = 'none';
+      updateMatiereDropdown();
+      renderTasks();
+    }
+
+    function updateMatiereDropdown() {
+      const userSpes = getUserSpes() || [];
+      const select = document.getElementById('taskMatiere');
+      select.innerHTML = '';
+
+      troncCommun.forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m.code;
+        opt.textContent = m.label;
+        select.appendChild(opt);
+      });
+
+      toutesLesSpes.forEach(m => {
+        if (userSpes.includes(m.code)) {
+          const opt = document.createElement('option');
+          opt.value = m.code;
+          opt.textContent = m.label;
+          select.appendChild(opt);
+        }
+      });
+    }
+
+    function checkMatiereVisibility() {
+      const type = document.getElementById('taskType').value;
+      const matiereGroup = document.getElementById('matiereGroup');
+      if (type === 'info') {
+        matiereGroup.classList.add('hidden');
+      } else {
+        matiereGroup.classList.remove('hidden');
+      }
+    }
 
     const vacancesPF = [
       { name: "Vacances de Septembre", icon: "🌴", start: "2026-09-14", end: "2026-09-20" },
@@ -513,9 +792,7 @@
 
     function getVacancesObject(dateKey) {
       for (let v of vacancesPF) {
-        if (dateKey >= v.start && dateKey <= v.end) {
-          return v;
-        }
+        if (dateKey >= v.start && dateKey <= v.end) return v;
       }
       return null;
     }
@@ -570,7 +847,44 @@
         currentTasks.push({ id: doc.id, ...doc.data() });
       });
       renderTasks();
+      renderUrgencies();
     });
+
+    function renderUrgencies() {
+      const todayKey = formatDateKey(new Date());
+      const urgentList = document.getElementById('urgentList');
+      urgentList.innerHTML = '';
+
+      const userSpes = getUserSpes() || [];
+
+      // Filtrer les tâches non complétées après ou aujourd'hui
+      const upcoming = currentTasks.filter(t => {
+        if (t.completed || t.dateKey < todayKey || t.type === 'info') return false;
+        // Vérifier si c'est du tronc commun ou dans ses spés
+        const isTronc = troncCommun.some(tc => tc.code === t.matiere);
+        const isUserSpe = userSpes.includes(t.matiere);
+        return isTronc || isUserSpe || !t.matiere;
+      }).sort((a, b) => a.dateKey.localeCompare(b.dateKey)).slice(0, 5);
+
+      if (upcoming.length === 0) {
+        urgentList.innerHTML = `<div class="urgent-empty">Aucun devoir urgent à venir.</div>`;
+        return;
+      }
+
+      upcoming.forEach(task => {
+        const d = new Date(task.dateKey);
+        const dateFormatted = d.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
+        
+        const item = document.createElement('div');
+        item.className = 'urgent-item';
+        const labelMat = task.matiere ? `[${task.matiere}] ` : '';
+        item.innerHTML = `
+          <strong>${labelMat}${task.title}</strong>
+          <div class="urgent-date">📅 ${dateFormatted}</div>
+        `;
+        urgentList.appendChild(item);
+      });
+    }
 
     function renderTasks() {
       for (let i = 0; i < 5; i++) {
@@ -601,11 +915,26 @@
           const dayTasks = currentTasks.filter(t => t.dateKey === dateKey);
           dayTasks.forEach(task => {
             const card = document.createElement('div');
-            card.className = `task-card ${task.type} ${task.completed ? 'completed' : ''}`;
+            
+            let matiereClass = '';
+            if (task.matiere) {
+              matiereClass = `matiere-${task.matiere.replace(/\s+/g, '-')}`;
+            }
+
+            card.className = `task-card ${task.type} ${matiereClass} ${task.completed ? 'completed' : ''}`;
+            
+            const displayTitle = task.matiere ? `[${task.matiere}] ${task.title}` : task.title;
+
+            let linkBtnHTML = '';
+            if (task.link && task.link.trim() !== '') {
+              linkBtnHTML = `<a href="${task.link}" target="_blank" class="task-link">🔗 Ouvrir le lien</a>`;
+            }
+
             card.innerHTML = `
               <div class="task-type">${task.type}</div>
-              <div class="task-title">${task.title}</div>
+              <div class="task-title">${displayTitle}</div>
               <div class="task-desc">${task.desc}</div>
+              ${linkBtnHTML}
               <div class="task-actions">
                 <button class="btn-action" onclick="toggleTask('${task.id}', ${task.completed})">${task.completed ? 'Rétablir' : 'Fait'}</button>
                 <button class="btn-action" onclick="deleteTask('${task.id}')">Supprimer</button>
@@ -622,6 +951,7 @@
       selectedDate.setDate(currentMonday.getDate() + dayIndex);
       document.getElementById('selectedDate').value = formatDateKey(selectedDate);
       document.getElementById('taskForm').reset();
+      checkMatiereVisibility();
       document.getElementById('taskModal').style.display = 'flex';
     }
 
@@ -631,11 +961,17 @@
 
     document.getElementById('taskForm').addEventListener('submit', function(e) {
       e.preventDefault();
+      
+      const typeVal = document.getElementById('taskType').value;
+      const matiereVal = (typeVal !== 'info') ? document.getElementById('taskMatiere').value : '';
+
       db.collection("tasks").add({
         dateKey: document.getElementById('selectedDate').value,
-        type: document.getElementById('taskType').value,
+        type: typeVal,
+        matiere: matiereVal,
         title: document.getElementById('taskTitle').value,
         desc: document.getElementById('taskDesc').value,
+        link: document.getElementById('taskLink').value,
         completed: false
       });
       closeModal();
@@ -649,6 +985,7 @@
       db.collection("tasks").doc(id).delete();
     }
 
+    checkFirstVisit();
     renderTimetable();
   </script>
 </body>
