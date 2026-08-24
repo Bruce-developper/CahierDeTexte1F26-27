@@ -776,11 +776,14 @@
       "2027-07-14": { name: "Fête Nationale", icon: "🎆" }
     };
 
+    // CORRECTION DU DÉCALAGE DE DATE EN HEURE LOCALE
     function getMonday(d) {
-      d = new Date(d);
+      const year = d.getFullYear();
+      const month = d.getMonth();
+      const date = d.getDate();
       const day = d.getDay();
-      const diff = d.getDate() - day + (day === 0 ? -6 : 1);
-      return new Date(d.setDate(diff));
+      const diff = date - day + (day === 0 ? -6 : 1);
+      return new Date(year, month, diff);
     }
 
     function formatDateKey(date) {
@@ -805,8 +808,7 @@
     function renderTimetable() {
       const daysOfWeek = [];
       for (let i = 0; i < 5; i++) {
-        const day = new Date(currentMonday);
-        day.setDate(currentMonday.getDate() + i);
+        const day = new Date(currentMonday.getFullYear(), currentMonday.getMonth(), currentMonday.getDate() + i);
         daysOfWeek.push(day);
       }
 
@@ -887,8 +889,7 @@
 
     function renderTasks() {
       for (let i = 0; i < 5; i++) {
-        const dayDate = new Date(currentMonday);
-        dayDate.setDate(currentMonday.getDate() + i);
+        const dayDate = new Date(currentMonday.getFullYear(), currentMonday.getMonth(), currentMonday.getDate() + i);
         const dateKey = formatDateKey(dayDate);
 
         const col = document.querySelector(`.day-column[data-dayindex="${i}"]`);
@@ -946,8 +947,7 @@
     }
 
     function openModal(dayIndex) {
-      const selectedDate = new Date(currentMonday);
-      selectedDate.setDate(currentMonday.getDate() + dayIndex);
+      const selectedDate = new Date(currentMonday.getFullYear(), currentMonday.getMonth(), currentMonday.getDate() + dayIndex);
       document.getElementById('selectedDate').value = formatDateKey(selectedDate);
       document.getElementById('taskForm').reset();
       checkMatiereVisibility();
