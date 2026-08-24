@@ -686,6 +686,18 @@
       return saved ? JSON.parse(saved) : null;
     }
 
+    // Vérifie si une tâche doit être affichée selon les spés sélectionnées par l'utilisateur
+    function isTaskVisibleForUser(task) {
+      if (!task.matiere) return true; // Les infos sans matière s'affichent toujours
+      
+      const userSpes = getUserSpes() || [];
+      const isTronc = troncCommun.some(tc => tc.code === task.matiere);
+      const isUserSpe = userSpes.includes(task.matiere);
+
+      // S'affiche si c'est du tronc commun OU une spé sélectionnée
+      return isTronc || isUserSpe;
+    }
+
     function checkFirstVisit() {
       const spes = getUserSpes();
       if (!spes) {
@@ -712,6 +724,7 @@
       document.getElementById('speModal').style.display = 'none';
       updateMatiereDropdown();
       renderTasks();
+      renderUrgencies();
     }
 
     function updateMatiereDropdown() {
@@ -776,7 +789,6 @@
       "2027-07-14": { name: "Fête Nationale", icon: "🎆" }
     };
 
-    // CORRECTION DU DÉCALAGE DE DATE EN HEURE LOCALE
     function getMonday(d) {
       const year = d.getFullYear();
       const month = d.getMonth();
@@ -857,13 +869,9 @@
       const urgentList = document.getElementById('urgentList');
       urgentList.innerHTML = '';
 
-      const userSpes = getUserSpes() || [];
-
       const upcoming = currentTasks.filter(t => {
         if (t.completed || t.dateKey < todayKey || t.type === 'info') return false;
-        const isTronc = troncCommun.some(tc => tc.code === t.matiere);
-        const isUserSpe = userSpes.includes(t.matiere);
-        return isTronc || isUserSpe || !t.matiere;
+        return isTaskVisibleForUser(t);
       }).sort((a, b) => a.dateKey.localeCompare(b.dateKey)).slice(0, 5);
 
       if (upcoming.length === 0) {
@@ -912,7 +920,8 @@
           col.classList.remove('off-day');
           addBtn.disabled = false;
 
-          const dayTasks = currentTasks.filter(t => t.dateKey === dateKey);
+          // Filtre les tâches du jour ET vérifie si l'utilisateur doit la voir selon ses spés
+          const dayTasks = currentTasks.filter(t => t.dateKey === dateKey && isTaskVisibleForUser(t));
           dayTasks.forEach(task => {
             const card = document.createElement('div');
             
