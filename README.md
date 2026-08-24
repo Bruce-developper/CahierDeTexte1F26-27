@@ -1,1 +1,0 @@
-# CahierDeTexte1F26-27
