@@ -44,12 +44,12 @@
     body {
       background: var(--bg-gradient);
       margin: 0;
-      padding: 10px 20px 20px;
+      padding: 10px 20px 80px 20px;
       color: var(--text-color);
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       min-height: 100vh;
       position: relative;
       overflow-x: hidden;
@@ -62,13 +62,12 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin: auto 0;
       z-index: 1;
     }
 
     .header-container {
       text-align: center;
-      margin-top: 0;
+      margin-top: 10px;
       margin-bottom: 15px;
       width: 100%;
       position: relative;
@@ -202,9 +201,7 @@
       overflow: hidden;
       position: relative;
     }
-    .day-column.off-day { opacity: 0.7; }
     
-    /* Style spécifique pour le jour actuel */
     .day-column.today {
       border: 2px solid #38bdf8;
       box-shadow: 0 0 15px rgba(56, 189, 248, 0.25);
@@ -239,7 +236,6 @@
       gap: 12px;
     }
 
-    /* Cartes des tâches et Couleurs par matière */
     .task-card {
       background: var(--task-bg);
       border-radius: 8px;
@@ -308,6 +304,37 @@
       font-weight: 700;
     }
 
+    /* Brm Bruce Doom Ancré en bas à droite */
+    .bruce-doom-badge {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(248, 113, 113, 0.4);
+      color: #f87171;
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 0.85em;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 10px rgba(248, 113, 113, 0.2);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      user-select: none;
+    }
+    .bruce-doom-badge::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background-color: #f87171;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #f87171;
+    }
+
     .modal {
       display: none;
       position: fixed;
@@ -316,7 +343,7 @@
       backdrop-filter: blur(8px);
       justify-content: center;
       align-items: center;
-      z-index: 10;
+      z-index: 1000;
     }
     .modal-content {
       background: var(--modal-bg);
@@ -393,7 +420,7 @@
     <div class="urgent-banner">
       <div class="urgent-title">⚡ Devoirs & Évaluations à venir (3 jours max)</div>
       <div class="urgent-list" id="urgentList">
-        <div class="urgent-empty">Aucun devoir à venir sous 3 jours.</div>
+        <div class="urgent-empty">Aucun devoir à venir d'ici 3 jours.</div>
       </div>
     </div>
 
@@ -410,6 +437,11 @@
       <div class="day-column" data-dayindex="3"><div class="day-header"><div class="day-name">Jeudi <span class="today-marker"></span></div><div class="day-date" id="date-3">-</div></div><div class="task-list"></div><button class="add-btn" id="add-btn-3" onclick="openModal(3)">+ Ajouter une tâche</button></div>
       <div class="day-column" data-dayindex="4"><div class="day-header"><div class="day-name">Vendredi <span class="today-marker"></span></div><div class="day-date" id="date-4">-</div></div><div class="task-list"></div><button class="add-btn" id="add-btn-4" onclick="openModal(4)">+ Ajouter une tâche</button></div>
     </div>
+  </div>
+
+  <!-- BRUCE DOOM - Ancré en bas à droite -->
+  <div class="bruce-doom-badge" id="bruceDoomBadge">
+    BRUCE DOOM
   </div>
 
   <!-- Modal Tâche -->
@@ -716,7 +748,6 @@
       renderUrgencies();
     });
 
-    // Bandeau devoirs : 3 jours max uniquement
     function renderUrgencies() {
       const now = new Date();
       const todayKey = formatDateKey(now);
