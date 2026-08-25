@@ -200,8 +200,27 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      position: relative;
     }
     .day-column.off-day { opacity: 0.7; }
+    
+    /* Style spécifique pour le jour actuel */
+    .day-column.today {
+      border: 2px solid #38bdf8;
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.25);
+    }
+    .today-badge {
+      display: inline-block;
+      background: #38bdf8;
+      color: #0f172a;
+      font-size: 0.65em;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: 6px;
+      text-transform: uppercase;
+      vertical-align: middle;
+    }
 
     .day-header {
       background: rgba(40, 50, 70, 0.3);
@@ -220,18 +239,30 @@
       gap: 12px;
     }
 
+    /* Cartes des tâches et Couleurs par matière */
     .task-card {
       background: var(--task-bg);
       border-radius: 8px;
       padding: 12px;
       border-left: 5px solid #94a3b8;
+      transition: opacity 0.2s;
     }
+
+    .task-card.matiere-Francais { border-left-color: #e11d48; }
+    .task-card.matiere-Math { border-left-color: #2563eb; }
+    .task-card.matiere-ENS-SPC { border-left-color: #0284c7; }
+    .task-card.matiere-ENS-SVT { border-left-color: #059669; }
+    .task-card.matiere-HG { border-left-color: #d97706; }
+    .task-card.matiere-EMC { border-left-color: #b45309; }
+    .task-card.matiere-Anglais { border-left-color: #dc2626; }
     .task-card.matiere-SES { border-left-color: #7c3aed; }
     .task-card.matiere-HGGSP { border-left-color: #ea580c; }
     .task-card.matiere-AMC { border-left-color: #9333ea; }
     .task-card.matiere-SPC { border-left-color: #0891b2; }
     .task-card.matiere-SVT { border-left-color: #16a34a; }
-    .task-card.matiere-Francais { border-left-color: #e11d48; }
+
+    .task-card.completed { opacity: 0.45; }
+    .task-card.completed .task-title { text-decoration: line-through; }
 
     .task-type {
       font-size: 0.7em;
@@ -245,6 +276,24 @@
 
     .task-title { font-size: 0.95em; font-weight: 700; color: var(--title-color); }
     .task-desc { font-size: 0.85em; opacity: 0.9; white-space: pre-wrap; margin-top: 4px; }
+
+    .task-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border-color);
+    }
+    .btn-action {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.75em;
+      color: var(--subtext-color);
+      font-weight: 600;
+    }
+    .btn-action:hover { color: var(--title-color); }
 
     .add-btn {
       background: rgba(99, 102, 241, 0.15);
@@ -342,9 +391,9 @@
     </div>
 
     <div class="urgent-banner">
-      <div class="urgent-title">⚡ Devoirs & Évaluations à venir</div>
+      <div class="urgent-title">⚡ Devoirs & Évaluations à venir (3 jours max)</div>
       <div class="urgent-list" id="urgentList">
-        <div class="urgent-empty">Aucun devoir à venir.</div>
+        <div class="urgent-empty">Aucun devoir à venir sous 3 jours.</div>
       </div>
     </div>
 
@@ -355,11 +404,11 @@
     </div>
 
     <div class="timetable">
-      <div class="day-column" data-dayindex="0"><div class="day-header"><div class="day-name">Lundi</div><div class="day-date" id="date-0">-</div></div><div class="task-list"></div><button class="add-btn" id="add-btn-0" onclick="openModal(0)">+ Ajouter une tâche</button></div>
-      <div class="day-column" data-dayindex="1"><div class="day-header"><div class="day-name">Mardi</div><div class="day-date" id="date-1">-</div></div><div class="task-list"></div><button class="add-btn" id="add-btn-1" onclick="openModal(1)">+ Ajouter une tâche</button></div>
-      <div class="day-column" data-dayindex="2"><div class="day-header"><div class="day-name">Mercredi</div><div class="day-date" id="date-2">-</div></div><div class="task-list"></div><button class="add-btn" id="add-btn-2" onclick="openModal(2)">+ Ajouter une tâche</button></div>
-      <div class="day-column" data-dayindex="3"><div class="day-header"><div class="day-name">Jeudi</div><div class="day-date" id="date-3">-</div></div><div class="task-list"></div><button class="add-btn" id="add-btn-3" onclick="openModal(3)">+ Ajouter une tâche</button></div>
-      <div class="day-column" data-dayindex="4"><div class="day-header"><div class="day-name">Vendredi</div><div class="day-date" id="date-4">-</div></div><div class="task-list"></div><button class="add-btn" id="add-btn-4" onclick="openModal(4)">+ Ajouter une tâche</button></div>
+      <div class="day-column" data-dayindex="0"><div class="day-header"><div class="day-name">Lundi <span class="today-marker"></span></div><div class="day-date" id="date-0">-</div></div><div class="task-list"></div><button class="add-btn" id="add-btn-0" onclick="openModal(0)">+ Ajouter une tâche</button></div>
+      <div class="day-column" data-dayindex="1"><div class="day-header"><div class="day-name">Mardi <span class="today-marker"></span></div><div class="day-date" id="date-1">-</div></div><div class="task-list"></div><button class="add-btn" id="add-btn-1" onclick="openModal(1)">+ Ajouter une tâche</button></div>
+      <div class="day-column" data-dayindex="2"><div class="day-header"><div class="day-name">Mercredi <span class="today-marker"></span></div><div class="day-date" id="date-2">-</div></div><div class="task-list"></div><button class="add-btn" id="add-btn-2" onclick="openModal(2)">+ Ajouter une tâche</button></div>
+      <div class="day-column" data-dayindex="3"><div class="day-header"><div class="day-name">Jeudi <span class="today-marker"></span></div><div class="day-date" id="date-3">-</div></div><div class="task-list"></div><button class="add-btn" id="add-btn-3" onclick="openModal(3)">+ Ajouter une tâche</button></div>
+      <div class="day-column" data-dayindex="4"><div class="day-header"><div class="day-name">Vendredi <span class="today-marker"></span></div><div class="day-date" id="date-4">-</div></div><div class="task-list"></div><button class="add-btn" id="add-btn-4" onclick="openModal(4)">+ Ajouter une tâche</button></div>
     </div>
   </div>
 
@@ -401,7 +450,7 @@
     </div>
   </div>
 
-  <!-- Modal Sélection dynamique Spé A & Spé B -->
+  <!-- Modal Spés -->
   <div class="modal" id="speModal">
     <div class="modal-content">
       <h2>🎓 Choisissez vos Spécialités</h2>
@@ -524,8 +573,7 @@
         return;
       }
 
-      const config = { speA, speB };
-      localStorage.setItem('user_spes_groups', JSON.stringify(config));
+      localStorage.setItem('user_spes_groups', JSON.stringify({ speA, speB }));
       document.getElementById('speModal').style.display = 'none';
 
       updateMatiereDropdown();
@@ -542,7 +590,6 @@
       const isTronc = troncCommun.some(tc => task.matiere === tc.code);
       if (isTronc) return true;
 
-      // Vérification du groupe spécifique (ex: SPC_A vs SPC_B)
       if (task.matiere.endsWith("_A")) {
         const code = task.matiere.replace("_A", "");
         return userSpes.speA === code;
@@ -581,7 +628,6 @@
         select.appendChild(opt);
       });
 
-      // Ajout des choix avec précision du Groupe A ou B pour les devoirs
       listesSpesDisponibles.forEach(m => {
         const optA = document.createElement('option');
         optA.value = `${m.code}_A`;
@@ -628,6 +674,8 @@
 
     function renderTimetable() {
       const daysOfWeek = [];
+      const todayKey = formatDateKey(new Date());
+
       for (let i = 0; i < 5; i++) {
         const day = new Date(currentMonday.getFullYear(), currentMonday.getMonth(), currentMonday.getDate() + i);
         daysOfWeek.push(day);
@@ -640,8 +688,20 @@
       document.getElementById('pfInfoBox').innerText = `📍 Année Scolaire 2026-2027`;
 
       daysOfWeek.forEach((date, index) => {
+        const dateKey = formatDateKey(date);
         const dateStr = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
         document.getElementById(`date-${index}`).innerText = dateStr;
+
+        const col = document.querySelector(`.day-column[data-dayindex="${index}"]`);
+        const marker = col.querySelector('.today-marker');
+
+        if (dateKey === todayKey) {
+          col.classList.add('today');
+          marker.innerHTML = `<span class="today-badge">Aujourd'hui</span>`;
+        } else {
+          col.classList.remove('today');
+          marker.innerHTML = '';
+        }
       });
 
       renderTasks();
@@ -656,18 +716,25 @@
       renderUrgencies();
     });
 
+    // Bandeau devoirs : 3 jours max uniquement
     function renderUrgencies() {
-      const todayKey = formatDateKey(new Date());
+      const now = new Date();
+      const todayKey = formatDateKey(now);
+      
+      const maxLimit = new Date();
+      maxLimit.setDate(now.getDate() + 3);
+      const maxLimitKey = formatDateKey(maxLimit);
+
       const urgentList = document.getElementById('urgentList');
       urgentList.innerHTML = '';
 
       const upcoming = currentTasks.filter(t => {
-        if (t.completed || t.dateKey < todayKey || t.type === 'info') return false;
+        if (t.completed || t.dateKey < todayKey || t.dateKey > maxLimitKey || t.type === 'info') return false;
         return isTaskVisibleForUser(t);
-      }).sort((a, b) => a.dateKey.localeCompare(b.dateKey)).slice(0, 5);
+      }).sort((a, b) => a.dateKey.localeCompare(b.dateKey));
 
       if (upcoming.length === 0) {
-        urgentList.innerHTML = `<div class="urgent-empty">Aucun devoir à venir.</div>`;
+        urgentList.innerHTML = `<div class="urgent-empty">Aucun devoir à venir d'ici 3 jours.</div>`;
         return;
       }
 
@@ -700,10 +767,11 @@
         const dayTasks = currentTasks.filter(t => t.dateKey === dateKey && isTaskVisibleForUser(t));
         dayTasks.forEach(task => {
           const card = document.createElement('div');
+          
           const baseMat = task.matiere ? task.matiere.replace("_A", "").replace("_B", "") : '';
           const matiereClass = baseMat ? `matiere-${baseMat.replace(/\s+/g, '-')}` : '';
 
-          card.className = `task-card ${task.type} ${matiereClass}`;
+          card.className = `task-card ${task.type} ${matiereClass} ${task.completed ? 'completed' : ''}`;
           
           const displayMat = task.matiere ? task.matiere.replace("_A", " (A)").replace("_B", " (B)") : '';
           const displayTitle = displayMat ? `[${displayMat}] ${task.title}` : task.title;
@@ -712,8 +780,9 @@
             <div class="task-type">${task.type}</div>
             <div class="task-title">${displayTitle}</div>
             <div class="task-desc">${task.desc}</div>
-            <div class="task-actions" style="margin-top:8px;">
-              <button class="btn-cancel" style="padding:4px 8px; font-size:0.7em;" onclick="deleteTask('${task.id}')">Supprimer</button>
+            <div class="task-actions">
+              <button class="btn-action" onclick="toggleTask('${task.id}', ${task.completed})">${task.completed ? 'Rétablir' : '✓ Fait'}</button>
+              <button class="btn-action" onclick="deleteTask('${task.id}')">Supprimer</button>
             </div>
           `;
           container.appendChild(card);
@@ -749,6 +818,10 @@
       });
       closeModal();
     });
+
+    function toggleTask(id, currentStatus) {
+      db.collection("tasks").doc(id).update({ completed: !currentStatus });
+    }
 
     function deleteTask(id) {
       db.collection("tasks").doc(id).delete();
