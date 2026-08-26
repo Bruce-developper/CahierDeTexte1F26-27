@@ -14,7 +14,7 @@
     }
 
     :root {
-      /* Fond Style PS5 : Pièce sombre immersives avec projecteurs de lumière */
+      /* Fond Style PS5 : Pièce sombre immersive avec projecteurs de lumière */
       --bg-gradient: 
         radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.18), transparent 45%),
         radial-gradient(circle at 85% 30%, rgba(99, 102, 241, 0.15), transparent 50%),
@@ -588,6 +588,29 @@
       { code: "Anglais", label: "Anglais" }
     ];
 
+    /* --- GESTION DES TÂCHES FAITES LOCALEMENT (PROPRE À CHAQUE ÉLÈVE) --- */
+    function getCompletedTasksLocal() {
+      const saved = localStorage.getItem('user_completed_tasks');
+      return saved ? JSON.parse(saved) : [];
+    }
+
+    function isTaskCompletedLocally(taskId) {
+      const completedList = getCompletedTasksLocal();
+      return completedList.includes(taskId);
+    }
+
+    function toggleTaskLocally(taskId) {
+      let completedList = getCompletedTasksLocal();
+      if (completedList.includes(taskId)) {
+        completedList = completedList.filter(id => id !== taskId);
+      } else {
+        completedList.push(taskId);
+      }
+      localStorage.setItem('user_completed_tasks', JSON.stringify(completedList));
+      renderTasks();
+      renderUrgencies();
+    }
+
     function toggleTheme() {
       document.body.classList.toggle('light-mode');
     }
@@ -803,7 +826,8 @@
       urgentList.innerHTML = '';
 
       const upcoming = currentTasks.filter(t => {
-        if (t.completed || t.dateKey < todayKey || t.dateKey > maxLimitKey || t.type === 'info') return false;
+        const completedLocally = isTaskCompletedLocally(t.id);
+        if (completedLocally || t.dateKey < todayKey || t.dateKey > maxLimitKey || t.type === 'info') return false;
         return isTaskVisibleForUser(t);
       }).sort((a, b) => a.dateKey.localeCompare(b.dateKey));
 
@@ -844,8 +868,10 @@
           
           const baseMat = task.matiere ? task.matiere.replace("_A", "").replace("_B", "") : '';
           const matiereClass = baseMat ? `matiere-${baseMat.replace(/\s+/g, '-')}` : '';
+          
+          const completed = isTaskCompletedLocally(task.id);
 
-          card.className = `task-card ${task.type} ${matiereClass} ${task.completed ? 'completed' : ''}`;
+          card.className = `task-card ${task.type} ${matiereClass} ${completed ? 'completed' : ''}`;
           
           const displayMat = task.matiere ? task.matiere.replace("_A", " (A)").replace("_B", " (B)") : '';
           const displayTitle = displayMat ? `[${displayMat}] ${task.title}` : task.title;
@@ -855,7 +881,7 @@
             <div class="task-title">${displayTitle}</div>
             <div class="task-desc">${task.desc}</div>
             <div class="task-actions">
-              <button class="btn-action" onclick="toggleTask('${task.id}', ${task.completed})">${task.completed ? 'Rétablir' : '✓ Fait'}</button>
+              <button class="btn-action" onclick="toggleTaskLocally('${task.id}')">${completed ? 'Rétablir' : '✓ Fait'}</button>
               <button class="btn-action" onclick="deleteTask('${task.id}')">Supprimer</button>
             </div>
           `;
@@ -887,15 +913,10 @@
         type: typeVal,
         matiere: matiereVal,
         title: document.getElementById('taskTitle').value,
-        desc: document.getElementById('taskDesc').value,
-        completed: false
+        desc: document.getElementById('taskDesc').value
       });
       closeModal();
     });
-
-    function toggleTask(id, currentStatus) {
-      db.collection("tasks").doc(id).update({ completed: !currentStatus });
-    }
 
     function deleteTask(id) {
       db.collection("tasks").doc(id).delete();
