@@ -14,7 +14,6 @@
     }
 
     :root {
-      /* Fond Style PS5 : Pièce sombre immersive avec projecteurs de lumière */
       --bg-gradient: 
         radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.18), transparent 45%),
         radial-gradient(circle at 85% 30%, rgba(99, 102, 241, 0.15), transparent 50%),
@@ -108,6 +107,8 @@
       top: 0;
       display: flex;
       gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
     .header-btn {
@@ -348,7 +349,6 @@
       border-color: rgba(56, 189, 248, 0.6);
     }
 
-    /* Badge Bruce Doom */
     .bruce-doom-badge {
       position: fixed;
       bottom: 20px;
@@ -456,7 +456,8 @@
       <h1>Cahier de Texte</h1>
       <div class="info-pf" id="pfInfoBox">Chargement...</div>
       <div class="header-actions">
-        <a href="https://padlet.com/iris_joussin1/padlet-de-la-1ere-f-dgu45v9kkx2egjch" target="_blank" class="header-btn padlet-btn">📋 Padlet 1F</a>
+        <a href="https://padlet.com/iris_joussin1/padlet-de-la-1ere-f-dgu45v9kkx2egjch" target="_blank" class="header-btn padlet-btn">📋 Padlet Fr</a>
+        <a href="https://padlet.com/carine_solia/elets-chiq-cristallisat-une-longue-histoire-de-la-matiere-sco3o5vlm3vax34p" target="_blank" class="header-btn padlet-btn">🧪 Padlet SVT</a>
         <button class="header-btn" onclick="openSpeModal()">🎓 Mes Spés</button>
         <button class="header-btn" onclick="toggleTheme()">⚙️ Thème</button>
       </div>
@@ -588,7 +589,7 @@
       { code: "Anglais", label: "Anglais" }
     ];
 
-    /* --- GESTION DES TÂCHES FAITES LOCALEMENT (PROPRE À CHAQUE ÉLÈVE) --- */
+    /* --- GESTION DU STATUT "FAIT" INDIVIDUEL (localStorage) --- */
     function getCompletedTasksLocal() {
       const saved = localStorage.getItem('user_completed_tasks');
       return saved ? JSON.parse(saved) : [];
