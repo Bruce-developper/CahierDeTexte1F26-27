@@ -9,46 +9,46 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      /* PALETTE SOMBRE VIBRANTE */
-      --bg-main: #0a0f1d;
-      --bg-card: #151f38;
-      --bg-surface: #1e2c4f;
-      --bg-input: #0f172a;
+      /* PALETTE SOMBRE NOIRE & COULEURS VIVES */
+      --bg-main: #000000;
+      --bg-card: #0d0d0d;
+      --bg-surface: #1a1a1a;
+      --bg-input: #000000;
       --text-main: #ffffff;
-      --text-muted: #94a3b8;
-      --border: rgba(255, 255, 255, 0.15);
-      --primary: #6366f1;
-      --primary-hover: #4f46e5;
-      --accent-glow: rgba(99, 102, 241, 0.25);
+      --text-muted: #a1a1aa;
+      --border: #27272a;
+      --primary: #8b5cf6;
+      --primary-hover: #7c3aed;
+      --accent-glow: rgba(139, 92, 246, 0.25);
       
-      /* Couleurs Matières Vives & Éclatantes */
+      /* Couleurs Matières Vives & Électriques */
       --mat-francais: #ff2a5f;
-      --mat-maths: #0066ff;
+      --mat-maths: #00f0ff;
       --mat-ens-spc: #00d2ff;
-      --mat-ens-svt: #00e676;
-      --mat-hg: #ff9100;
-      --mat-emc: #ff6d00;
-      --mat-anglais: #ff1744;
+      --mat-ens-svt: #00ff87;
+      --mat-hg: #ff9900;
+      --mat-emc: #ffaa00;
+      --mat-anglais: #ff007f;
       --mat-ses: #a855f7;
-      --mat-hggsp: #ff5722;
-      --mat-amc: #d500f9;
-      --mat-spc: #0284c7;
-      --mat-svt: #10b981;
-      --mat-nsi: #3d5af1;
+      --mat-hggsp: #ff5500;
+      --mat-amc: #c084fc;
+      --mat-spc: #38bdf8;
+      --mat-svt: #4ade80;
+      --mat-nsi: #6366f1;
     }
 
-    /* PALETTE CLAIRE COLORÉE & CONTRASTÉE */
+    /* PALETTE CLAIRE CONTRASTÉE (FOND GRIS DOUX + BORDURES NOIRES) */
     body.light-mode {
-      --bg-main: #f1f5f9;
+      --bg-main: #e4e4e7;
       --bg-card: #ffffff;
-      --bg-surface: #e2e8f0;
+      --bg-surface: #f4f4f5;
       --bg-input: #ffffff;
-      --text-main: #0f172a;
-      --text-muted: #334155;
-      --border: #1e293b;
-      --primary: #4f46e5;
-      --primary-hover: #4338ca;
-      --accent-glow: rgba(79, 70, 229, 0.15);
+      --text-main: #000000;
+      --text-muted: #3f3f46;
+      --border: #000000;
+      --primary: #000000;
+      --primary-hover: #27272a;
+      --accent-glow: rgba(0, 0, 0, 0.1);
     }
 
     * {
@@ -90,7 +90,7 @@
     .brand-icon {
       width: 38px;
       height: 38px;
-      background: linear-gradient(135deg, var(--primary), #a855f7);
+      background: var(--primary);
       border-radius: 10px;
       display: flex;
       align-items: center;
@@ -98,12 +98,12 @@
       color: white;
       font-weight: 800;
       font-size: 1.1rem;
-      box-shadow: 0 4px 12px var(--accent-glow);
+      box-shadow: 0 0 15px var(--accent-glow);
     }
 
     .brand-title {
       font-size: 1.05rem;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: -0.01em;
     }
 
@@ -173,7 +173,7 @@
     }
 
     .header-title h1 {
-      font-size: 1.7rem;
+      font-size: 1.75rem;
       font-weight: 800;
       letter-spacing: -0.02em;
     }
@@ -182,17 +182,16 @@
       font-size: 0.88rem;
       color: var(--text-muted);
       margin-top: 2px;
-      font-weight: 500;
     }
 
     .academic-badge {
       background: var(--bg-card);
       border: 2px solid var(--border);
-      padding: 6px 16px;
+      padding: 6px 14px;
       border-radius: 20px;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 700;
-      color: var(--primary);
+      color: var(--text-main);
     }
 
     /* BANNIÈRE URGENCES */
@@ -211,9 +210,9 @@
       font-size: 0.8rem;
       font-weight: 800;
       text-transform: uppercase;
-      color: #ff1744;
+      color: #ff0055;
       margin-bottom: 12px;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.04em;
     }
 
     .urgent-grid {
@@ -226,7 +225,7 @@
     .urgent-card {
       background: var(--bg-surface);
       border: 1px solid var(--border);
-      border-left: 5px solid #ff1744;
+      border-left: 4px solid #ff0055;
       border-radius: 8px;
       padding: 10px 14px;
       min-width: 220px;
@@ -242,7 +241,6 @@
       font-size: 0.75rem;
       color: var(--text-muted);
       margin-top: 4px;
-      font-weight: 600;
     }
 
     /* CONTROLES SEMAINE */
@@ -259,14 +257,14 @@
 
     .week-title {
       font-size: 0.95rem;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .btn-control {
       background: var(--bg-surface);
       border: 1px solid var(--border);
       color: var(--text-main);
-      padding: 8px 16px;
+      padding: 8px 14px;
       border-radius: 8px;
       font-size: 0.82rem;
       font-weight: 700;
@@ -305,13 +303,13 @@
 
     .day-column.today {
       border-color: var(--primary);
-      box-shadow: 0 0 15px var(--accent-glow);
+      box-shadow: 0 0 12px var(--accent-glow);
     }
 
     .day-header {
       padding: 14px 16px;
       border-bottom: 2px solid var(--border);
-      background: rgba(0, 0, 0, 0.06);
+      background: rgba(255, 255, 255, 0.02);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -325,7 +323,6 @@
     .day-date {
       font-size: 0.78rem;
       color: var(--text-muted);
-      font-weight: 600;
     }
 
     .today-tag {
@@ -333,8 +330,8 @@
       color: white;
       font-size: 0.65rem;
       font-weight: 800;
-      padding: 2px 8px;
-      border-radius: 6px;
+      padding: 2px 6px;
+      border-radius: 4px;
       text-transform: uppercase;
     }
 
@@ -350,13 +347,13 @@
     .task-card {
       background: var(--bg-surface);
       border: 1px solid var(--border);
-      border-left: 6px solid var(--text-muted);
+      border-left: 5px solid var(--text-muted);
       border-radius: 8px;
       padding: 12px;
       display: flex;
       flex-direction: column;
       gap: 6px;
-      transition: transform 0.15s ease;
+      transition: transform 0.15s ease, border-color 0.15s ease;
     }
 
     .task-card:hover {
@@ -378,7 +375,7 @@
     .task-card.matiere-NSI { border-left-color: var(--mat-nsi); }
 
     .task-card.completed {
-      opacity: 0.45;
+      opacity: 0.35;
     }
     .task-card.completed .task-title {
       text-decoration: line-through;
@@ -391,15 +388,15 @@
     }
 
     .task-badge {
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      color: var(--primary);
+      color: var(--text-main);
     }
 
-    .task-card.devoir .task-badge { color: #ff9100; }
-    .task-card.controle .task-badge { color: #ff1744; }
+    .task-card.devoir .task-badge { color: #ffaa00; }
+    .task-card.controle .task-badge { color: #ff0055; }
 
     .task-title {
       font-size: 0.88rem;
@@ -412,7 +409,6 @@
       color: var(--text-muted);
       white-space: pre-wrap;
       line-height: 1.4;
-      font-weight: 500;
     }
 
     .task-footer {
@@ -452,7 +448,7 @@
 
     .add-task-btn:hover {
       border-color: var(--primary);
-      color: var(--primary);
+      color: var(--text-main);
       background: var(--accent-glow);
     }
 
@@ -461,7 +457,7 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.85);
       backdrop-filter: blur(4px);
       justify-content: center;
       align-items: center;
@@ -479,7 +475,7 @@
 
     .modal-title {
       font-size: 1.1rem;
-      font-weight: 700;
+      font-weight: 800;
       margin-bottom: 16px;
     }
 
@@ -528,6 +524,7 @@
       border: 1px solid var(--border);
       padding: 8px 16px;
       border-radius: 6px;
+      font-weight: 600;
       cursor: pointer;
     }
   </style>
