@@ -3,417 +3,503 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cahier de Texte - 1F</title>
+  <title>Espace Scolaire - Cahier de Texte 1F</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-    }
-
     :root {
-      --bg-gradient: 
-        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.18), transparent 45%),
-        radial-gradient(circle at 85% 30%, rgba(99, 102, 241, 0.15), transparent 50%),
-        radial-gradient(circle at 50% 85%, rgba(30, 41, 59, 0.6), transparent 60%),
-        linear-gradient(180deg, #07090e 0%, #030407 100%);
-      --text-color: #f8fafc;
-      --card-bg: rgba(15, 23, 42, 0.65);
-      --task-bg: rgba(7, 11, 20, 0.75);
-      --nav-bg: rgba(15, 23, 42, 0.7);
-      --modal-bg: #0f172a;
-      --input-bg: #070b14;
-      --border-color: rgba(255, 255, 255, 0.12);
-      --title-color: #ffffff;
-      --subtext-color: #94a3b8;
-      --accent-glow: rgba(56, 189, 248, 0.25);
+      --bg-main: #0b0f19;
+      --bg-card: #151c2c;
+      --bg-surface: #1e293b;
+      --bg-input: #0f172a;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.08);
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --accent-glow: rgba(59, 130, 246, 0.15);
+      
+      /* Couleurs Matières Professionnelles */
+      --mat-francais: #f43f5e;
+      --mat-maths: #3b82f6;
+      --mat-ens-spc: #06b6d4;
+      --mat-ens-svt: #10b981;
+      --mat-hg: #f59e0b;
+      --mat-emc: #d97706;
+      --mat-anglais: #ec4899;
+      --mat-ses: #8b5cf6;
+      --mat-hggsp: #f97316;
+      --mat-amc: #a855f7;
+      --mat-spc: #0284c7;
+      --mat-svt: #22c55e;
+      --mat-nsi: #6366f1;
     }
 
     body.light-mode {
-      --bg-gradient: 
-        radial-gradient(circle at 20% 20%, rgba(186, 230, 253, 0.5), transparent 40%),
-        radial-gradient(circle at 80% 80%, rgba(199, 210, 254, 0.5), transparent 40%),
-        linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 100%);
-      --text-color: #0f172a;
-      --card-bg: rgba(255, 255, 255, 0.75);
-      --task-bg: #ffffff;
-      --nav-bg: rgba(255, 255, 255, 0.8);
-      --modal-bg: #ffffff;
-      --input-bg: #f8fafc;
-      --border-color: rgba(0, 0, 0, 0.08);
-      --title-color: #0f172a;
-      --subtext-color: #475569;
-      --accent-glow: rgba(56, 189, 248, 0.15);
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-surface: #f1f5f9;
+      --bg-input: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: rgba(0, 0, 0, 0.08);
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --accent-glow: rgba(37, 99, 235, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
     }
 
     body {
-      background: var(--bg-gradient);
-      background-attachment: fixed;
-      margin: 0;
-      padding: 10px 20px 80px 20px;
-      color: var(--text-color);
+      background-color: var(--bg-main);
+      color: var(--text-main);
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
       min-height: 100vh;
-      position: relative;
-      overflow-x: hidden;
-      transition: background 0.4s ease, color 0.3s;
+      transition: background-color 0.3s, color 0.3s;
     }
 
-    .app-container {
-      width: 100%;
-      max-width: 1200px;
+    /* --- SIDEBAR DE NAVIGATION --- */
+    .sidebar {
+      width: 260px;
+      background-color: var(--bg-card);
+      border-right: 1px solid var(--border);
+      padding: 24px 16px;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      z-index: 1;
+      gap: 24px;
+      position: fixed;
+      height: 100vh;
+      z-index: 10;
     }
 
-    .header-container {
-      text-align: center;
-      margin-top: 10px;
-      margin-bottom: 15px;
-      width: 100%;
-      position: relative;
-    }
-    h1 {
-      color: var(--title-color);
-      margin: 0 0 8px 0;
-      font-size: 2.2em;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      text-shadow: 0 0 20px var(--accent-glow);
-    }
-    .info-pf {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--border-color);
-      color: #38bdf8;
-      padding: 6px 16px;
-      border-radius: 20px;
-      display: inline-block;
-      font-size: 0.88em;
-      font-weight: 600;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    .header-actions {
-      position: absolute;
-      right: 0;
-      top: 0;
+    .brand {
       display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    .header-btn {
-      background: var(--nav-bg);
-      color: var(--text-color);
-      border: 1px solid var(--border-color);
-      padding: 8px 14px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 0.8em;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      text-decoration: none;
-      display: inline-flex;
       align-items: center;
-      backdrop-filter: blur(16px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-    .header-btn:hover { 
-      transform: translateY(-2px);
-      border-color: rgba(255, 255, 255, 0.3);
-      box-shadow: 0 6px 20px var(--accent-glow);
-    }
-    .header-btn.padlet-btn {
-      background: rgba(236, 72, 153, 0.15);
-      border-color: rgba(236, 72, 153, 0.3);
-      color: #f472b6;
+      gap: 12px;
+      padding: 0 8px;
     }
 
-    .urgent-banner {
-      width: 100%;
-      background: var(--card-bg);
-      backdrop-filter: blur(20px);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 14px 18px;
-      margin-bottom: 20px;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
-    }
-    .urgent-title {
-      font-size: 0.85em;
-      font-weight: 800;
-      color: #f87171;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 10px;
-    }
-    .urgent-list {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-    }
-    .urgent-item {
-      background: var(--task-bg);
-      border: 1px solid var(--border-color);
-      border-left: 4px solid #f87171;
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--primary);
       border-radius: 8px;
-      padding: 8px 12px;
-      min-width: 200px;
-      font-size: 0.82em;
-      flex-shrink: 0;
-    }
-    .urgent-item .urgent-date {
-      color: var(--subtext-color);
-      font-size: 0.85em;
-      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 1.1rem;
     }
 
-    .nav-week {
+    .brand-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .brand-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .nav-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .nav-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      padding: 0 8px 4px 8px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      color: var(--text-main);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      transition: background 0.2s;
+    }
+
+    .nav-item:hover {
+      background: var(--bg-surface);
+    }
+
+    .nav-item.padlet-link {
+      color: var(--text-main);
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* --- CONTENU PRINCIPAL --- */
+    .main-wrapper {
+      margin-left: 260px;
+      flex: 1;
+      padding: 32px 40px;
+      max-width: 1400px;
+    }
+
+    .top-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      width: 100%;
-      margin-bottom: 20px;
-      background: var(--nav-bg);
-      backdrop-filter: blur(20px);
-      padding: 12px 20px;
-      border-radius: 16px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-    }
-    .btn-nav {
-      background: #38bdf8;
-      color: #0f172a;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 800;
-      font-size: 0.85em;
-      transition: all 0.2s;
-    }
-    .btn-nav:hover {
-      box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
-      transform: scale(1.02);
+      margin-bottom: 28px;
     }
 
-    .timetable {
+    .header-title h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .header-title p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .academic-badge {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    /* BANNIÈRE URGENCES */
+    .urgent-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 28px;
+    }
+
+    .urgent-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #ef4444;
+      margin-bottom: 12px;
+      letter-spacing: 0.03em;
+    }
+
+    .urgent-grid {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .urgent-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid #ef4444;
+      border-radius: 8px;
+      padding: 10px 14px;
+      min-width: 220px;
+      flex-shrink: 0;
+    }
+
+    .urgent-card-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .urgent-card-date {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* CONTROLES SEMAINE */
+    .week-navigation {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 24px;
+    }
+
+    .week-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .btn-control {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-control:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* GRILLE EMPLOI DU TEMPS */
+    .timetable-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 16px;
-      width: 100%;
     }
-    @media (max-width: 960px) {
-      .timetable { grid-template-columns: 1fr; }
-      .header-actions { position: static; margin-top: 10px; justify-content: center; }
+
+    @media (max-width: 1200px) {
+      .timetable-grid { grid-template-columns: 1fr; }
+      .sidebar { width: 100%; height: auto; position: relative; }
+      .main-wrapper { margin-left: 0; padding: 20px; }
+      body { flex-direction: column; }
     }
 
     .day-column {
-      background: var(--card-bg);
-      backdrop-filter: blur(20px);
-      border-radius: 16px;
-      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
-      position: relative;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      transition: border-color 0.3s, box-shadow 0.3s;
+      min-height: 500px;
     }
-    .day-column:hover {
-      border-color: rgba(255, 255, 255, 0.25);
-    }
-    
+
     .day-column.today {
-      border: 2px solid #38bdf8;
-      box-shadow: 0 0 30px rgba(56, 189, 248, 0.3);
-    }
-    .today-badge {
-      display: inline-block;
-      background: #38bdf8;
-      color: #0f172a;
-      font-size: 0.65em;
-      font-weight: 800;
-      padding: 2px 6px;
-      border-radius: 4px;
-      margin-left: 6px;
-      text-transform: uppercase;
-      vertical-align: middle;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px var(--primary);
     }
 
     .day-header {
-      background: rgba(255, 255, 255, 0.03);
-      padding: 14px;
-      border-bottom: 1px solid var(--border-color);
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.01);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .day-name { font-size: 1em; font-weight: 700; color: var(--title-color); }
-    .day-date { font-size: 0.8em; color: var(--subtext-color); margin-top: 2px; }
 
-    .task-list {
+    .day-name {
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .day-date {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .today-tag {
+      background: var(--primary);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .task-container {
       padding: 12px;
-      flex-grow: 1;
-      min-height: 250px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
+      flex: 1;
     }
 
+    /* CARTES DE DEVOIRS */
     .task-card {
-      background: var(--task-bg);
-      border-radius: 10px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--text-muted);
+      border-radius: 8px;
       padding: 12px;
-      border-left: 5px solid #94a3b8;
-      transition: transform 0.2s, opacity 0.2s;
-      border-top: 1px solid var(--border-color);
-      border-right: 1px solid var(--border-color);
-      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: transform 0.15s ease;
     }
+
     .task-card:hover {
       transform: translateY(-2px);
     }
 
-    /* --- PALETTE DE COULEURS SPÉCIFIQUES PAR MATIÈRE --- */
-    .task-card.matiere-Francais { border-left-color: #ef4444; }
-    .task-card.matiere-Math { border-left-color: #3b82f6; }
-    .task-card.matiere-ENS-SPC { border-left-color: #06b6d4; }
-    .task-card.matiere-ENS-SVT { border-left-color: #10b981; }
-    .task-card.matiere-HG { border-left-color: #f59e0b; }
-    .task-card.matiere-EMC { border-left-color: #d97706; }
-    .task-card.matiere-Anglais { border-left-color: #ec4899; }
-    .task-card.matiere-SES { border-left-color: #8b5cf6; }
-    .task-card.matiere-HGGSP { border-left-color: #f97316; }
-    .task-card.matiere-AMC { border-left-color: #a855f7; }
-    .task-card.matiere-SPC { border-left-color: #0284c7; }
-    .task-card.matiere-SVT { border-left-color: #22c55e; }
-    .task-card.matiere-NSI { border-left-color: #6366f1; }
+    /* COULEURS PAR MATIERE */
+    .task-card.matiere-Francais { border-left-color: var(--mat-francais); }
+    .task-card.matiere-Math { border-left-color: var(--mat-maths); }
+    .task-card.matiere-ENS-SPC { border-left-color: var(--mat-ens-spc); }
+    .task-card.matiere-ENS-SVT { border-left-color: var(--mat-ens-svt); }
+    .task-card.matiere-HG { border-left-color: var(--mat-hg); }
+    .task-card.matiere-EMC { border-left-color: var(--mat-emc); }
+    .task-card.matiere-Anglais { border-left-color: var(--mat-anglais); }
+    .task-card.matiere-SES { border-left-color: var(--mat-ses); }
+    .task-card.matiere-HGGSP { border-left-color: var(--mat-hggsp); }
+    .task-card.matiere-AMC { border-left-color: var(--mat-amc); }
+    .task-card.matiere-SPC { border-left-color: var(--mat-spc); }
+    .task-card.matiere-SVT { border-left-color: var(--mat-svt); }
+    .task-card.matiere-NSI { border-left-color: var(--mat-nsi); }
 
-    .task-card.completed { opacity: 0.4; }
-    .task-card.completed .task-title { text-decoration: line-through; }
+    .task-card.completed {
+      opacity: 0.4;
+    }
+    .task-card.completed .task-title {
+      text-decoration: line-through;
+    }
 
-    .task-type {
-      font-size: 0.7em;
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .task-badge {
+      font-size: 0.65rem;
       font-weight: 800;
       text-transform: uppercase;
-      margin-bottom: 4px;
-      color: #38bdf8;
+      letter-spacing: 0.04em;
+      color: var(--primary);
     }
-    .task-card.devoir .task-type { color: #fbbf24; }
-    .task-card.controle .task-type { color: #f87171; }
 
-    .task-title { font-size: 0.95em; font-weight: 700; color: var(--title-color); }
-    .task-desc { font-size: 0.85em; opacity: 0.85; white-space: pre-wrap; margin-top: 4px; }
+    .task-card.devoir .task-badge { color: #f59e0b; }
+    .task-card.controle .task-badge { color: #ef4444; }
 
-    .task-actions {
+    .task-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .task-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      white-space: pre-wrap;
+      line-height: 1.4;
+    }
+
+    .task-footer {
       display: flex;
       justify-content: flex-end;
-      gap: 10px;
-      margin-top: 10px;
-      padding-top: 8px;
-      border-top: 1px solid var(--border-color);
+      gap: 12px;
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px solid var(--border);
     }
-    .btn-action {
+
+    .task-action-btn {
       background: none;
       border: none;
-      cursor: pointer;
-      font-size: 0.75em;
-      color: var(--subtext-color);
+      color: var(--text-muted);
+      font-size: 0.72rem;
       font-weight: 600;
-      transition: color 0.2s;
-    }
-    .btn-action:hover { color: var(--title-color); }
-
-    .add-btn {
-      background: rgba(56, 189, 248, 0.08);
-      color: #38bdf8;
-      border: 1px dashed rgba(56, 189, 248, 0.3);
-      padding: 10px;
-      width: calc(100% - 24px);
-      margin: 0 12px 12px 12px;
-      border-radius: 8px;
       cursor: pointer;
-      font-size: 0.85em;
-      font-weight: 700;
+    }
+
+    .task-action-btn:hover {
+      color: var(--text-main);
+    }
+
+    .add-task-btn {
+      margin: 8px 12px 12px 12px;
+      padding: 8px;
+      background: transparent;
+      border: 1px dashed var(--border);
+      border-radius: 6px;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
       transition: all 0.2s;
     }
-    .add-btn:hover {
-      background: rgba(56, 189, 248, 0.15);
-      border-color: rgba(56, 189, 248, 0.6);
+
+    .add-task-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--accent-glow);
     }
 
-    .bruce-doom-badge {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: rgba(15, 23, 42, 0.85);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(248, 113, 113, 0.4);
-      color: #f87171;
-      padding: 8px 16px;
-      border-radius: 30px;
-      font-size: 0.85em;
-      font-weight: 800;
-      letter-spacing: 0.05em;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 15px rgba(248, 113, 113, 0.2);
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      user-select: none;
-    }
-    .bruce-doom-badge::before {
-      content: '';
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      background-color: #f87171;
-      border-radius: 50%;
-      box-shadow: 0 0 10px #f87171;
-    }
-
+    /* MODALES */
     .modal {
       display: none;
       position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(3, 7, 18, 0.8);
-      backdrop-filter: blur(12px);
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
       justify-content: center;
       align-items: center;
       z-index: 1000;
     }
+
     .modal-content {
-      background: var(--modal-bg);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
       padding: 24px;
-      border-radius: 16px;
       width: 100%;
       max-width: 440px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
     }
-    .form-group { margin-bottom: 14px; }
+
+    .modal-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
     .form-group label {
       display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
       margin-bottom: 6px;
-      font-size: 0.8em;
-      font-weight: 700;
-      color: var(--subtext-color);
     }
+
     .form-group input, .form-group select, .form-group textarea {
       width: 100%;
       padding: 10px;
-      background: var(--input-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      color: var(--title-color);
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-main);
+      font-size: 0.88rem;
     }
 
     .modal-actions {
@@ -422,106 +508,146 @@
       gap: 10px;
       margin-top: 20px;
     }
-    .btn-save {
-      background: #38bdf8;
-      color: #0f172a;
+
+    .btn-submit {
+      background: var(--primary);
+      color: white;
       border: none;
-      padding: 9px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 700;
-    }
-    .btn-cancel {
-      background: #1e293b;
-      color: #ffffff;
-      border: none;
-      padding: 9px 16px;
-      border-radius: 8px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 600;
       cursor: pointer;
     }
 
-    .spe-section-title {
-      font-size: 0.85em;
-      font-weight: 800;
-      color: #38bdf8;
-      text-transform: uppercase;
-      margin-top: 15px;
-      margin-bottom: 8px;
+    .btn-cancel {
+      background: var(--bg-surface);
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-  <div class="app-container">
-    <div class="header-container">
-      <h1>Cahier de Texte</h1>
-      <div class="info-pf" id="pfInfoBox">Chargement...</div>
-      <div class="header-actions">
-        <a href="https://padlet.com/iris_joussin1/padlet-de-la-1ere-f-dgu45v9kkx2egjch" target="_blank" class="header-btn padlet-btn">📋 Padlet Fr</a>
-        <a href="https://padlet.com/carine_solia/elets-chiq-cristallisat-une-longue-histoire-de-la-matiere-sco3o5vlm3vax34p" target="_blank" class="header-btn padlet-btn">🧪 Padlet SVT</a>
-        <button class="header-btn" onclick="openSpeModal()">🎓 Mes Spés</button>
-        <button class="header-btn" onclick="toggleTheme()">⚙️ Thème</button>
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">1F</div>
+      <div>
+        <div class="brand-title">Cahier de Texte</div>
+        <div class="brand-subtitle">Lycée - Classe 1ère F</div>
       </div>
     </div>
 
-    <div class="urgent-banner">
-      <div class="urgent-title">⚡ Devoirs & Évaluations à venir (3 jours max)</div>
-      <div class="urgent-list" id="urgentList">
-        <div class="urgent-empty">Aucun devoir à venir d'ici 3 jours.</div>
+    <div class="nav-group">
+      <div class="nav-label">Ressources</div>
+      <a href="https://padlet.com/iris_joussin1/padlet-de-la-1ere-f-dgu45v9kkx2egjch" target="_blank" class="nav-item padlet-link">
+        📋 Padlet Fr
+      </a>
+      <a href="https://padlet.com/carine_solia/elets-chiq-cristallisat-une-longue-histoire-de-la-matiere-sco3o5vlm3vax34p" target="_blank" class="nav-item padlet-link">
+        🧪 Padlet SVT
+      </a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Configuration</div>
+      <button class="nav-item" onclick="openSpeModal()">🎓 Mes Spécialités</button>
+      <button class="nav-item" onclick="toggleTheme()">⚙️ Changer le Thème</button>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="brand-subtitle">Statut : Connexion active</div>
+    </div>
+  </aside>
+
+  <main class="main-wrapper">
+    <header class="top-header">
+      <div class="header-title">
+        <h1>Planning du Travail à Faire</h1>
+        <p>Suivi des cours, devoirs et évaluations à venir</p>
       </div>
-    </div>
+      <div class="academic-badge" id="pfInfoBox">Année Scolaire 2026-2027</div>
+    </header>
 
-    <div class="nav-week">
-      <button class="btn-nav" onclick="changeWeek(-1)">❮ Semaine précédente</button>
-      <div class="current-week-title" id="weekRangeTitle">...</div>
-      <button class="btn-nav" onclick="changeWeek(1)">Semaine suivante ❯</button>
-    </div>
+    <section class="urgent-section">
+      <div class="urgent-header">
+        ⚡ Devoirs & Évaluations Imminents (Sous 3 jours)
+      </div>
+      <div class="urgent-grid" id="urgentList">
+        <div class="urgent-card" style="border-left-color: var(--border);">
+          <div class="urgent-card-title">Aucun devoir à rendre sous 3 jours.</div>
+        </div>
+      </div>
+    </section>
 
-    <div class="timetable">
-      <div class="day-column" data-dayindex="0"><div class="day-header"><div class="day-name">Lundi <span class="today-marker"></span></div><div class="day-date" id="date-0">-</div></div><div class="task-list"></div><button class="add-btn" id="add-btn-0" onclick="openModal(0)">+ Ajouter une tâche</button></div>
-      <div class="day-column" data-dayindex="1"><div class="day-header"><div class="day-name">Mardi <span class="today-marker"></span></div><div class="day-date" id="date-1">-</div></div><div class="task-list"></div><button class="add-btn" id="add-btn-1" onclick="openModal(1)">+ Ajouter une tâche</button></div>
-      <div class="day-column" data-dayindex="2"><div class="day-header"><div class="day-name">Mercredi <span class="today-marker"></span></div><div class="day-date" id="date-2">-</div></div><div class="task-list"></div><button class="add-btn" id="add-btn-2" onclick="openModal(2)">+ Ajouter une tâche</button></div>
-      <div class="day-column" data-dayindex="3"><div class="day-header"><div class="day-name">Jeudi <span class="today-marker"></span></div><div class="day-date" id="date-3">-</div></div><div class="task-list"></div><button class="add-btn" id="add-btn-3" onclick="openModal(3)">+ Ajouter une tâche</button></div>
-      <div class="day-column" data-dayindex="4"><div class="day-header"><div class="day-name">Vendredi <span class="today-marker"></span></div><div class="day-date" id="date-4">-</div></div><div class="task-list"></div><button class="add-btn" id="add-btn-4" onclick="openModal(4)">+ Ajouter une tâche</button></div>
-    </div>
-  </div>
+    <nav class="week-navigation">
+      <button class="btn-control" onclick="changeWeek(-1)">❮ Semaine précédente</button>
+      <div class="week-title" id="weekRangeTitle">Chargement...</div>
+      <button class="btn-control" onclick="changeWeek(1)">Semaine suivante ❯</button>
+    </nav>
 
-  <div class="bruce-doom-badge" id="bruceDoomBadge">
-    BRUCE DOOM
-  </div>
+    <section class="timetable-grid">
+      <div class="day-column" data-dayindex="0">
+        <div class="day-header"><span class="day-name">Lundi <span class="today-marker"></span></span><span class="day-date" id="date-0">-</span></div>
+        <div class="task-container"></div>
+        <button class="add-task-btn" onclick="openModal(0)">+ Ajouter un travail</button>
+      </div>
+      <div class="day-column" data-dayindex="1">
+        <div class="day-header"><span class="day-name">Mardi <span class="today-marker"></span></span><span class="day-date" id="date-1">-</span></div>
+        <div class="task-container"></div>
+        <button class="add-task-btn" onclick="openModal(1)">+ Ajouter un travail</button>
+      </div>
+      <div class="day-column" data-dayindex="2">
+        <div class="day-header"><span class="day-name">Mercredi <span class="today-marker"></span></span><span class="day-date" id="date-2">-</span></div>
+        <div class="task-container"></div>
+        <button class="add-task-btn" onclick="openModal(2)">+ Ajouter un travail</button>
+      </div>
+      <div class="day-column" data-dayindex="3">
+        <div class="day-header"><span class="day-name">Jeudi <span class="today-marker"></span></span><span class="day-date" id="date-3">-</span></div>
+        <div class="task-container"></div>
+        <button class="add-task-btn" onclick="openModal(3)">+ Ajouter un travail</button>
+      </div>
+      <div class="day-column" data-dayindex="4">
+        <div class="day-header"><span class="day-name">Vendredi <span class="today-marker"></span></span><span class="day-date" id="date-4">-</span></div>
+        <div class="task-container"></div>
+        <button class="add-task-btn" onclick="openModal(4)">+ Ajouter un travail</button>
+      </div>
+    </section>
+  </main>
 
   <div class="modal" id="taskModal">
     <div class="modal-content">
-      <h2>Nouvelle entrée</h2>
+      <div class="modal-title">Nouveau travail à faire</div>
       <form id="taskForm">
         <input type="hidden" id="selectedDate">
         <div class="form-group">
-          <label for="taskType">Catégorie</label>
+          <label for="taskType">Type de travail</label>
           <select id="taskType" onchange="checkMatiereVisibility()">
-            <option value="devoir">Devoir à faire</option>
-            <option value="controle">Évaluation / Examen</option>
-            <option value="info">Information</option>
+            <option value="devoir">Devoir à maison</option>
+            <option value="controle">Évaluation / Contrôle</option>
+            <option value="info">Information du professeur</option>
           </select>
         </div>
 
         <div class="form-group" id="matiereGroup">
-          <label for="taskMatiere">Matière / Groupe</label>
+          <label for="taskMatiere">Matières / Groupe</label>
           <select id="taskMatiere"></select>
         </div>
 
         <div class="form-group">
-          <label for="taskTitle">Intitulé / Titre</label>
-          <input type="text" id="taskTitle" required placeholder="Ex: Chapitre 2 - Exercices">
+          <label for="taskTitle">Intitulé</label>
+          <input type="text" id="taskTitle" required placeholder="Ex: Exercices 12 à 15 p. 104">
         </div>
 
         <div class="form-group">
-          <label for="taskDesc">Consignes</label>
-          <textarea id="taskDesc" rows="3"></textarea>
+          <label for="taskDesc">Consignes détaillées</label>
+          <textarea id="taskDesc" rows="3" placeholder="Détails du travail à faire..."></textarea>
         </div>
 
         <div class="modal-actions">
           <button type="button" class="btn-cancel" onclick="closeModal()">Annuler</button>
-          <button type="submit" class="btn-save">Enregistrer</button>
+          <button type="submit" class="btn-submit">Enregistrer</button>
         </div>
       </form>
     </div>
@@ -529,25 +655,17 @@
 
   <div class="modal" id="speModal">
     <div class="modal-content">
-      <h2>🎓 Choisissez vos Spécialités</h2>
-      <p>Sélectionnez la matière correspondant à votre Groupe A et à votre Groupe B :</p>
-      
-      <div class="spe-section-title">1. Quelle est votre Spé A ?</div>
+      <div class="modal-title">🎓 Sélection des Spécialités</div>
       <div class="form-group">
-        <select id="selectSpeA" onchange="onSpeAChange()">
-          <option value="">-- Choisissez la Spé A --</option>
-        </select>
+        <label>Spécialité A</label>
+        <select id="selectSpeA" onchange="onSpeAChange()"></select>
       </div>
-
-      <div class="spe-section-title">2. Quelle est votre Spé B ?</div>
       <div class="form-group">
-        <select id="selectSpeB">
-          <option value="">-- Choisissez la Spé B --</option>
-        </select>
+        <label>Spécialité B</label>
+        <select id="selectSpeB"></select>
       </div>
-
       <div class="modal-actions">
-        <button type="button" class="btn-save" onclick="saveUserSpes()">Valider</button>
+        <button type="button" class="btn-submit" onclick="saveUserSpes()">Enregistrer mes choix</button>
       </div>
     </div>
   </div>
@@ -581,16 +699,16 @@
     ];
 
     const troncCommun = [
-      { code: "Math", label: "Maths (Tous)" },
+      { code: "Math", label: "Mathématiques" },
       { code: "Francais", label: "Français" },
       { code: "ENS-SPC", label: "ENS SPC" },
       { code: "ENS-SVT", label: "ENS SVT" },
-      { code: "HG", label: "Histoire-Géo" },
+      { code: "HG", label: "Histoire-Géographie" },
       { code: "EMC", label: "EMC" },
-      { code: "Anglais", label: "Anglais" }
+      { code: "Anglais", label: "Anglais LVA" }
     ];
 
-    /* --- GESTION LOCALE (STATUT "FAIT" & SUPPRESSION INDIVIDUELLE) --- */
+    /* --- GESTION LOCALE (FAIT & SUPPRESSION INDIVIDUELLE) --- */
     function getCompletedTasksLocal() {
       const saved = localStorage.getItem('user_completed_tasks');
       return saved ? JSON.parse(saved) : [];
@@ -642,7 +760,7 @@
 
     function initSpeModalOptions() {
       const selectA = document.getElementById('selectSpeA');
-      selectA.innerHTML = '<option value="">-- Choisissez la Spé A --</option>';
+      selectA.innerHTML = '<option value="">-- Sélectionner Spé A --</option>';
 
       listesSpesDisponibles.forEach(s => {
         const opt = document.createElement('option');
@@ -663,7 +781,7 @@
       const selectB = document.getElementById('selectSpeB');
       
       const currentB = selectB.value;
-      selectB.innerHTML = '<option value="">-- Choisissez la Spé B --</option>';
+      selectB.innerHTML = '<option value="">-- Sélectionner Spé B --</option>';
 
       listesSpesDisponibles.forEach(s => {
         if (s.code !== speAVal) {
@@ -687,7 +805,7 @@
       const speB = document.getElementById('selectSpeB').value;
 
       if (!speA || !speB) {
-        alert("Veuillez sélectionner vos 2 spécialités.");
+        alert("Veuillez choisir 2 spécialités.");
         return;
       }
 
@@ -710,12 +828,10 @@
       if (isTronc) return true;
 
       if (task.matiere.endsWith("_A")) {
-        const code = task.matiere.replace("_A", "");
-        return userSpes.speA === code;
+        return userSpes.speA === task.matiere.replace("_A", "");
       }
       if (task.matiere.endsWith("_B")) {
-        const code = task.matiere.replace("_B", "");
-        return userSpes.speB === code;
+        return userSpes.speB === task.matiere.replace("_B", "");
       }
 
       return (userSpes.speA === task.matiere || userSpes.speB === task.matiere);
@@ -723,8 +839,7 @@
 
     function checkFirstVisit() {
       initSpeModalOptions();
-      const spes = getUserSpes();
-      if (!spes) {
+      if (!getUserSpes()) {
         document.getElementById('speModal').style.display = 'flex';
       } else {
         updateMatiereDropdown();
@@ -762,28 +877,20 @@
 
     function checkMatiereVisibility() {
       const type = document.getElementById('taskType').value;
-      const matiereGroup = document.getElementById('matiereGroup');
-      if (type === 'info') {
-        matiereGroup.style.display = 'none';
-      } else {
-        matiereGroup.style.display = 'block';
-      }
+      document.getElementById('matiereGroup').style.display = (type === 'info') ? 'none' : 'block';
     }
 
     function getMonday(d) {
-      const year = d.getFullYear();
-      const month = d.getMonth();
-      const date = d.getDate();
       const day = d.getDay();
-      const diff = date - day + (day === 0 ? -6 : 1);
-      return new Date(year, month, diff);
+      const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+      return new Date(d.setDate(diff));
     }
 
     function formatDateKey(date) {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
     }
 
     function changeWeek(direction) {
@@ -792,31 +899,28 @@
     }
 
     function renderTimetable() {
-      const daysOfWeek = [];
+      const days = [];
       const todayKey = formatDateKey(new Date());
 
       for (let i = 0; i < 5; i++) {
-        const day = new Date(currentMonday.getFullYear(), currentMonday.getMonth(), currentMonday.getDate() + i);
-        daysOfWeek.push(day);
+        const d = new Date(currentMonday);
+        d.setDate(d.getDate() + i);
+        days.push(d);
       }
 
-      const options = { day: 'numeric', month: 'long' };
-      const startStr = daysOfWeek[0].toLocaleDateString('fr-FR', options);
-      const endStr = daysOfWeek[4].toLocaleDateString('fr-FR', options);
-      document.getElementById('weekRangeTitle').innerText = `Semaine du ${startStr} au ${endStr}`;
-      document.getElementById('pfInfoBox').innerText = `📍 Année Scolaire 2026-2027`;
+      const options = { day: 'numeric', month: 'short' };
+      document.getElementById('weekRangeTitle').innerText = `Semaine du ${days[0].toLocaleDateString('fr-FR', options)} au ${days[4].toLocaleDateString('fr-FR', options)}`;
 
-      daysOfWeek.forEach((date, index) => {
+      days.forEach((date, index) => {
         const dateKey = formatDateKey(date);
-        const dateStr = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
-        document.getElementById(`date-${index}`).innerText = dateStr;
+        document.getElementById(`date-${index}`).innerText = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
 
         const col = document.querySelector(`.day-column[data-dayindex="${index}"]`);
         const marker = col.querySelector('.today-marker');
 
         if (dateKey === todayKey) {
           col.classList.add('today');
-          marker.innerHTML = `<span class="today-badge">Aujourd'hui</span>`;
+          marker.innerHTML = `<span class="today-tag">Aujourd'hui</span>`;
         } else {
           col.classList.remove('today');
           marker.innerHTML = '';
@@ -838,37 +942,33 @@
     function renderUrgencies() {
       const now = new Date();
       const todayKey = formatDateKey(now);
-      
-      const maxLimit = new Date();
-      maxLimit.setDate(now.getDate() + 3);
-      const maxLimitKey = formatDateKey(maxLimit);
+      const limit = new Date();
+      limit.setDate(now.getDate() + 3);
+      const limitKey = formatDateKey(limit);
 
       const urgentList = document.getElementById('urgentList');
       urgentList.innerHTML = '';
 
       const upcoming = currentTasks.filter(t => {
-        const completedLocally = isTaskCompletedLocally(t.id);
-        if (completedLocally || t.dateKey < todayKey || t.dateKey > maxLimitKey || t.type === 'info') return false;
-        return isTaskVisibleForUser(t);
+        return !isTaskCompletedLocally(t.id) && t.dateKey >= todayKey && t.dateKey <= limitKey && t.type !== 'info' && isTaskVisibleForUser(t);
       }).sort((a, b) => a.dateKey.localeCompare(b.dateKey));
 
       if (upcoming.length === 0) {
-        urgentList.innerHTML = `<div class="urgent-empty">Aucun devoir à venir d'ici 3 jours.</div>`;
+        urgentList.innerHTML = `<div class="urgent-card" style="border-left-color: var(--border);"><div class="urgent-card-title">Aucun devoir à rendre sous 3 jours.</div></div>`;
         return;
       }
 
       upcoming.forEach(task => {
         const parts = task.dateKey.split('-');
         const d = new Date(parts[0], parts[1] - 1, parts[2]);
-        const dateFormatted = d.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
+        const dateFormatted = d.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric' });
         
         const item = document.createElement('div');
-        item.className = 'urgent-item';
-        const cleanMat = task.matiere ? task.matiere.replace("_A", " (Grp A)").replace("_B", " (Grp B)") : '';
-        const labelMat = cleanMat ? `[${cleanMat}] ` : '';
+        item.className = 'urgent-card';
+        const mat = task.matiere ? `[${task.matiere.replace("_A", " A").replace("_B", " B")}] ` : '';
         item.innerHTML = `
-          <strong>${labelMat}${task.title}</strong>
-          <div class="urgent-date">📅 ${dateFormatted}</div>
+          <div class="urgent-card-title">${mat}${task.title}</div>
+          <div class="urgent-card-date">📅 Pour le ${dateFormatted}</div>
         `;
         urgentList.appendChild(item);
       });
@@ -876,34 +976,32 @@
 
     function renderTasks() {
       for (let i = 0; i < 5; i++) {
-        const dayDate = new Date(currentMonday.getFullYear(), currentMonday.getMonth(), currentMonday.getDate() + i);
+        const dayDate = new Date(currentMonday);
+        dayDate.setDate(dayDate.getDate() + i);
         const dateKey = formatDateKey(dayDate);
 
-        const col = document.querySelector(`.day-column[data-dayindex="${i}"]`);
-        const container = col.querySelector('.task-list');
+        const container = document.querySelector(`.day-column[data-dayindex="${i}"] .task-container`);
         container.innerHTML = '';
 
         const dayTasks = currentTasks.filter(t => t.dateKey === dateKey && isTaskVisibleForUser(t));
         dayTasks.forEach(task => {
           const card = document.createElement('div');
-          
           const baseMat = task.matiere ? task.matiere.replace("_A", "").replace("_B", "") : '';
           const matiereClass = baseMat ? `matiere-${baseMat.replace(/\s+/g, '-')}` : '';
-          
           const completed = isTaskCompletedLocally(task.id);
 
           card.className = `task-card ${task.type} ${matiereClass} ${completed ? 'completed' : ''}`;
-          
-          const displayMat = task.matiere ? task.matiere.replace("_A", " (A)").replace("_B", " (B)") : '';
-          const displayTitle = displayMat ? `[${displayMat}] ${task.title}` : task.title;
+          const matLabel = task.matiere ? `[${task.matiere.replace("_A", " A").replace("_B", " B")}] ` : '';
 
           card.innerHTML = `
-            <div class="task-type">${task.type}</div>
-            <div class="task-title">${displayTitle}</div>
-            <div class="task-desc">${task.desc}</div>
-            <div class="task-actions">
-              <button class="btn-action" onclick="toggleTaskLocally('${task.id}')">${completed ? 'Rétablir' : '✓ Fait'}</button>
-              <button class="btn-action" onclick="deleteTaskLocally('${task.id}')">Supprimer</button>
+            <div class="task-header">
+              <span class="task-badge">${task.type}</span>
+            </div>
+            <div class="task-title">${matLabel}${task.title}</div>
+            ${task.desc ? `<div class="task-desc">${task.desc}</div>` : ''}
+            <div class="task-footer">
+              <button class="task-action-btn" onclick="toggleTaskLocally('${task.id}')">${completed ? 'Rétablir' : '✓ Fait'}</button>
+              <button class="task-action-btn" onclick="deleteTaskLocally('${task.id}')">Masquer</button>
             </div>
           `;
           container.appendChild(card);
@@ -912,7 +1010,8 @@
     }
 
     function openModal(dayIndex) {
-      const selectedDate = new Date(currentMonday.getFullYear(), currentMonday.getMonth(), currentMonday.getDate() + dayIndex);
+      const selectedDate = new Date(currentMonday);
+      selectedDate.setDate(selectedDate.getDate() + dayIndex);
       document.getElementById('selectedDate').value = formatDateKey(selectedDate);
       document.getElementById('taskForm').reset();
       checkMatiereVisibility();
@@ -925,14 +1024,12 @@
 
     document.getElementById('taskForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      
       const typeVal = document.getElementById('taskType').value;
-      const matiereVal = (typeVal !== 'info') ? document.getElementById('taskMatiere').value : '';
-
+      
       db.collection("tasks").add({
         dateKey: document.getElementById('selectedDate').value,
         type: typeVal,
-        matiere: matiereVal,
+        matiere: (typeVal !== 'info') ? document.getElementById('taskMatiere').value : '',
         title: document.getElementById('taskTitle').value,
         desc: document.getElementById('taskDesc').value
       });
