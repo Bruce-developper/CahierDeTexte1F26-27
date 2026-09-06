@@ -9,46 +9,46 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      /* PALETTE SOMBRE SOBRE (Deep Slate / Neutral) */
-      --bg-main: #0f172a;
-      --bg-card: #1e293b;
-      --bg-surface: #334155;
+      /* PALETTE SOMBRE VIBRANTE */
+      --bg-main: #0a0f1d;
+      --bg-card: #151f38;
+      --bg-surface: #1e2c4f;
       --bg-input: #0f172a;
-      --text-main: #f8fafc;
+      --text-main: #ffffff;
       --text-muted: #94a3b8;
-      --border: rgba(255, 255, 255, 0.12);
-      --primary: #475569;
-      --primary-hover: #64748b;
-      --accent-glow: rgba(100, 116, 139, 0.2);
+      --border: rgba(255, 255, 255, 0.15);
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --accent-glow: rgba(99, 102, 241, 0.25);
       
-      /* Couleurs Matières Sobres & Désaturées */
-      --mat-francais: #e11d48;
-      --mat-maths: #2563eb;
-      --mat-ens-spc: #0284c7;
-      --mat-ens-svt: #059669;
-      --mat-hg: #d97706;
-      --mat-emc: #b45309;
-      --mat-anglais: #db2777;
-      --mat-ses: #7c3aed;
-      --mat-hggsp: #ea580c;
-      --mat-amc: #9333ea;
-      --mat-spc: #0369a1;
-      --mat-svt: #16a34a;
-      --mat-nsi: #4f46e5;
+      /* Couleurs Matières Vives & Éclatantes */
+      --mat-francais: #ff2a5f;
+      --mat-maths: #0066ff;
+      --mat-ens-spc: #00d2ff;
+      --mat-ens-svt: #00e676;
+      --mat-hg: #ff9100;
+      --mat-emc: #ff6d00;
+      --mat-anglais: #ff1744;
+      --mat-ses: #a855f7;
+      --mat-hggsp: #ff5722;
+      --mat-amc: #d500f9;
+      --mat-spc: #0284c7;
+      --mat-svt: #10b981;
+      --mat-nsi: #3d5af1;
     }
 
-    /* PALETTE CLAIRE SOBRE (Gris Minéral / Contraste Élevé) */
+    /* PALETTE CLAIRE COLORÉE & CONTRASTÉE */
     body.light-mode {
-      --bg-main: #e2e8f0;
+      --bg-main: #f1f5f9;
       --bg-card: #ffffff;
-      --bg-surface: #f1f5f9;
+      --bg-surface: #e2e8f0;
       --bg-input: #ffffff;
       --text-main: #0f172a;
-      --text-muted: #475569;
-      --border: #475569;
-      --primary: #334155;
-      --primary-hover: #1e293b;
-      --accent-glow: rgba(51, 65, 85, 0.1);
+      --text-muted: #334155;
+      --border: #1e293b;
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --accent-glow: rgba(79, 70, 229, 0.15);
     }
 
     * {
@@ -88,16 +88,17 @@
     }
 
     .brand-icon {
-      width: 36px;
-      height: 36px;
-      background: var(--primary);
-      border-radius: 8px;
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--primary), #a855f7);
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
       font-weight: 800;
       font-size: 1.1rem;
+      box-shadow: 0 4px 12px var(--accent-glow);
     }
 
     .brand-title {
@@ -120,7 +121,7 @@
 
     .nav-label {
       font-size: 0.7rem;
-      font-weight: 700;
+      font-weight: 800;
       text-transform: uppercase;
       color: var(--text-muted);
       letter-spacing: 0.05em;
@@ -136,13 +137,13 @@
       color: var(--text-main);
       text-decoration: none;
       font-size: 0.88rem;
-      font-weight: 500;
+      font-weight: 600;
       background: transparent;
       border: 1px solid transparent;
       cursor: pointer;
       width: 100%;
       text-align: left;
-      transition: background 0.2s, border-color 0.2s;
+      transition: all 0.2s;
     }
 
     .nav-item:hover {
@@ -172,7 +173,7 @@
     }
 
     .header-title h1 {
-      font-size: 1.6rem;
+      font-size: 1.7rem;
       font-weight: 800;
       letter-spacing: -0.02em;
     }
@@ -181,16 +182,17 @@
       font-size: 0.88rem;
       color: var(--text-muted);
       margin-top: 2px;
+      font-weight: 500;
     }
 
     .academic-badge {
       background: var(--bg-card);
       border: 2px solid var(--border);
-      padding: 6px 14px;
+      padding: 6px 16px;
       border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--text-main);
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--primary);
     }
 
     /* BANNIÈRE URGENCES */
@@ -207,9 +209,9 @@
       align-items: center;
       gap: 8px;
       font-size: 0.8rem;
-      font-weight: 700;
+      font-weight: 800;
       text-transform: uppercase;
-      color: #dc2626;
+      color: #ff1744;
       margin-bottom: 12px;
       letter-spacing: 0.03em;
     }
@@ -224,7 +226,7 @@
     .urgent-card {
       background: var(--bg-surface);
       border: 1px solid var(--border);
-      border-left: 4px solid #dc2626;
+      border-left: 5px solid #ff1744;
       border-radius: 8px;
       padding: 10px 14px;
       min-width: 220px;
@@ -233,13 +235,14 @@
 
     .urgent-card-title {
       font-size: 0.85rem;
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .urgent-card-date {
       font-size: 0.75rem;
       color: var(--text-muted);
       margin-top: 4px;
+      font-weight: 600;
     }
 
     /* CONTROLES SEMAINE */
@@ -263,12 +266,12 @@
       background: var(--bg-surface);
       border: 1px solid var(--border);
       color: var(--text-main);
-      padding: 8px 14px;
+      padding: 8px 16px;
       border-radius: 8px;
       font-size: 0.82rem;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
-      transition: background 0.2s, color 0.2s;
+      transition: all 0.2s;
     }
 
     .btn-control:hover {
@@ -301,14 +304,14 @@
     }
 
     .day-column.today {
-      border-color: #64748b;
-      box-shadow: 0 0 0 1px #64748b;
+      border-color: var(--primary);
+      box-shadow: 0 0 15px var(--accent-glow);
     }
 
     .day-header {
       padding: 14px 16px;
       border-bottom: 2px solid var(--border);
-      background: rgba(0, 0, 0, 0.04);
+      background: rgba(0, 0, 0, 0.06);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -316,21 +319,22 @@
 
     .day-name {
       font-size: 0.9rem;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .day-date {
       font-size: 0.78rem;
       color: var(--text-muted);
+      font-weight: 600;
     }
 
     .today-tag {
       background: var(--primary);
       color: white;
       font-size: 0.65rem;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 4px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 6px;
       text-transform: uppercase;
     }
 
@@ -346,7 +350,7 @@
     .task-card {
       background: var(--bg-surface);
       border: 1px solid var(--border);
-      border-left: 5px solid var(--text-muted);
+      border-left: 6px solid var(--text-muted);
       border-radius: 8px;
       padding: 12px;
       display: flex;
@@ -374,7 +378,7 @@
     .task-card.matiere-NSI { border-left-color: var(--mat-nsi); }
 
     .task-card.completed {
-      opacity: 0.4;
+      opacity: 0.45;
     }
     .task-card.completed .task-title {
       text-decoration: line-through;
@@ -387,19 +391,19 @@
     }
 
     .task-badge {
-      font-size: 0.65rem;
+      font-size: 0.68rem;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      color: var(--text-main);
+      color: var(--primary);
     }
 
-    .task-card.devoir .task-badge { color: #d97706; }
-    .task-card.controle .task-badge { color: #dc2626; }
+    .task-card.devoir .task-badge { color: #ff9100; }
+    .task-card.controle .task-badge { color: #ff1744; }
 
     .task-title {
       font-size: 0.88rem;
-      font-weight: 600;
+      font-weight: 700;
       line-height: 1.3;
     }
 
@@ -408,6 +412,7 @@
       color: var(--text-muted);
       white-space: pre-wrap;
       line-height: 1.4;
+      font-weight: 500;
     }
 
     .task-footer {
@@ -424,7 +429,7 @@
       border: none;
       color: var(--text-muted);
       font-size: 0.72rem;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
     }
 
@@ -440,14 +445,14 @@
       border-radius: 6px;
       color: var(--text-muted);
       font-size: 0.8rem;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       transition: all 0.2s;
     }
 
     .add-task-btn:hover {
       border-color: var(--primary);
-      color: var(--text-main);
+      color: var(--primary);
       background: var(--accent-glow);
     }
 
@@ -485,7 +490,7 @@
     .form-group label {
       display: block;
       font-size: 0.78rem;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text-muted);
       margin-bottom: 6px;
     }
@@ -513,7 +518,7 @@
       border: none;
       padding: 8px 16px;
       border-radius: 6px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
     }
 
