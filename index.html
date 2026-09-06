@@ -576,7 +576,7 @@
       </div>
       <div class="urgent-grid" id="urgentList">
         <div class="urgent-card" style="border-left-color: var(--border);">
-          <div class="urgent-card-title">Aucune évaluation programmée.</div>
+          <div class="urgent-card-title">Aucune évaluation prévue sous 3 jours.</div>
         </div>
       </div>
     </section>
@@ -953,17 +953,26 @@
     function renderUrgencies() {
       const now = new Date();
       const todayKey = formatDateKey(now);
+      
+      // Marge de 3 jours max
+      const limit = new Date();
+      limit.setDate(now.getDate() + 3);
+      const limitKey = formatDateKey(limit);
 
       const urgentList = document.getElementById('urgentList');
       urgentList.innerHTML = '';
 
-      // Filtre uniquement les ÉVALUATIONS / CONTRÔLES à venir (non faites et visibles par l'utilisateur)
+      // Filtre uniquement les ÉVALUATIONS / CONTRÔLES prévus dans les 3 prochains jours
       const upcoming = currentTasks.filter(t => {
-        return !isTaskCompletedLocally(t.id) && t.dateKey >= todayKey && t.type === 'controle' && isTaskVisibleForUser(t);
+        return !isTaskCompletedLocally(t.id) && 
+               t.dateKey >= todayKey && 
+               t.dateKey <= limitKey && 
+               t.type === 'controle' && 
+               isTaskVisibleForUser(t);
       }).sort((a, b) => a.dateKey.localeCompare(b.dateKey));
 
       if (upcoming.length === 0) {
-        urgentList.innerHTML = `<div class="urgent-card" style="border-left-color: var(--border);"><div class="urgent-card-title">Aucune évaluation programmée.</div></div>`;
+        urgentList.innerHTML = `<div class="urgent-card" style="border-left-color: var(--border);"><div class="urgent-card-title">Aucune évaluation prévue sous 3 jours.</div></div>`;
         return;
       }
 
