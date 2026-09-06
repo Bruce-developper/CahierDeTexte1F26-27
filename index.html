@@ -37,7 +37,7 @@
       --mat-nsi: #6366f1;
     }
 
-    /* PALETTE CLAIRE CONTRASTÉE (FOND GRIS DOUX + BORDURES NOIRES) */
+    /* PALETTE CLAIRE CONTRASTÉE */
     body.light-mode {
       --bg-main: #e4e4e7;
       --bg-card: #ffffff;
@@ -194,7 +194,7 @@
       color: var(--text-main);
     }
 
-    /* BANNIÈRE URGENCES */
+    /* BANNIÈRE URGENCES (ÉVALUATIONS UNIQUEMENT) */
     .urgent-section {
       background: var(--bg-card);
       border: 2px solid var(--border);
@@ -572,11 +572,11 @@
 
     <section class="urgent-section">
       <div class="urgent-header">
-        ⚡ Devoirs & Évaluations Imminents (Sous 3 jours)
+        ⚡ Évaluations & Contrôles Imminents
       </div>
       <div class="urgent-grid" id="urgentList">
         <div class="urgent-card" style="border-left-color: var(--border);">
-          <div class="urgent-card-title">Aucun devoir à rendre sous 3 jours.</div>
+          <div class="urgent-card-title">Aucune évaluation programmée.</div>
         </div>
       </div>
     </section>
@@ -953,26 +953,24 @@
     function renderUrgencies() {
       const now = new Date();
       const todayKey = formatDateKey(now);
-      const limit = new Date();
-      limit.setDate(now.getDate() + 3);
-      const limitKey = formatDateKey(limit);
 
       const urgentList = document.getElementById('urgentList');
       urgentList.innerHTML = '';
 
+      // Filtre uniquement les ÉVALUATIONS / CONTRÔLES à venir (non faites et visibles par l'utilisateur)
       const upcoming = currentTasks.filter(t => {
-        return !isTaskCompletedLocally(t.id) && t.dateKey >= todayKey && t.dateKey <= limitKey && t.type !== 'info' && isTaskVisibleForUser(t);
+        return !isTaskCompletedLocally(t.id) && t.dateKey >= todayKey && t.type === 'controle' && isTaskVisibleForUser(t);
       }).sort((a, b) => a.dateKey.localeCompare(b.dateKey));
 
       if (upcoming.length === 0) {
-        urgentList.innerHTML = `<div class="urgent-card" style="border-left-color: var(--border);"><div class="urgent-card-title">Aucun devoir à rendre sous 3 jours.</div></div>`;
+        urgentList.innerHTML = `<div class="urgent-card" style="border-left-color: var(--border);"><div class="urgent-card-title">Aucune évaluation programmée.</div></div>`;
         return;
       }
 
       upcoming.forEach(task => {
         const parts = task.dateKey.split('-');
         const d = new Date(parts[0], parts[1] - 1, parts[2]);
-        const dateFormatted = d.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric' });
+        const dateFormatted = d.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
         
         const item = document.createElement('div');
         item.className = 'urgent-card';
