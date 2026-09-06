@@ -282,19 +282,20 @@
       transform: translateY(-2px);
     }
 
-    .task-card.matiere-Francais { border-left-color: #f43f5e; }
+    /* --- PALETTE DE COULEURS SPÉCIFIQUES PAR MATIÈRE --- */
+    .task-card.matiere-Francais { border-left-color: #ef4444; }
     .task-card.matiere-Math { border-left-color: #3b82f6; }
-    .task-card.matiere-ENS-SPC { border-left-color: #0ea5e9; }
+    .task-card.matiere-ENS-SPC { border-left-color: #06b6d4; }
     .task-card.matiere-ENS-SVT { border-left-color: #10b981; }
     .task-card.matiere-HG { border-left-color: #f59e0b; }
     .task-card.matiere-EMC { border-left-color: #d97706; }
-    .task-card.matiere-Anglais { border-left-color: #ef4444; }
+    .task-card.matiere-Anglais { border-left-color: #ec4899; }
     .task-card.matiere-SES { border-left-color: #8b5cf6; }
     .task-card.matiere-HGGSP { border-left-color: #f97316; }
     .task-card.matiere-AMC { border-left-color: #a855f7; }
-    .task-card.matiere-SPC { border-left-color: #06b6d4; }
+    .task-card.matiere-SPC { border-left-color: #0284c7; }
     .task-card.matiere-SVT { border-left-color: #22c55e; }
-    .task-card.matiere-NSI { border-left-color: #10b981; }
+    .task-card.matiere-NSI { border-left-color: #6366f1; }
 
     .task-card.completed { opacity: 0.4; }
     .task-card.completed .task-title { text-decoration: line-through; }
@@ -582,22 +583,21 @@
     const troncCommun = [
       { code: "Math", label: "Maths (Tous)" },
       { code: "Francais", label: "Français" },
-      { code: "ENS SPC", label: "ENS SPC" },
-      { code: "ENS SVT", label: "ENS SVT" },
+      { code: "ENS-SPC", label: "ENS SPC" },
+      { code: "ENS-SVT", label: "ENS SVT" },
       { code: "HG", label: "Histoire-Géo" },
       { code: "EMC", label: "EMC" },
       { code: "Anglais", label: "Anglais" }
     ];
 
-    /* --- GESTION DU STATUT "FAIT" INDIVIDUEL (localStorage) --- */
+    /* --- GESTION LOCALE (STATUT "FAIT" & SUPPRESSION INDIVIDUELLE) --- */
     function getCompletedTasksLocal() {
       const saved = localStorage.getItem('user_completed_tasks');
       return saved ? JSON.parse(saved) : [];
     }
 
     function isTaskCompletedLocally(taskId) {
-      const completedList = getCompletedTasksLocal();
-      return completedList.includes(taskId);
+      return getCompletedTasksLocal().includes(taskId);
     }
 
     function toggleTaskLocally(taskId) {
@@ -608,6 +608,25 @@
         completedList.push(taskId);
       }
       localStorage.setItem('user_completed_tasks', JSON.stringify(completedList));
+      renderTasks();
+      renderUrgencies();
+    }
+
+    function getDeletedTasksLocal() {
+      const saved = localStorage.getItem('user_deleted_tasks');
+      return saved ? JSON.parse(saved) : [];
+    }
+
+    function isTaskDeletedLocally(taskId) {
+      return getDeletedTasksLocal().includes(taskId);
+    }
+
+    function deleteTaskLocally(taskId) {
+      let deletedList = getDeletedTasksLocal();
+      if (!deletedList.includes(taskId)) {
+        deletedList.push(taskId);
+        localStorage.setItem('user_deleted_tasks', JSON.stringify(deletedList));
+      }
       renderTasks();
       renderUrgencies();
     }
@@ -681,6 +700,7 @@
     }
 
     function isTaskVisibleForUser(task) {
+      if (isTaskDeletedLocally(task.id)) return false;
       if (!task.matiere) return true;
 
       const userSpes = getUserSpes();
@@ -883,7 +903,7 @@
             <div class="task-desc">${task.desc}</div>
             <div class="task-actions">
               <button class="btn-action" onclick="toggleTaskLocally('${task.id}')">${completed ? 'Rétablir' : '✓ Fait'}</button>
-              <button class="btn-action" onclick="deleteTask('${task.id}')">Supprimer</button>
+              <button class="btn-action" onclick="deleteTaskLocally('${task.id}')">Supprimer</button>
             </div>
           `;
           container.appendChild(card);
@@ -918,10 +938,6 @@
       });
       closeModal();
     });
-
-    function deleteTask(id) {
-      db.collection("tasks").doc(id).delete();
-    }
 
     checkFirstVisit();
     renderTimetable();
