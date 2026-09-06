@@ -36,17 +36,18 @@
       --mat-nsi: #6366f1;
     }
 
+    /* Thème clair ajusté avec des contours noirs et contrastés */
     body.light-mode {
-      --bg-main: #f8fafc;
+      --bg-main: #e2e8f0;
       --bg-card: #ffffff;
       --bg-surface: #f1f5f9;
       --bg-input: #ffffff;
       --text-main: #0f172a;
-      --text-muted: #64748b;
-      --border: rgba(0, 0, 0, 0.08);
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
-      --accent-glow: rgba(37, 99, 235, 0.08);
+      --text-muted: #475569;
+      --border: #64748b;
+      --primary: #1d4ed8;
+      --primary-hover: #1e40af;
+      --accent-glow: rgba(29, 78, 216, 0.12);
     }
 
     * {
@@ -68,7 +69,7 @@
     .sidebar {
       width: 260px;
       background-color: var(--bg-card);
-      border-right: 1px solid var(--border);
+      border-right: 2px solid var(--border);
       padding: 24px 16px;
       display: flex;
       flex-direction: column;
@@ -136,19 +137,16 @@
       font-size: 0.88rem;
       font-weight: 500;
       background: transparent;
-      border: none;
+      border: 1px solid transparent;
       cursor: pointer;
       width: 100%;
       text-align: left;
-      transition: background 0.2s;
+      transition: background 0.2s, border-color 0.2s;
     }
 
     .nav-item:hover {
       background: var(--bg-surface);
-    }
-
-    .nav-item.padlet-link {
-      color: var(--text-main);
+      border-color: var(--border);
     }
 
     .sidebar-footer {
@@ -185,8 +183,8 @@
     }
 
     .academic-badge {
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
+      background: var(--bg-card);
+      border: 2px solid var(--border);
       padding: 6px 14px;
       border-radius: 20px;
       font-size: 0.8rem;
@@ -197,7 +195,7 @@
     /* BANNIÈRE URGENCES */
     .urgent-section {
       background: var(--bg-card);
-      border: 1px solid var(--border);
+      border: 2px solid var(--border);
       border-radius: 12px;
       padding: 16px 20px;
       margin-bottom: 28px;
@@ -225,7 +223,7 @@
     .urgent-card {
       background: var(--bg-surface);
       border: 1px solid var(--border);
-      border-left: 3px solid #ef4444;
+      border-left: 4px solid #ef4444;
       border-radius: 8px;
       padding: 10px 14px;
       min-width: 220px;
@@ -249,7 +247,7 @@
       justify-content: space-between;
       align-items: center;
       background: var(--bg-card);
-      border: 1px solid var(--border);
+      border: 2px solid var(--border);
       border-radius: 12px;
       padding: 12px 16px;
       margin-bottom: 24px;
@@ -269,7 +267,7 @@
       font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: background 0.2s, color 0.2s;
     }
 
     .btn-control:hover {
@@ -287,14 +285,14 @@
 
     @media (max-width: 1200px) {
       .timetable-grid { grid-template-columns: 1fr; }
-      .sidebar { width: 100%; height: auto; position: relative; }
+      .sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 2px solid var(--border); }
       .main-wrapper { margin-left: 0; padding: 20px; }
       body { flex-direction: column; }
     }
 
     .day-column {
       background: var(--bg-card);
-      border: 1px solid var(--border);
+      border: 2px solid var(--border);
       border-radius: 12px;
       display: flex;
       flex-direction: column;
@@ -308,8 +306,8 @@
 
     .day-header {
       padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-      background: rgba(255, 255, 255, 0.01);
+      border-bottom: 2px solid var(--border);
+      background: rgba(0, 0, 0, 0.03);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -347,7 +345,7 @@
     .task-card {
       background: var(--bg-surface);
       border: 1px solid var(--border);
-      border-left: 4px solid var(--text-muted);
+      border-left: 5px solid var(--text-muted);
       border-radius: 8px;
       padding: 12px;
       display: flex;
@@ -360,7 +358,6 @@
       transform: translateY(-2px);
     }
 
-    /* COULEURS PAR MATIERE */
     .task-card.matiere-Francais { border-left-color: var(--mat-francais); }
     .task-card.matiere-Math { border-left-color: var(--mat-maths); }
     .task-card.matiere-ENS-SPC { border-left-color: var(--mat-ens-spc); }
@@ -396,8 +393,8 @@
       color: var(--primary);
     }
 
-    .task-card.devoir .task-badge { color: #f59e0b; }
-    .task-card.controle .task-badge { color: #ef4444; }
+    .task-card.devoir .task-badge { color: #d97706; }
+    .task-card.controle .task-badge { color: #dc2626; }
 
     .task-title {
       font-size: 0.88rem;
@@ -438,7 +435,7 @@
       margin: 8px 12px 12px 12px;
       padding: 8px;
       background: transparent;
-      border: 1px dashed var(--border);
+      border: 2px dashed var(--border);
       border-radius: 6px;
       color: var(--text-muted);
       font-size: 0.8rem;
@@ -467,7 +464,7 @@
 
     .modal-content {
       background: var(--bg-card);
-      border: 1px solid var(--border);
+      border: 2px solid var(--border);
       border-radius: 12px;
       padding: 24px;
       width: 100%;
@@ -542,10 +539,10 @@
 
     <div class="nav-group">
       <div class="nav-label">Ressources</div>
-      <a href="https://padlet.com/iris_joussin1/padlet-de-la-1ere-f-dgu45v9kkx2egjch" target="_blank" class="nav-item padlet-link">
+      <a href="https://padlet.com/iris_joussin1/padlet-de-la-1ere-f-dgu45v9kkx2egjch" target="_blank" class="nav-item">
         📋 Padlet Fr
       </a>
-      <a href="https://padlet.com/carine_solia/elets-chiq-cristallisat-une-longue-histoire-de-la-matiere-sco3o5vlm3vax34p" target="_blank" class="nav-item padlet-link">
+      <a href="https://padlet.com/carine_solia/elets-chiq-cristallisat-une-longue-histoire-de-la-matiere-sco3o5vlm3vax34p" target="_blank" class="nav-item">
         🧪 Padlet SVT
       </a>
     </div>
@@ -708,7 +705,27 @@
       { code: "Anglais", label: "Anglais LVA" }
     ];
 
-    /* --- GESTION LOCALE (FAIT & SUPPRESSION INDIVIDUELLE) --- */
+    /* --- CALCUL DU LUNDI (INCLUT BASCULEMENT SEMAINE PROCHAINE LE WEEK-END) --- */
+    function getMonday(d) {
+      const date = new Date(d);
+      const day = date.getDay();
+      
+      // Si nous sommes Samedi (6) ou Dimanche (0), bascule sur la semaine suivante
+      if (day === 6) {
+        date.setDate(date.getDate() + 2);
+      } else if (day === 0) {
+        date.setDate(date.getDate() + 1);
+      } else {
+        const diff = date.getDate() - day + 1;
+        date.setDate(diff);
+      }
+      
+      // Ajuste au lundi de la semaine cible
+      const targetDay = date.getDay();
+      const targetDiff = date.getDate() - targetDay + (targetDay === 0 ? -6 : 1);
+      return new Date(date.setDate(targetDiff));
+    }
+
     function getCompletedTasksLocal() {
       const saved = localStorage.getItem('user_completed_tasks');
       return saved ? JSON.parse(saved) : [];
@@ -878,12 +895,6 @@
     function checkMatiereVisibility() {
       const type = document.getElementById('taskType').value;
       document.getElementById('matiereGroup').style.display = (type === 'info') ? 'none' : 'block';
-    }
-
-    function getMonday(d) {
-      const day = d.getDay();
-      const diff = d.getDate() - day + (day === 0 ? -6 : 1);
-      return new Date(d.setDate(diff));
     }
 
     function formatDateKey(date) {
