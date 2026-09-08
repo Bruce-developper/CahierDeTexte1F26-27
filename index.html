@@ -29,6 +29,7 @@
       --mat-hg: #ff9900;
       --mat-emc: #ffaa00;
       --mat-anglais: #ff007f;
+      --mat-lvb: #f43f5e;
       --mat-ses: #a855f7;
       --mat-hggsp: #ff5500;
       --mat-amc: #c084fc;
@@ -37,18 +38,18 @@
       --mat-nsi: #6366f1;
     }
 
-    /* PALETTE CLAIRE CONTRASTÉE */
+    /* PALETTE CLAIRE ADOUCIE (Anti-éblouissement) */
     body.light-mode {
-      --bg-main: #e4e4e7;
-      --bg-card: #ffffff;
-      --bg-surface: #f4f4f5;
+      --bg-main: #e2e8f0;        /* Gris-bleu doux apaisant */
+      --bg-card: #f8fafc;        /* Blanc cassé très doux */
+      --bg-surface: #f1f5f9;     /* Gris clair pour les éléments */
       --bg-input: #ffffff;
-      --text-main: #000000;
-      --text-muted: #3f3f46;
-      --border: #000000;
-      --primary: #000000;
-      --primary-hover: #27272a;
-      --accent-glow: rgba(0, 0, 0, 0.1);
+      --text-main: #1e293b;      /* Ardoise sombre au lieu du noir pur */
+      --text-muted: #64748b;     /* Gris neutre */
+      --border: #cbd5e1;        /* Bordures douces */
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --accent-glow: rgba(79, 70, 229, 0.15);
     }
 
     * {
@@ -169,7 +170,7 @@
       cursor: pointer;
       text-align: left;
       padding: 4px 0;
-      opacity: 0.5;
+      opacity: 0.6;
       transition: opacity 0.2s;
     }
 
@@ -330,7 +331,7 @@
     .day-header {
       padding: 14px 16px;
       border-bottom: 2px solid var(--border);
-      background: rgba(255, 255, 255, 0.02);
+      background: rgba(0, 0, 0, 0.02);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -388,6 +389,7 @@
     .task-card.matiere-HG { border-left-color: var(--mat-hg); }
     .task-card.matiere-EMC { border-left-color: var(--mat-emc); }
     .task-card.matiere-Anglais { border-left-color: var(--mat-anglais); }
+    .task-card[class*="matiere-LVB"] { border-left-color: var(--mat-lvb); }
     .task-card.matiere-SES { border-left-color: var(--mat-ses); }
     .task-card.matiere-HGGSP { border-left-color: var(--mat-hggsp); }
     .task-card.matiere-AMC { border-left-color: var(--mat-amc); }
@@ -396,7 +398,7 @@
     .task-card.matiere-NSI { border-left-color: var(--mat-nsi); }
 
     .task-card.completed {
-      opacity: 0.35;
+      opacity: 0.4;
     }
     .task-card.completed .task-title {
       text-decoration: line-through;
@@ -416,8 +418,8 @@
       color: var(--text-main);
     }
 
-    .task-card.devoir .task-badge { color: #ffaa00; }
-    .task-card.controle .task-badge { color: #ff0055; }
+    .task-card.devoir .task-badge { color: #d97706; }
+    .task-card.controle .task-badge { color: #dc2626; }
 
     .task-title {
       font-size: 0.88rem;
@@ -455,7 +457,7 @@
     }
 
     .task-action-btn.btn-delete-global {
-      color: #ff0055;
+      color: #dc2626;
     }
 
     .add-task-btn {
@@ -487,7 +489,7 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.85);
+      background: rgba(0, 0, 0, 0.7);
       backdrop-filter: blur(4px);
       justify-content: center;
       align-items: center;
@@ -582,12 +584,12 @@
 
     <div class="nav-group">
       <div class="nav-label">Configuration</div>
-      <button class="nav-item" onclick="openSpeModal()">🎓 Mes Spécialités</button>
+      <button class="nav-item" onclick="openSpeModal()">🎓 Spécialités & LVB</button>
       <button class="nav-item" onclick="toggleTheme()">⚙️ Changer le Thème</button>
     </div>
 
     <div class="sidebar-footer">
-      <div class="brand-subtitle" id="statusLabel">Statut : Connexion active</div>
+      <div class="brand-subtitle" id="statusLabel">Statut : Eleve connecté</div>
       <button class="admin-link" id="adminLoginBtn" onclick="openAdminModal()">🔒 Admin</button>
       <button class="admin-link" id="adminLogoutBtn" style="display:none;" onclick="logoutAdmin()">🚪 Déconnexion Admin</button>
     </div>
@@ -648,6 +650,7 @@
     </section>
   </main>
 
+  <!-- MODALE CREATION DEVOIR -->
   <div class="modal" id="taskModal">
     <div class="modal-content">
       <div class="modal-title">Nouveau travail à faire</div>
@@ -656,7 +659,7 @@
         <div class="form-group">
           <label for="taskType">Type de travail</label>
           <select id="taskType" onchange="checkMatiereVisibility()">
-            <option value="devoir">Devoir à maison</option>
+            <option value="devoir">Devoir à la maison</option>
             <option value="controle">Évaluation / Contrôle</option>
             <option value="info">Information du professeur</option>
           </select>
@@ -685,9 +688,10 @@
     </div>
   </div>
 
+  <!-- MODALE CONFIGURATION ELEVE (SPES ET LVB) -->
   <div class="modal" id="speModal">
     <div class="modal-content">
-      <div class="modal-title">🎓 Sélection des Spécialités</div>
+      <div class="modal-title">🎓 Vos Spécialités & Option LVB</div>
       <div class="form-group">
         <label>Spécialité A</label>
         <select id="selectSpeA" onchange="onSpeAChange()"></select>
@@ -696,12 +700,23 @@
         <label>Spécialité B</label>
         <select id="selectSpeB"></select>
       </div>
+      <div class="form-group">
+        <label>Langue Vivante B (LVB)</label>
+        <select id="selectLVB">
+          <option value="">-- Sélectionner LVB --</option>
+          <option value="LVB_Tahitien">Tahitien</option>
+          <option value="LVB_Espagnol">Espagnol</option>
+          <option value="LVB_Chinois">Chinois</option>
+          <option value="LVB_Japonais">Japonais</option>
+        </select>
+      </div>
       <div class="modal-actions">
-        <button type="button" class="btn-submit" onclick="saveUserSpes()">Enregistrer mes choix</button>
+        <button type="button" class="btn-submit" onclick="saveUserConfig()">Enregistrer mes choix</button>
       </div>
     </div>
   </div>
 
+  <!-- MODALE ADMIN LOGIN -->
   <div class="modal" id="adminModal">
     <div class="modal-content">
       <div class="modal-title">🔒 Connexion Administration</div>
@@ -759,6 +774,13 @@
       { code: "Anglais", label: "Anglais LVA" }
     ];
 
+    const lvbList = [
+      { code: "LVB_Tahitien", label: "LVB Tahitien" },
+      { code: "LVB_Espagnol", label: "LVB Espagnol" },
+      { code: "LVB_Chinois", label: "LVB Chinois" },
+      { code: "LVB_Japonais", label: "LVB Japonais" }
+    ];
+
     function checkAdminSession() {
       if (sessionStorage.getItem('is_admin') === 'true') {
         setAdminState(true);
@@ -778,7 +800,7 @@
         document.body.classList.remove('is-admin');
         document.getElementById('adminLoginBtn').style.display = 'block';
         document.getElementById('adminLogoutBtn').style.display = 'none';
-        document.getElementById('statusLabel').innerText = 'Statut : Connexion active';
+        document.getElementById('statusLabel').innerText = 'Statut : Eleve connecté';
       }
       renderTasks();
     }
@@ -880,7 +902,7 @@
       document.body.classList.toggle('light-mode');
     }
 
-    function getUserSpes() {
+    function getUserConfig() {
       const saved = localStorage.getItem('user_spes_groups');
       return saved ? JSON.parse(saved) : null;
     }
@@ -896,9 +918,12 @@
         selectA.appendChild(opt);
       });
 
-      const userSpes = getUserSpes();
-      if (userSpes && userSpes.speA) {
-        selectA.value = userSpes.speA;
+      const userConfig = getUserConfig();
+      if (userConfig && userConfig.speA) {
+        selectA.value = userConfig.speA;
+      }
+      if (userConfig && userConfig.lvb) {
+        document.getElementById('selectLVB').value = userConfig.lvb;
       }
       onSpeAChange();
     }
@@ -919,24 +944,25 @@
         }
       });
 
-      const userSpes = getUserSpes();
+      const userConfig = getUserConfig();
       if (currentB && currentB !== speAVal) {
         selectB.value = currentB;
-      } else if (userSpes && userSpes.speB && userSpes.speB !== speAVal) {
-        selectB.value = userSpes.speB;
+      } else if (userConfig && userConfig.speB && userConfig.speB !== speAVal) {
+        selectB.value = userConfig.speB;
       }
     }
 
-    function saveUserSpes() {
+    function saveUserConfig() {
       const speA = document.getElementById('selectSpeA').value;
       const speB = document.getElementById('selectSpeB').value;
+      const lvb = document.getElementById('selectLVB').value;
 
-      if (!speA || !speB) {
-        alert("Veuillez choisir 2 spécialités.");
+      if (!speA || !speB || !lvb) {
+        alert("Veuillez sélectionner vos 2 spécialités et votre LVB.");
         return;
       }
 
-      localStorage.setItem('user_spes_groups', JSON.stringify({ speA, speB }));
+      localStorage.setItem('user_spes_groups', JSON.stringify({ speA, speB, lvb }));
       document.getElementById('speModal').style.display = 'none';
 
       updateMatiereDropdown();
@@ -948,25 +974,29 @@
       if (isTaskDeletedLocally(task.id)) return false;
       if (!task.matiere) return true;
 
-      const userSpes = getUserSpes();
-      if (!userSpes) return true;
+      const userConfig = getUserConfig();
+      if (!userConfig) return true;
 
       const isTronc = troncCommun.some(tc => task.matiere === tc.code);
       if (isTronc) return true;
 
-      if (task.matiere.endsWith("_A")) {
-        return userSpes.speA === task.matiere.replace("_A", "");
-      }
-      if (task.matiere.endsWith("_B")) {
-        return userSpes.speB === task.matiere.replace("_B", "");
+      if (task.matiere.startsWith("LVB_")) {
+        return userConfig.lvb === task.matiere;
       }
 
-      return (userSpes.speA === task.matiere || userSpes.speB === task.matiere);
+      if (task.matiere.endsWith("_A")) {
+        return userConfig.speA === task.matiere.replace("_A", "");
+      }
+      if (task.matiere.endsWith("_B")) {
+        return userConfig.speB === task.matiere.replace("_B", "");
+      }
+
+      return (userConfig.speA === task.matiere || userConfig.speB === task.matiere);
     }
 
     function checkFirstVisit() {
       initSpeModalOptions();
-      if (!getUserSpes()) {
+      if (!getUserConfig()) {
         document.getElementById('speModal').style.display = 'flex';
       } else {
         updateMatiereDropdown();
@@ -986,6 +1016,13 @@
         const opt = document.createElement('option');
         opt.value = m.code;
         opt.textContent = m.label;
+        select.appendChild(opt);
+      });
+
+      lvbList.forEach(l => {
+        const opt = document.createElement('option');
+        opt.value = l.code;
+        opt.textContent = l.label;
         select.appendChild(opt);
       });
 
@@ -1091,7 +1128,7 @@
         
         const item = document.createElement('div');
         item.className = 'urgent-card';
-        const mat = task.matiere ? `[${task.matiere.replace("_A", " A").replace("_B", " B")}] ` : '';
+        const mat = task.matiere ? `[${task.matiere.replace("_A", " A").replace("_B", " B").replace("LVB_", "LVB ")}] ` : '';
         item.innerHTML = `
           <div class="urgent-card-title">${mat}${task.title}</div>
           <div class="urgent-card-date">📅 Pour le ${dateFormatted}</div>
@@ -1117,7 +1154,7 @@
           const completed = isTaskCompletedLocally(task.id);
 
           card.className = `task-card ${task.type} ${matiereClass} ${completed ? 'completed' : ''}`;
-          const matLabel = task.matiere ? `[${task.matiere.replace("_A", " A").replace("_B", " B")}] ` : '';
+          const matLabel = task.matiere ? `[${task.matiere.replace("_A", " A").replace("_B", " B").replace("LVB_", "LVB ")}] ` : '';
 
           let adminDeleteBtn = isAdmin ? `<button class="task-action-btn btn-delete-global" onclick="deleteGlobalTask('${task.id}')">🗑️ Supprimer (Global)</button>` : '';
 
