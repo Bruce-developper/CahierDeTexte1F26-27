@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      /* PALETTE SOMBRE NOIRE & COULEURS VIVES */
+      /* PALETTE SOMBRE PAR DÉFAUT */
       --bg-main: #000000;
       --bg-card: #0d0d0d;
       --bg-surface: #1a1a1a;
@@ -21,7 +21,7 @@
       --primary-hover: #7c3aed;
       --accent-glow: rgba(139, 92, 246, 0.25);
       
-      /* Couleurs Matières Vives & Électriques */
+      /* Couleurs Matières */
       --mat-francais: #ff2a5f;
       --mat-maths: #00f0ff;
       --mat-ens-spc: #00d2ff;
@@ -38,18 +38,64 @@
       --mat-nsi: #6366f1;
     }
 
-    /* PALETTE CLAIRE ADOUCIE (Anti-éblouissement) */
-    body.light-mode {
-      --bg-main: #e2e8f0;        /* Gris-bleu doux apaisant */
-      --bg-card: #f8fafc;        /* Blanc cassé très doux */
-      --bg-surface: #f1f5f9;     /* Gris clair pour les éléments */
+    /* THÈME CLAIR ADOUCI */
+    body.theme-light {
+      --bg-main: #e2e8f0;
+      --bg-card: #f8fafc;
+      --bg-surface: #f1f5f9;
       --bg-input: #ffffff;
-      --text-main: #1e293b;      /* Ardoise sombre au lieu du noir pur */
-      --text-muted: #64748b;     /* Gris neutre */
-      --border: #cbd5e1;        /* Bordures douces */
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --border: #cbd5e1;
       --primary: #4f46e5;
       --primary-hover: #4338ca;
       --accent-glow: rgba(79, 70, 229, 0.15);
+    }
+
+    /* THÈME JUNGLE */
+    body.theme-jungle {
+      --bg-main: #062319;
+      --bg-card: #0b3829;
+      --bg-surface: #124d3a;
+      --bg-input: #062319;
+      --text-main: #e8f5e9;
+      --text-muted: #81c784;
+      --border: #1b5e20;
+      --primary: #2e7d32;
+      --primary-hover: #1b5e20;
+      --accent-glow: rgba(76, 175, 80, 0.3);
+      background-image: radial-gradient(#1b5e20 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    /* THÈME OCÉAN */
+    body.theme-ocean {
+      --bg-main: #031926;
+      --bg-card: #08283b;
+      --bg-surface: #0e3852;
+      --bg-input: #031926;
+      --text-main: #e0f7fa;
+      --text-muted: #80deea;
+      --border: #155d85;
+      --primary: #00838f;
+      --primary-hover: #006064;
+      --accent-glow: rgba(0, 188, 212, 0.3);
+      background-image: radial-gradient(circle at 50% 50%, #08283b 0%, #031926 100%);
+    }
+
+    /* THÈME DÉSERT */
+    body.theme-desert {
+      --bg-main: #2b1d14;
+      --bg-card: #3d2a1e;
+      --bg-surface: #523a2b;
+      --bg-input: #2b1d14;
+      --text-main: #fff3e0;
+      --text-muted: #ffcc80;
+      --border: #6d4c41;
+      --primary: #d84315;
+      --primary-hover: #bf360c;
+      --accent-glow: rgba(255, 112, 67, 0.3);
+      background-image: linear-gradient(180deg, #2b1d14 0%, #3e2415 100%);
     }
 
     * {
@@ -67,7 +113,7 @@
       transition: background-color 0.3s, color 0.3s;
     }
 
-    /* --- SIDEBAR DE NAVIGATION --- */
+    /* --- SIDEBAR DE NAVIGATION & DÉCORS --- */
     .sidebar {
       width: 260px;
       background-color: var(--bg-card);
@@ -79,6 +125,49 @@
       position: fixed;
       height: 100vh;
       z-index: 10;
+      overflow: hidden;
+    }
+
+    /* Éléments de décorations spécifiques aux thèmes */
+    .sidebar::before, .sidebar::after {
+      content: '';
+      position: absolute;
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+
+    /* Décoration Jungle : Lianes en haut */
+    body.theme-jungle .sidebar::before {
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 45px;
+      background-image: repeating-linear-gradient(90deg, transparent 0, transparent 20px, #2e7d32 20px, #1b5e20 25px);
+      border-bottom: 3px solid #81c784;
+      border-radius: 0 0 15px 15px;
+      opacity: 0.8;
+    }
+
+    /* Décoration Océan : Algues / Vagues en bas */
+    body.theme-ocean .sidebar::after {
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 35px;
+      background: radial-gradient(circle at 10px -5px, transparent 12px, #00838f 13px);
+      background-size: 20px 40px;
+      opacity: 0.6;
+    }
+
+    /* Décoration Désert : Dunes / Sun en bas */
+    body.theme-desert .sidebar::after {
+      bottom: 0;
+      left: -20%;
+      width: 140%;
+      height: 40px;
+      background: #d84315;
+      border-radius: 100% 100% 0 0;
+      opacity: 0.4;
     }
 
     .brand {
@@ -86,6 +175,8 @@
       align-items: center;
       gap: 12px;
       padding: 0 8px;
+      position: relative;
+      z-index: 2;
     }
 
     .brand-icon {
@@ -118,6 +209,8 @@
       display: flex;
       flex-direction: column;
       gap: 6px;
+      position: relative;
+      z-index: 2;
     }
 
     .nav-label {
@@ -129,7 +222,7 @@
       padding: 0 8px 4px 8px;
     }
 
-    .nav-item {
+    .nav-item, .theme-select {
       display: flex;
       align-items: center;
       gap: 10px;
@@ -139,17 +232,17 @@
       text-decoration: none;
       font-size: 0.88rem;
       font-weight: 600;
-      background: transparent;
-      border: 1px solid transparent;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
       cursor: pointer;
       width: 100%;
       text-align: left;
       transition: all 0.2s;
     }
 
-    .nav-item:hover {
-      background: var(--bg-surface);
-      border-color: var(--border);
+    .nav-item:hover, .theme-select:hover {
+      border-color: var(--primary);
+      background: var(--bg-card);
     }
 
     .sidebar-footer {
@@ -159,6 +252,8 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
+      position: relative;
+      z-index: 2;
     }
 
     .admin-link {
@@ -585,7 +680,15 @@
     <div class="nav-group">
       <div class="nav-label">Configuration</div>
       <button class="nav-item" onclick="openSpeModal()">🎓 Spécialités & LVB</button>
-      <button class="nav-item" onclick="toggleTheme()">⚙️ Changer le Thème</button>
+      
+      <!-- SÉLECTEUR DE THÈME AVEC THÈMES PERSONNALISÉS -->
+      <select id="themeSelector" class="theme-select" onchange="changeTheme(this.value)">
+        <option value="dark">🌙 Thème Sombre</option>
+        <option value="light">☀️ Thème Clair</option>
+        <option value="jungle">🌿 Thème Jungle</option>
+        <option value="ocean">🌊 Thème Océan</option>
+        <option value="desert">🏜️ Thème Désert</option>
+      </select>
     </div>
 
     <div class="sidebar-footer">
@@ -781,7 +884,22 @@
       { code: "LVB_Japonais", label: "LVB Japonais" }
     ];
 
-    /* GESTION DE LA SESSION ADMIN (PERSISTANTE VIA LOCALSTORAGE) */
+    /* GESTION DES THÈMES */
+    function changeTheme(themeName) {
+      document.body.className = document.body.className.replace(/\btheme-\S+/g, '');
+      if (themeName !== 'dark') {
+        document.body.classList.add(`theme-${themeName}`);
+      }
+      localStorage.setItem('app_theme', themeName);
+    }
+
+    function initTheme() {
+      const savedTheme = localStorage.getItem('app_theme') || 'dark';
+      document.getElementById('themeSelector').value = savedTheme;
+      changeTheme(savedTheme);
+    }
+
+    /* GESTION DE LA SESSION ADMIN (LOCALSTORAGE) */
     function checkAdminSession() {
       if (localStorage.getItem('is_admin') === 'true') {
         setAdminState(true);
@@ -897,10 +1015,6 @@
       }
       renderTasks();
       renderUrgencies();
-    }
-
-    function toggleTheme() {
-      document.body.classList.toggle('light-mode');
     }
 
     function getUserConfig() {
@@ -1206,6 +1320,7 @@
       closeModal();
     });
 
+    initTheme();
     checkAdminSession();
     checkFirstVisit();
     renderTimetable();
