@@ -155,6 +155,27 @@
       margin-top: auto;
       padding-top: 16px;
       border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .admin-link {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      padding: 4px 0;
+      opacity: 0.5;
+      transition: opacity 0.2s;
+    }
+
+    .admin-link:hover {
+      opacity: 1;
+      color: var(--text-main);
     }
 
     /* --- CONTENU PRINCIPAL --- */
@@ -194,7 +215,7 @@
       color: var(--text-main);
     }
 
-    /* BANNIÈRE URGENCES (ÉVALUATIONS UNIQUEMENT) */
+    /* BANNIÈRE URGENCES */
     .urgent-section {
       background: var(--bg-card);
       border: 2px solid var(--border);
@@ -433,6 +454,10 @@
       color: var(--text-main);
     }
 
+    .task-action-btn.btn-delete-global {
+      color: #ff0055;
+    }
+
     .add-task-btn {
       margin: 8px 12px 12px 12px;
       padding: 8px;
@@ -444,6 +469,11 @@
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s;
+      display: none;
+    }
+
+    body.is-admin .add-task-btn {
+      display: block;
     }
 
     .add-task-btn:hover {
@@ -557,7 +587,9 @@
     </div>
 
     <div class="sidebar-footer">
-      <div class="brand-subtitle">Statut : Connexion active</div>
+      <div class="brand-subtitle" id="statusLabel">Statut : Connexion active</div>
+      <button class="admin-link" id="adminLoginBtn" onclick="openAdminModal()">🔒 Admin</button>
+      <button class="admin-link" id="adminLogoutBtn" style="display:none;" onclick="logoutAdmin()">🚪 Déconnexion Admin</button>
     </div>
   </aside>
 
@@ -670,6 +702,22 @@
     </div>
   </div>
 
+  <div class="modal" id="adminModal">
+    <div class="modal-content">
+      <div class="modal-title">🔒 Connexion Administration</div>
+      <form id="adminForm" onsubmit="handleAdminLogin(event)">
+        <div class="form-group">
+          <label for="adminPass">Mot de passe</label>
+          <input type="password" id="adminPass" required placeholder="Saisir le mot de passe admin">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" onclick="closeAdminModal()">Annuler</button>
+          <button type="submit" class="btn-submit">Se connecter</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
@@ -685,6 +733,9 @@
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
+
+    const ADMIN_PASSWORD_HASH = "1ereFcahierdetexte202627";
+    let isAdmin = false;
 
     let currentMonday = getMonday(new Date());
     let currentTasks = [];
@@ -707,6 +758,65 @@
       { code: "EMC", label: "EMC" },
       { code: "Anglais", label: "Anglais LVA" }
     ];
+
+    function checkAdminSession() {
+      if (sessionStorage.getItem('is_admin') === 'true') {
+        setAdminState(true);
+      } else {
+        setAdminState(false);
+      }
+    }
+
+    function setAdminState(state) {
+      isAdmin = state;
+      if (isAdmin) {
+        document.body.classList.add('is-admin');
+        document.getElementById('adminLoginBtn').style.display = 'none';
+        document.getElementById('adminLogoutBtn').style.display = 'block';
+        document.getElementById('statusLabel').innerText = 'Statut : Admin connecté';
+      } else {
+        document.body.classList.remove('is-admin');
+        document.getElementById('adminLoginBtn').style.display = 'block';
+        document.getElementById('adminLogoutBtn').style.display = 'none';
+        document.getElementById('statusLabel').innerText = 'Statut : Connexion active';
+      }
+      renderTasks();
+    }
+
+    function openAdminModal() {
+      document.getElementById('adminPass').value = '';
+      document.getElementById('adminModal').style.display = 'flex';
+    }
+
+    function closeAdminModal() {
+      document.getElementById('adminModal').style.display = 'none';
+    }
+
+    function handleAdminLogin(e) {
+      e.preventDefault();
+      const inputPass = document.getElementById('adminPass').value;
+      if (inputPass === ADMIN_PASSWORD_HASH) {
+        sessionStorage.setItem('is_admin', 'true');
+        setAdminState(true);
+        closeAdminModal();
+      } else {
+        alert("Mot de passe incorrect.");
+      }
+    }
+
+    function logoutAdmin() {
+      sessionStorage.removeItem('is_admin');
+      setAdminState(false);
+    }
+
+    function deleteGlobalTask(taskId) {
+      if (!isAdmin) return;
+      if (confirm("Voulez-vous vraiment supprimer définitivement ce devoir pour tout le monde ?")) {
+        db.collection("tasks").doc(taskId).delete().catch(error => {
+          alert("Erreur lors de la suppression : " + error.message);
+        });
+      }
+    }
 
     function getMonday(d) {
       const date = new Date(d);
@@ -954,7 +1064,6 @@
       const now = new Date();
       const todayKey = formatDateKey(now);
       
-      // Marge de 3 jours max
       const limit = new Date();
       limit.setDate(now.getDate() + 3);
       const limitKey = formatDateKey(limit);
@@ -962,7 +1071,6 @@
       const urgentList = document.getElementById('urgentList');
       urgentList.innerHTML = '';
 
-      // Filtre uniquement les ÉVALUATIONS / CONTRÔLES prévus dans les 3 prochains jours
       const upcoming = currentTasks.filter(t => {
         return !isTaskCompletedLocally(t.id) && 
                t.dateKey >= todayKey && 
@@ -1011,6 +1119,8 @@
           card.className = `task-card ${task.type} ${matiereClass} ${completed ? 'completed' : ''}`;
           const matLabel = task.matiere ? `[${task.matiere.replace("_A", " A").replace("_B", " B")}] ` : '';
 
+          let adminDeleteBtn = isAdmin ? `<button class="task-action-btn btn-delete-global" onclick="deleteGlobalTask('${task.id}')">🗑️ Supprimer (Global)</button>` : '';
+
           card.innerHTML = `
             <div class="task-header">
               <span class="task-badge">${task.type}</span>
@@ -1020,6 +1130,7 @@
             <div class="task-footer">
               <button class="task-action-btn" onclick="toggleTaskLocally('${task.id}')">${completed ? 'Rétablir' : '✓ Fait'}</button>
               <button class="task-action-btn" onclick="deleteTaskLocally('${task.id}')">Masquer</button>
+              ${adminDeleteBtn}
             </div>
           `;
           container.appendChild(card);
@@ -1028,6 +1139,7 @@
     }
 
     function openModal(dayIndex) {
+      if (!isAdmin) return;
       const selectedDate = new Date(currentMonday);
       selectedDate.setDate(selectedDate.getDate() + dayIndex);
       document.getElementById('selectedDate').value = formatDateKey(selectedDate);
@@ -1042,6 +1154,8 @@
 
     document.getElementById('taskForm').addEventListener('submit', function(e) {
       e.preventDefault();
+      if (!isAdmin) return;
+      
       const typeVal = document.getElementById('taskType').value;
       
       db.collection("tasks").add({
@@ -1054,6 +1168,7 @@
       closeModal();
     });
 
+    checkAdminSession();
     checkFirstVisit();
     renderTimetable();
   </script>
