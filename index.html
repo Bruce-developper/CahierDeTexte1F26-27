@@ -781,8 +781,9 @@
       { code: "LVB_Japonais", label: "LVB Japonais" }
     ];
 
+    /* GESTION DE LA SESSION ADMIN (PERSISTANTE VIA LOCALSTORAGE) */
     function checkAdminSession() {
-      if (sessionStorage.getItem('is_admin') === 'true') {
+      if (localStorage.getItem('is_admin') === 'true') {
         setAdminState(true);
       } else {
         setAdminState(false);
@@ -818,7 +819,7 @@
       e.preventDefault();
       const inputPass = document.getElementById('adminPass').value;
       if (inputPass === ADMIN_PASSWORD_HASH) {
-        sessionStorage.setItem('is_admin', 'true');
+        localStorage.setItem('is_admin', 'true');
         setAdminState(true);
         closeAdminModal();
       } else {
@@ -827,7 +828,7 @@
     }
 
     function logoutAdmin() {
-      sessionStorage.removeItem('is_admin');
+      localStorage.removeItem('is_admin');
       setAdminState(false);
     }
 
