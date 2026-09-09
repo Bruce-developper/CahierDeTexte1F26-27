@@ -46,7 +46,7 @@
       --mat-nsi: #818cf8;
     }
 
-    /* THÈME CLAIR - Motif géométrique moderne */
+    /* THÈME CLAIR */
     body.theme-light {
       --bg-main: #f1f5f9;
       --bg-card: #ffffff;
@@ -66,7 +66,7 @@
       background-position: 0 0, 20px 20px;
     }
 
-    /* THÈME JUNGLE - Feuillages et lucioles */
+    /* THÈME JUNGLE */
     body.theme-jungle {
       --bg-main: #04140c;
       --bg-card: #092618;
@@ -87,7 +87,7 @@
       background-attachment: fixed;
     }
 
-    /* THÈME OCÉAN - Vagues et bulles lumineuses */
+    /* THÈME OCÉAN */
     body.theme-ocean {
       --bg-main: #03121e;
       --bg-card: #072136;
@@ -108,7 +108,7 @@
       background-attachment: fixed;
     }
 
-    /* THÈME DÉSERT - Dune dorée, chaleur et points de sable */
+    /* THÈME DÉSERT */
     body.theme-desert {
       --bg-main: #1c100b;
       --bg-card: #2e1b12;
@@ -129,7 +129,7 @@
       background-attachment: fixed;
     }
 
-    /* THÈME GOLD RUSH - Éclats et dorures */
+    /* THÈME GOLD RUSH */
     body.theme-gold {
       --bg-main: #120e07;
       --bg-card: #211a0e;
@@ -149,7 +149,7 @@
       background-attachment: fixed;
     }
 
-    /* THÈME ESPACE - Constellations, étoiles et nébuleuses */
+    /* THÈME ESPACE */
     body.theme-space {
       --bg-main: #03030c;
       --bg-card: #0a0c1e;
@@ -169,35 +169,6 @@
         radial-gradient(rgba(129, 140, 248, 0.3) 1.5px, transparent 1.5px);
       background-size: 100% 100%, 100% 100%, 40px 40px, 90px 90px;
       background-attachment: fixed;
-    }
-
-    /* ANIMATIONS ET EFFETS VISUELS SUPPLÉMENTAIRES */
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
-      opacity: 0.6;
-    }
-
-    body.theme-space::before {
-      background: radial-gradient(circle at 50% 50%, transparent 60%, rgba(99, 102, 241, 0.08));
-    }
-
-    body.theme-jungle::before {
-      background: radial-gradient(circle at 50% 100%, rgba(34, 197, 94, 0.1), transparent 70%);
-    }
-
-    body.theme-ocean::before {
-      background: linear-gradient(180deg, rgba(6, 182, 212, 0.05) 0%, transparent 100%);
-    }
-
-    body.theme-desert::before {
-      background: radial-gradient(circle at 50% 100%, rgba(234, 88, 12, 0.12), transparent 75%);
     }
 
     * {
@@ -267,6 +238,7 @@
       }
     }
 
+    /* BARRE LATÉRALE CLASSIQUE ET ÉPURÉE */
     .sidebar {
       width: 280px;
       background-color: var(--bg-card);
@@ -280,49 +252,153 @@
       z-index: 10;
       overflow: hidden;
       backdrop-filter: blur(12px);
-      transition: background-image 0.4s ease, border-color 0.4s ease;
+      transition: background-color 0.4s ease, border-color 0.4s ease;
     }
 
-    /* ÉLÉMENTS DE DÉCORATION DANS LA BARRE LATÉRALE SELON LE THÈME */
-    body.theme-jungle .sidebar {
-      background-image: 
-        radial-gradient(circle at 100% 0%, rgba(34, 197, 94, 0.15) 0%, transparent 60%),
-        radial-gradient(rgba(134, 239, 172, 0.15) 1.5px, transparent 1.5px);
-      background-size: 100% 100%, 30px 30px;
+    /* ÉLÉMENTS DE DÉCORATION VISUELS DANS LA BARRE LATÉRALE SUR-MESURE */
+    .sidebar-deco {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
     }
 
-    body.theme-ocean .sidebar {
-      background-image: 
-        radial-gradient(circle at 0% 100%, rgba(6, 182, 212, 0.18) 0%, transparent 60%),
-        radial-gradient(rgba(103, 232, 249, 0.15) 1.5px, transparent 1.5px);
-      background-size: 100% 100%, 25px 25px;
+    /* DÉCORATIONS JUNGLE : Lianes pendatnes, lézard et luciole brillante */
+    .theme-jungle .sidebar-deco::before {
+      content: "";
+      position: absolute;
+      top: -10px;
+      right: 15px;
+      width: 50px;
+      height: 140px;
+      background: 
+        radial-gradient(circle at 10px 30px, #22c55e 6px, transparent 7px),
+        radial-gradient(circle at 35px 70px, #16a34a 8px, transparent 9px),
+        radial-gradient(circle at 15px 110px, #15803d 7px, transparent 8px);
+      border-right: 3px solid #22c55e;
+      border-bottom-right-radius: 20px;
+      opacity: 0.85;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));
     }
 
-    body.theme-desert .sidebar {
-      background-image: 
-        radial-gradient(circle at 50% 0%, rgba(249, 115, 22, 0.2) 0%, transparent 65%),
-        radial-gradient(rgba(253, 186, 116, 0.18) 1.5px, transparent 1.5px);
-      background-size: 100% 100%, 28px 28px;
+    .theme-jungle .sidebar-deco::after {
+      content: "🦎";
+      position: absolute;
+      bottom: 80px;
+      right: 12px;
+      font-size: 2rem;
+      transform: rotate(-35deg);
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6));
+      animation: lizardWiggle 6s ease-in-out infinite;
     }
 
-    body.theme-gold .sidebar {
-      background-image: 
-        radial-gradient(circle at 100% 100%, rgba(234, 179, 8, 0.2) 0%, transparent 60%),
-        radial-gradient(rgba(250, 204, 21, 0.2) 1.5px, transparent 1.5px);
-      background-size: 100% 100%, 20px 20px;
+    @keyframes lizardWiggle {
+      0%, 100% { transform: rotate(-35deg) translateY(0); }
+      50% { transform: rotate(-25deg) translateY(-5px); }
     }
 
-    body.theme-space .sidebar {
-      background-image: 
-        radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.25) 0%, transparent 60%),
-        radial-gradient(rgba(129, 140, 248, 0.2) 1.5px, transparent 1.5px);
-      background-size: 100% 100%, 35px 35px;
+    /* DÉCORATIONS ESPACE : Planète à anneaux, étoiles et fusée */
+    .theme-space .sidebar-deco::before {
+      content: "🪐";
+      position: absolute;
+      top: 20px;
+      right: 15px;
+      font-size: 2.2rem;
+      filter: drop-shadow(0 0 12px rgba(99, 102, 241, 0.8));
+      animation: orbitFloat 8s ease-in-out infinite alternate;
     }
 
-    body.theme-light .sidebar {
-      background-image: 
-        radial-gradient(#3b82f6 0.8px, transparent 0.8px);
-      background-size: 20px 20px;
+    .theme-space .sidebar-deco::after {
+      content: "✨";
+      position: absolute;
+      bottom: 90px;
+      left: 20px;
+      font-size: 1.5rem;
+      filter: drop-shadow(0 0 8px #818cf8);
+      animation: pulseGlow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes orbitFloat {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(12px) rotate(15deg); }
+    }
+
+    /* DÉCORATIONS OCÉAN : Poissons colorés et récif de corail */
+    .theme-ocean .sidebar-deco::before {
+      content: "🐠";
+      position: absolute;
+      top: 40%;
+      right: 15px;
+      font-size: 1.8rem;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+      animation: swimFish 7s ease-in-out infinite alternate;
+    }
+
+    .theme-ocean .sidebar-deco::after {
+      content: "🪸";
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 3rem;
+      opacity: 0.85;
+      filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.5));
+    }
+
+    @keyframes swimFish {
+      0% { transform: translateY(0) translateX(0); }
+      100% { transform: translateY(-15px) translateX(-10px); }
+    }
+
+    /* DÉCORATIONS DÉSERT : Cactus géant et dunes / canyons */
+    .theme-desert .sidebar-deco::before {
+      content: "🌵";
+      position: absolute;
+      bottom: 20px;
+      right: 15px;
+      font-size: 2.8rem;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
+    }
+
+    .theme-desert .sidebar-deco::after {
+      content: "☀️";
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 2rem;
+      filter: drop-shadow(0 0 15px #f97316);
+      animation: pulseGlow 4s ease-in-out infinite alternate;
+    }
+
+    /* DÉCORATIONS GOLD RUSH : Pioches croisées et pépites d'or */
+    .theme-gold .sidebar-deco::before {
+      content: "⛏️";
+      position: absolute;
+      top: 25px;
+      right: 15px;
+      font-size: 1.8rem;
+      filter: drop-shadow(0 0 8px rgba(234, 179, 8, 0.6));
+      transform: rotate(-20deg);
+    }
+
+    .theme-gold .sidebar-deco::after {
+      content: "🪙";
+      position: absolute;
+      bottom: 30px;
+      right: 20px;
+      font-size: 2.2rem;
+      filter: drop-shadow(0 0 12px #eab308);
+      animation: goldSparkle 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes goldSparkle {
+      0% { transform: scale(0.95); filter: drop-shadow(0 0 8px #eab308); }
+      100% { transform: scale(1.1); filter: drop-shadow(0 0 18px #fde047); }
+    }
+
+    @keyframes pulseGlow {
+      0% { opacity: 0.6; transform: scale(0.98); }
+      100% { opacity: 1; transform: scale(1.08); }
     }
 
     .brand {
@@ -807,6 +883,9 @@
   <div class="confetti-container" id="confettiContainer"></div>
 
   <aside class="sidebar">
+    <!-- ÉLÉMENTS DE DÉCORATION SUR-MESURE SELON LE THÈME SANS OVERLAY SUR LE FOND DE LA BARRE -->
+    <div class="sidebar-deco"></div>
+
     <div class="brand">
       <div class="brand-icon">1F</div>
       <div>
