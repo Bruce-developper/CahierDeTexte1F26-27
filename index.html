@@ -422,28 +422,30 @@
       box-shadow: var(--card-shadow);
       position: relative;
       transition: all 0.3s;
+      overflow: hidden;
     }
 
-    /* STYLE DE FILIGRANE POUR LES JOURS PASSÉS */
+    /* BANDEAUX FILIGRANES OBLIQUES POUR LES JOURS PASSÉS */
     .day-column.past-day {
-      opacity: 0.45;
-      filter: grayscale(0.5);
-      background: rgba(0, 0, 0, 0.2);
+      opacity: 0.5;
+      filter: grayscale(0.4);
+      background-image: repeating-linear-gradient(
+        -45deg,
+        rgba(255, 255, 255, 0.03),
+        rgba(255, 255, 255, 0.03) 15px,
+        transparent 15px,
+        transparent 30px
+      );
     }
 
-    .day-column.past-day::after {
-      content: 'JOUR PASSÉ';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(-30deg);
-      font-size: 1.2rem;
-      font-weight: 900;
-      color: var(--text-muted);
-      opacity: 0.15;
-      pointer-events: none;
-      letter-spacing: 0.1em;
-      white-space: nowrap;
+    body.theme-light .day-column.past-day {
+      background-image: repeating-linear-gradient(
+        -45deg,
+        rgba(0, 0, 0, 0.04),
+        rgba(0, 0, 0, 0.04) 15px,
+        transparent 15px,
+        transparent 30px
+      );
     }
 
     .day-column.today {
@@ -457,6 +459,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      background: var(--bg-card);
     }
 
     .day-name {
@@ -699,6 +702,8 @@
       <div class="nav-label">Ressources</div>
       <a href="https://padlet.com/iris_joussin1/padlet-de-la-1ere-f-dgu45v9kkx2egjch" target="_blank" class="nav-item">📋 Padlet Fr</a>
       <a href="https://padlet.com/carine_solia/elets-chiq-cristallisat-une-longue-histoire-de-la-matiere-sco3o5vlm3vax34p" target="_blank" class="nav-item">🧪 Padlet SVT</a>
+      <!-- CALENDRIER ANNIVERSAIRES RAJOUTÉ AUX RESSOURCES -->
+      <a href="Birthday_Calendar.pdf" target="_blank" class="nav-item">🎂 Calendrier Anniversaires</a>
     </div>
 
     <div class="nav-group">
@@ -724,7 +729,6 @@
   </aside>
 
   <main class="main-wrapper">
-    <!-- BANNIÈRE D'ANNIVERSAIRE AUTOMATIQUE -->
     <div class="birthday-banner" id="birthdayBanner">
       <span>🎉</span>
       <span id="birthdayMessage">Joyeux anniversaire !</span>
@@ -783,7 +787,6 @@
     </section>
   </main>
 
-  <!-- MODALE CREATION / EDIT DEVOIR -->
   <div class="modal" id="taskModal">
     <div class="modal-content">
       <div class="modal-title" id="modalTaskTitleText">Nouveau travail à faire</div>
@@ -800,7 +803,7 @@
         </div>
 
         <div class="form-group" id="matiereGroup">
-          <label for="taskMatiere">Matières / Groupe</label>
+          <label for="taskMatiere">Matières</label>
           <select id="taskMatiere"></select>
         </div>
 
@@ -822,7 +825,6 @@
     </div>
   </div>
 
-  <!-- MODALE ELEVE (SPES ET LVB) -->
   <div class="modal" id="speModal">
     <div class="modal-content">
       <div class="modal-title">🎓 Vos Spécialités & Option LVB</div>
@@ -850,7 +852,6 @@
     </div>
   </div>
 
-  <!-- MODALE ADMIN LOGIN -->
   <div class="modal" id="adminModal">
     <div class="modal-content">
       <div class="modal-title">🔒 Connexion Administration</div>
@@ -889,7 +890,6 @@
     let currentMonday = getMonday(new Date());
     let currentTasks = [];
 
-    /* CALENDRIER DES ANNIVERSAIRES EXTACTEMENT ISSU DU PDF */
     const birthdayCalendar = [
       { month: 0, day: 1, name: "Tereiarii" },
       { month: 0, day: 3, name: "Natiméo" },
@@ -917,18 +917,18 @@
       { month: 11, day: 21, name: "Moïra" }
     ];
 
+    /* LIBELLÉS ET NOMS SIMPLIFIÉS (SANS PHYSICHE CHIMIE OU GROUPES MENTIONNÉS) */
     const listesSpesDisponibles = [
-      { code: "SES", label: "SES" },
-      { code: "HGGSP", label: "HGGSP" },
-      { code: "AMC", label: "AMC" },
-      { code: "SPC", label: "Physique-Chimie (SPC)" },
-      { code: "SVT", label: "SVT" },
-      { code: "NSI", label: "NSI" }
+      { code: "SES", label: "Spé SES" },
+      { code: "HGGSP", label: "Spé HGGSP" },
+      { code: "AMC", label: "Spé AMC" },
+      { code: "SPC", label: "Spé SPC" },
+      { code: "SVT", label: "Spé SVT" },
+      { code: "NSI", label: "Spé NSI" }
     ];
 
-    /* MODIFICATION DE MATH EN MATHS */
     const troncCommun = [
-      { code: "Maths", label: "Mathématiques" },
+      { code: "Maths", label: "Maths" },
       { code: "Francais", label: "Français" },
       { code: "ENS-SPC", label: "ENS SPC" },
       { code: "ENS-SVT", label: "ENS SVT" },
@@ -944,7 +944,6 @@
       { code: "LVB_Japonais", label: "LVB Japonais" }
     ];
 
-    /* GESTION DE L'ANNIVERSAIRE & CONFETTIS */
     function checkBirthdays() {
       const today = new Date();
       const currentMonth = today.getMonth();
@@ -1185,7 +1184,7 @@
       document.getElementById('speModal').style.display = 'flex';
     }
 
-    /* TRI ET FILTRAGE DE LA LISTE DES MATIERES POUR N'AFFICHER QUE CEUX DE L'UTILISATEUR */
+    /* DROPDOWN DES MATIERES EPURE (SANS SOUCI DE GROUPE AFFICHE) */
     function updateMatiereDropdown() {
       const select = document.getElementById('taskMatiere');
       select.innerHTML = '';
@@ -1214,7 +1213,7 @@
           if (speAObj) {
             const opt = document.createElement('option');
             opt.value = `${speAObj.code}_A`;
-            opt.textContent = `${speAObj.label} (Groupe A)`;
+            opt.textContent = speAObj.label;
             select.appendChild(opt);
           }
         }
@@ -1224,7 +1223,7 @@
           if (speBObj) {
             const opt = document.createElement('option');
             opt.value = `${speBObj.code}_B`;
-            opt.textContent = `${speBObj.label} (Groupe B)`;
+            opt.textContent = speBObj.label;
             select.appendChild(opt);
           }
         }
@@ -1273,7 +1272,6 @@
         const colDate = new Date(date);
         colDate.setHours(0, 0, 0, 0);
 
-        /* GESTION DU FILIGRANE POUR LES JOURS PASSÉS */
         if (colDate < today) {
           col.classList.add('past-day');
           col.classList.remove('today');
@@ -1330,13 +1328,25 @@
         
         const item = document.createElement('div');
         item.className = 'urgent-card';
-        const mat = task.matiere ? `[${task.matiere.replace("_A", " A").replace("_B", " B").replace("LVB_", "LVB ")}] ` : '';
+        const mat = task.matiere ? `[${getDisplayMatiereLabel(task.matiere)}] ` : '';
         item.innerHTML = `
           <div style="font-weight: 700;">${mat}${task.title}</div>
           <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 4px;">📅 Pour le ${dateFormatted}</div>
         `;
         urgentList.appendChild(item);
       });
+    }
+
+    function getDisplayMatiereLabel(code) {
+      if (!code) return '';
+      const cleanCode = code.replace("_A", "").replace("_B", "");
+      const foundSpe = listesSpesDisponibles.find(s => s.code === cleanCode);
+      if (foundSpe) return foundSpe.label;
+      const foundTronc = troncCommun.find(t => t.code === cleanCode);
+      if (foundTronc) return foundTronc.label;
+      const foundLVB = lvbList.find(l => l.code === cleanCode);
+      if (foundLVB) return foundLVB.label;
+      return cleanCode;
     }
 
     function renderTasks() {
@@ -1356,11 +1366,10 @@
           const completed = isTaskCompletedLocally(task.id);
 
           card.className = `task-card ${task.type} ${matiereClass} ${completed ? 'completed' : ''}`;
-          const matLabel = task.matiere ? `[${task.matiere.replace("_A", " A").replace("_B", " B").replace("LVB_", "LVB ")}] ` : '';
+          const matLabel = task.matiere ? `[${getDisplayMatiereLabel(task.matiere)}] ` : '';
 
           let adminDeleteBtn = isAdmin ? `<button class="task-action-btn" style="color:#ef4444;" onclick="deleteGlobalTask('${task.id}')">🗑️ Supprimer (Global)</button>` : '';
 
-          /* BOUTON MODIFIER DISPONIBLE POUR TOUT LE MONDE */
           card.innerHTML = `
             <div class="task-top-bar">
               <span class="task-badge">${task.type}</span>
@@ -1391,7 +1400,6 @@
       document.getElementById('taskModal').style.display = 'flex';
     }
 
-    /* EDITEUR POUR MODIFIER UN DEVOIR EXISTANT (POUR TOUT LE MONDE) */
     function openEditModal(taskId) {
       const task = currentTasks.find(t => t.id === taskId);
       if (!task) return;
