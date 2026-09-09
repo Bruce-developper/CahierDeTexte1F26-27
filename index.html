@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* MASQUER LA BARRE DE DÉFILEMENT SUR TOUT LE SITE */
+    /* MASQUER LA BARRE DE DÉFILEMENT */
     html, body, * {
       scrollbar-width: none;
       -ms-overflow-style: none;
@@ -116,18 +116,23 @@
       --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.7);
     }
 
+    /* THÈME ESPACE DÉTAILLÉ */
     body.theme-space {
-      --bg-main: #050512;
-      --bg-card: #0b0c24;
-      --bg-surface: #14153d;
-      --bg-input: #050512;
-      --text-main: #f0f3ff;
-      --text-muted: #a5b4fc;
-      --border: rgba(165, 180, 252, 0.2);
-      --primary: #818cf8;
-      --primary-hover: #6366f1;
-      --accent-glow: rgba(129, 140, 248, 0.4);
-      --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.8);
+      --bg-main: #03030c;
+      --bg-card: #0a0c1e;
+      --bg-surface: #121533;
+      --bg-input: #060714;
+      --text-main: #e0e7ff;
+      --text-muted: #818cf8;
+      --border: rgba(129, 140, 248, 0.25);
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --accent-glow: rgba(99, 102, 241, 0.5);
+      --card-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.85);
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 85% 75%, rgba(168, 85, 247, 0.12) 0%, transparent 45%);
+      background-attachment: fixed;
     }
 
     * {
@@ -147,7 +152,6 @@
       overflow-x: hidden;
     }
 
-    /* BANNIÈRE ANNIVERSAIRE */
     .birthday-banner {
       display: none;
       background: linear-gradient(90deg, #ff007f, #7928ca, #00f0ff);
@@ -172,7 +176,6 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* CONFETTIS */
     .confetti-container {
       position: fixed;
       top: 0;
@@ -199,7 +202,6 @@
       }
     }
 
-    /* SIDEBAR */
     .sidebar {
       width: 280px;
       background-color: var(--bg-card);
@@ -307,7 +309,6 @@
       text-align: left;
     }
 
-    /* CONTENU MAIN */
     .main-wrapper {
       margin-left: 280px;
       flex: 1;
@@ -405,7 +406,6 @@
       color: white;
     }
 
-    /* GRILLE DU TIMETABLE */
     .timetable-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -425,7 +425,6 @@
       overflow: hidden;
     }
 
-    /* BANDEAUX FILIGRANES OBLIQUES POUR LES JOURS PASSÉS OU APRÈS 16H40 */
     .day-column.past-day {
       opacity: 0.5;
       filter: grayscale(0.4);
@@ -491,7 +490,6 @@
       flex: 1;
     }
 
-    /* CARTES DE DEVOIRS */
     .task-card {
       background: var(--bg-surface);
       border: 1px solid var(--border);
@@ -608,7 +606,6 @@
       color: var(--text-main);
     }
 
-    /* MODALES */
     .modal {
       display: none;
       position: fixed;
@@ -950,6 +947,16 @@
       return (heures > 16 || (heures === 16 && minutes >= 40));
     }
 
+    function isDatePastOrCutoff(dateKey) {
+      const now = new Date();
+      const todayKey = formatDateKey(now);
+
+      if (dateKey < todayKey) return true;
+      if (dateKey === todayKey && checkTahitiCutoff()) return true;
+
+      return false;
+    }
+
     function checkBirthdays() {
       const today = new Date();
       const currentMonth = today.getMonth();
@@ -1080,25 +1087,6 @@
       renderUrgencies();
     }
 
-    function getDeletedTasksLocal() {
-      const saved = localStorage.getItem('user_deleted_tasks');
-      return saved ? JSON.parse(saved) : [];
-    }
-
-    function isTaskDeletedLocally(taskId) {
-      return getDeletedTasksLocal().includes(taskId);
-    }
-
-    function deleteTaskLocally(taskId) {
-      let deletedList = getDeletedTasksLocal();
-      if (!deletedList.includes(taskId)) {
-        deletedList.push(taskId);
-        localStorage.setItem('user_deleted_tasks', JSON.stringify(deletedList));
-      }
-      renderTasks();
-      renderUrgencies();
-    }
-
     function getUserConfig() {
       const saved = localStorage.getItem('user_spes_groups');
       return saved ? JSON.parse(saved) : null;
@@ -1160,7 +1148,6 @@
     }
 
     function isTaskVisibleForUser(task) {
-      if (isTaskDeletedLocally(task.id)) return false;
       if (!task.matiere) return true;
 
       const userConfig = getUserConfig();
@@ -1274,9 +1261,16 @@
 
         const col = document.querySelector(`.day-column[data-dayindex="${index}"]`);
         const marker = col.querySelector('.today-marker');
+        const addBtn = col.querySelector('.add-task-btn');
 
         const colDate = new Date(date);
         colDate.setHours(0, 0, 0, 0);
+
+        const isLocked = isDatePastOrCutoff(dateKey);
+
+        if (addBtn) {
+          addBtn.style.display = isLocked ? 'none' : 'block';
+        }
 
         if (colDate < today) {
           col.classList.add('past-day');
@@ -1368,7 +1362,9 @@
         const container = document.querySelector(`.day-column[data-dayindex="${i}"] .task-container`);
         container.innerHTML = '';
 
+        const isLocked = isDatePastOrCutoff(dateKey);
         const dayTasks = currentTasks.filter(t => t.dateKey === dateKey && isTaskVisibleForUser(t));
+
         dayTasks.forEach(task => {
           const card = document.createElement('div');
           const baseMat = task.matiere ? task.matiere.replace("_A", "").replace("_B", "") : '';
@@ -1380,16 +1376,17 @@
 
           let adminDeleteBtn = isAdmin ? `<button class="task-action-btn" style="color:#ef4444;" onclick="deleteGlobalTask('${task.id}')">🗑️ Supprimer (Global)</button>` : '';
 
+          let editBtnHtml = isLocked ? '' : `<button class="btn-edit-task" onclick="openEditModal('${task.id}')">✏️ Modifier</button>`;
+
           card.innerHTML = `
             <div class="task-top-bar">
               <span class="task-badge">${task.type}</span>
-              <button class="btn-edit-task" onclick="openEditModal('${task.id}')">✏️ Modifier</button>
+              ${editBtnHtml}
             </div>
             <div class="task-title">${matLabel}${task.title}</div>
             ${task.desc ? `<div class="task-desc">${task.desc}</div>` : ''}
             <div class="task-footer">
               <button class="task-action-btn" onclick="toggleTaskLocally('${task.id}')">${completed ? 'Rétablir' : '✓ Fait'}</button>
-              <button class="task-action-btn" onclick="deleteTaskLocally('${task.id}')">Masquer</button>
               ${adminDeleteBtn}
             </div>
           `;
@@ -1401,7 +1398,14 @@
     function openModal(dayIndex) {
       const selectedDate = new Date(currentMonday);
       selectedDate.setDate(selectedDate.getDate() + dayIndex);
-      document.getElementById('selectedDate').value = formatDateKey(selectedDate);
+      const dateKey = formatDateKey(selectedDate);
+
+      if (isDatePastOrCutoff(dateKey)) {
+        alert("Impossible d'ajouter un devoir sur une date ou une heure passée.");
+        return;
+      }
+
+      document.getElementById('selectedDate').value = dateKey;
       document.getElementById('editingTaskId').value = "";
       document.getElementById('modalTaskTitleText').innerText = "Nouveau travail à faire";
       document.getElementById('taskForm').reset();
@@ -1413,6 +1417,11 @@
     function openEditModal(taskId) {
       const task = currentTasks.find(t => t.id === taskId);
       if (!task) return;
+
+      if (isDatePastOrCutoff(task.dateKey)) {
+        alert("Impossible de modifier un devoir dont la date est passée.");
+        return;
+      }
 
       document.getElementById('selectedDate').value = task.dateKey;
       document.getElementById('editingTaskId').value = task.id;
@@ -1442,9 +1451,16 @@
       
       const typeVal = document.getElementById('taskType').value;
       const editingId = document.getElementById('editingTaskId').value;
+      const targetDateKey = document.getElementById('selectedDate').value;
+
+      if (isDatePastOrCutoff(targetDateKey)) {
+        alert("Action impossible : la date sélectionnée est déjà passée.");
+        closeModal();
+        return;
+      }
 
       const payload = {
-        dateKey: document.getElementById('selectedDate').value,
+        dateKey: targetDateKey,
         type: typeVal,
         matiere: (typeVal !== 'info') ? document.getElementById('taskMatiere').value : '',
         title: document.getElementById('taskTitle').value,
