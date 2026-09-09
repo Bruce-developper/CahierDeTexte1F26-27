@@ -425,7 +425,7 @@
       overflow: hidden;
     }
 
-    /* BANDEAUX FILIGRANES OBLIQUES POUR LES JOURS PASSÉS */
+    /* BANDEAUX FILIGRANES OBLIQUES POUR LES JOURS PASSÉS OU APRÈS 16H40 */
     .day-column.past-day {
       opacity: 0.5;
       filter: grayscale(0.4);
@@ -702,8 +702,6 @@
       <div class="nav-label">Ressources</div>
       <a href="https://padlet.com/iris_joussin1/padlet-de-la-1ere-f-dgu45v9kkx2egjch" target="_blank" class="nav-item">📋 Padlet Fr</a>
       <a href="https://padlet.com/carine_solia/elets-chiq-cristallisat-une-longue-histoire-de-la-matiere-sco3o5vlm3vax34p" target="_blank" class="nav-item">🧪 Padlet SVT</a>
-      <!-- CALENDRIER ANNIVERSAIRES RAJOUTÉ AUX RESSOURCES -->
-      <a href="Birthday_Calendar.pdf" target="_blank" class="nav-item">🎂 Calendrier Anniversaires</a>
     </div>
 
     <div class="nav-group">
@@ -917,7 +915,6 @@
       { month: 11, day: 21, name: "Moïra" }
     ];
 
-    /* LIBELLÉS ET NOMS SIMPLIFIÉS (SANS PHYSICHE CHIMIE OU GROUPES MENTIONNÉS) */
     const listesSpesDisponibles = [
       { code: "SES", label: "Spé SES" },
       { code: "HGGSP", label: "Spé HGGSP" },
@@ -943,6 +940,15 @@
       { code: "LVB_Chinois", label: "LVB Chinois" },
       { code: "LVB_Japonais", label: "LVB Japonais" }
     ];
+
+    function checkTahitiCutoff() {
+      const now = new Date();
+      const options = { timeZone: 'Pacific/Tahiti', hour: '2-digit', minute: '2-digit', hour12: false };
+      const heureTahitiStr = new Intl.DateTimeFormat('fr-FR', options).format(now);
+      const [heures, minutes] = heureTahitiStr.split(':').map(Number);
+
+      return (heures > 16 || (heures === 16 && minutes >= 40));
+    }
 
     function checkBirthdays() {
       const today = new Date();
@@ -1184,7 +1190,6 @@
       document.getElementById('speModal').style.display = 'flex';
     }
 
-    /* DROPDOWN DES MATIERES EPURE (SANS SOUCI DE GROUPE AFFICHE) */
     function updateMatiereDropdown() {
       const select = document.getElementById('taskMatiere');
       select.innerHTML = '';
@@ -1252,6 +1257,7 @@
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const todayKey = formatDateKey(today);
+      const isPastCutoff = checkTahitiCutoff();
 
       for (let i = 0; i < 5; i++) {
         const d = new Date(currentMonday);
@@ -1277,7 +1283,11 @@
           col.classList.remove('today');
           marker.innerHTML = '';
         } else if (dateKey === todayKey) {
-          col.classList.remove('past-day');
+          if (isPastCutoff) {
+            col.classList.add('past-day');
+          } else {
+            col.classList.remove('past-day');
+          }
           col.classList.add('today');
           marker.innerHTML = `<span class="today-tag">Aujourd'hui</span>`;
         } else {
@@ -1455,6 +1465,8 @@
     checkFirstVisit();
     renderTimetable();
     checkBirthdays();
+
+    setInterval(renderTimetable, 60000);
   </script>
 </body>
 </html>
