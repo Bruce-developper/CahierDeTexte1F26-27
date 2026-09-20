@@ -230,6 +230,7 @@
       transition: transform 0.3s ease, background-color 0.4s ease, border-color 0.4s ease;
     }
 
+    /* ÉLÉMENTS DE DÉCORATION DE BARRE LATÉRALE POUR CHAQUE THÈME */
     .sidebar-deco {
       position: absolute;
       inset: 0;
@@ -266,9 +267,53 @@
       animation: lizardWiggle 6s ease-in-out infinite;
     }
 
+    .theme-ocean .sidebar-deco::after {
+      content: "🐬";
+      position: absolute;
+      bottom: 80px;
+      right: 12px;
+      font-size: 2rem;
+      animation: oceanFloat 5s ease-in-out infinite;
+    }
+
+    .theme-space .sidebar-deco::after {
+      content: "🚀";
+      position: absolute;
+      bottom: 80px;
+      right: 12px;
+      font-size: 2rem;
+      animation: spaceFly 8s ease-in-out infinite;
+    }
+
+    .theme-desert .sidebar-deco::after {
+      content: "🌵";
+      position: absolute;
+      bottom: 80px;
+      right: 12px;
+      font-size: 2rem;
+    }
+
+    .theme-gold .sidebar-deco::after {
+      content: "👑";
+      position: absolute;
+      bottom: 80px;
+      right: 12px;
+      font-size: 2rem;
+    }
+
     @keyframes lizardWiggle {
       0%, 100% { transform: rotate(-35deg) translateY(0); }
       50% { transform: rotate(-25deg) translateY(-5px); }
+    }
+
+    @keyframes oceanFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(10deg); }
+    }
+
+    @keyframes spaceFly {
+      0%, 100% { transform: translateY(0) translateX(0); }
+      50% { transform: translateY(-15px) translateX(-5px); }
     }
 
     .brand {
@@ -765,16 +810,16 @@
 
     <div class="sidebar-footer">
       <div class="brand-subtitle" id="statusLabel">Statut : Élève connecté</div>
-      <button class="admin-link" id="adminLoginBtn" onclick="openAdminModal()">🔒 Admin</button>
+      <button class="admin-link" id="adminLoginBtn" onclick="openAdminModal()">🔒 Connexion Admin</button>
       <button class="admin-link" id="adminLogoutBtn" style="display:none;" onclick="logoutAdmin()">🚪 Déconnexion Admin</button>
     </div>
   </aside>
 
   <main class="main-wrapper">
     <div class="vacation-banner" id="vacationBanner">
-      <span>🌴</span>
+      <span id="vacationIconLeft">🌴</span>
       <span id="vacationMessage">Période de Vacances Scolaires à Tahiti !</span>
-      <span>🌺</span>
+      <span id="vacationIconRight">🌺</span>
     </div>
 
     <header class="top-header">
@@ -938,15 +983,32 @@
     let activeMobileDayIndex = 0;
     let isAdmin = localStorage.getItem('cdt_admin') === 'true';
 
-    // CALENDRIER OFFICIEL DES VACANCES SCOLAIRES TAHITI / POLYNÉSIE 2026-2027
+    // CALENDRIER OFFICIEL VACANCES TAHITI / POLYNÉSIE 2026-2027 ET EMOJIS SPÉCIFIQUES
     const VACANCES_TAHITI_2026_2027 = [
-      { name: "Vacances de Septembre", start: "2026-09-12", end: "2026-09-20" },
-      { name: "Vacances de la Toussaint", start: "2026-10-24", end: "2026-11-08" },
-      { name: "Vacances de Noël", start: "2026-12-12", end: "2027-01-10" },
-      { name: "Vacances de Février", start: "2027-02-13", end: "2027-02-21" },
-      { name: "Vacances de Pâques", start: "2027-03-27", end: "2027-04-11" },
-      { name: "Vacances de Mai", start: "2027-05-15", end: "2027-05-23" },
-      { name: "Grandes Vacances", start: "2027-07-03", end: "2027-08-23" }
+      { name: "Vacances de Septembre", start: "2026-09-12", end: "2026-09-20", iconL: "🌺", iconR: "🌴" },
+      { name: "Vacances de la Toussaint", start: "2026-10-24", end: "2026-11-08", iconL: "🍂", iconR: "🎃" },
+      { name: "Vacances de Noël", start: "2026-12-12", end: "2027-01-10", iconL: "🎄", iconR: "❄️" },
+      { name: "Vacances de Février", start: "2027-02-13", end: "2027-02-21", iconL: "🌺", iconR: "🌴" },
+      { name: "Vacances de Pâques", start: "2027-03-27", end: "2027-04-11", iconL: "✝️", iconR: "🐣" },
+      { name: "Vacances de Mai", start: "2027-05-15", end: "2027-05-23", iconL: "🌺", iconR: "☀️" },
+      { name: "Grandes Vacances (Fin des cours)", start: "2027-06-09", end: "2027-08-23", iconL: "☀️", iconR: "🌊" }
+    ];
+
+    // JOURS FÉRIÉS SPÉCIFIQUES POLYNÉSIE & NATIONAUX
+    const JOURS_FERIES_TAHITI = [
+      { date: "2026-11-01", label: "Toussaint 🍂" },
+      { date: "2026-11-11", label: "Armistice 1918 🕊️" },
+      { date: "2026-12-25", label: "Noël 🎄" },
+      { date: "2027-01-01", label: "Jour de l'An ✨" },
+      { date: "2027-02-20", label: "Matari'i i ni'a 🌺" },
+      { date: "2027-03-05", label: "Arrivée de l'Évangile ⛵" },
+      { date: "2027-03-26", label: "Vendredi Saint ✝️" },
+      { date: "2027-03-29", label: "Lundi de Pâques 🐣" },
+      { date: "2027-05-01", label: "Fête du Travail 🛠️" },
+      { date: "2027-05-06", label: "Ascension ✨" },
+      { date: "2027-05-08", label: "Victoire 1945 🕊️" },
+      { date: "2027-05-17", label: "Lundi de Pentecôte 🕊️" },
+      { date: "2027-06-29", label: "Fête de l'Autonomie 🇵🇫" }
     ];
 
     const ALL_MATIERES = [
@@ -1029,6 +1091,10 @@
       return VACANCES_TAHITI_2026_2027.find(v => dateStr >= v.start && dateStr <= v.end);
     }
 
+    function checkHoliday(dateStr) {
+      return JOURS_FERIES_TAHITI.find(h => h.date === dateStr);
+    }
+
     function renderWeek() {
       const monday = getMonday(new Date());
       monday.setDate(monday.getDate() + (currentWeekOffset * 7));
@@ -1044,7 +1110,7 @@
       const currentHour = now.getHours();
       const currentMin = now.getMinutes();
 
-      let currentVacationName = null;
+      let activeVacation = null;
 
       for (let i = 0; i < 5; i++) {
         const currentDate = new Date(monday);
@@ -1057,33 +1123,45 @@
         const col = document.querySelector(`.day-column[data-dayindex="${i}"]`);
         const isToday = (dateStr === todayStr);
 
-        // GESTION DU FILIGRANE DE JOUR PASSÉ & REGLE DES 16H40
+        // REGLE : NE PAS MISA A JOUR FILIGRANE SI VENDREDI AVANT LES VACANCES OU SI JOUR DE VACANCES
+        const vac = checkVacation(dateStr);
+        const holiday = checkHoliday(dateStr);
+
         let isPast = currentDate < new Date(todayStr);
+        
+        // Si c'est aujourd'hui, filigrane après 16h40
         if (isToday) {
           if (currentHour > 16 || (currentHour === 16 && currentMin >= 40)) {
-            isPast = true; // Passe en filigrane dès 16h40
+            isPast = true;
           }
         }
 
+        // On retire le filigrane automatique pour les vendredis précédant les vacances s'ils ne sont pas encore passés
+        const nextDay = new Date(currentDate);
+        nextDay.setDate(nextDay.getDate() + 1);
+        const isFridayBeforeVacation = (i === 4 && checkVacation(nextDay.toISOString().split('T')[0]));
+
+        if (isFridayBeforeVacation && !isPast) {
+          isPast = false;
+        }
+
         col.classList.toggle('today', isToday);
-        col.classList.toggle('past-day', isPast);
+        col.classList.toggle('past-day', isPast && !vac);
 
         const marker = col.querySelector('.today-marker');
         marker.innerHTML = isToday ? '<span class="today-tag">Aujourd\'hui</span>' : '';
 
-        // VÉRIFICATION VACANCES
-        const vac = checkVacation(dateStr);
-        if (vac) {
-          currentVacationName = vac.name;
-        }
+        if (vac) activeVacation = vac;
 
-        renderTasksForDay(col, dateStr, vac);
+        renderTasksForDay(col, dateStr, vac, holiday);
       }
 
-      // BANNIÈRE VACANCES
+      // GESTION BANIÈRE DE VACANCES ET EMOJIS PERSONNALISÉS
       const banner = document.getElementById('vacationBanner');
-      if (currentVacationName) {
-        document.getElementById('vacationMessage').textContent = `Période de ${currentVacationName} à Tahiti ! 🌴`;
+      if (activeVacation) {
+        document.getElementById('vacationIconLeft').textContent = activeVacation.iconL;
+        document.getElementById('vacationIconRight').textContent = activeVacation.iconR;
+        document.getElementById('vacationMessage').textContent = `Période de ${activeVacation.name} à Tahiti !`;
         banner.style.display = 'flex';
       } else {
         banner.style.display = 'none';
@@ -1097,16 +1175,27 @@
       renderWeek();
     }
 
-    function renderTasksForDay(container, dateStr, vacation) {
+    function renderTasksForDay(container, dateStr, vacation, holiday) {
       const taskContainer = container.querySelector('.task-container');
       taskContainer.innerHTML = '';
 
       if (vacation) {
         taskContainer.innerHTML = `
           <div style="text-align:center; padding: 40px 10px; color: var(--text-muted);">
-            <div style="font-size: 2.5rem; margin-bottom: 8px;">🌴</div>
+            <div style="font-size: 2.5rem; margin-bottom: 8px;">${vacation.iconL}</div>
             <strong style="display:block; color:var(--text-main); font-size: 0.95rem;">${vacation.name}</strong>
-            <span style="font-size: 0.8rem;">Profitez de vos vacances !</span>
+            <span style="font-size: 0.8rem;">Reposez-vous bien !</span>
+          </div>
+        `;
+        return;
+      }
+
+      if (holiday) {
+        taskContainer.innerHTML = `
+          <div style="text-align:center; padding: 30px 10px; background: rgba(239, 68, 68, 0.1); border: 1px dashed #ef4444; border-radius: 12px; margin-top: 10px;">
+            <div style="font-size: 2rem; margin-bottom: 6px;">🎉</div>
+            <strong style="display:block; color:#ef4444; font-size: 0.9rem;">Jour Férié</strong>
+            <span style="font-size: 0.8rem; color: var(--text-main);">${holiday.label}</span>
           </div>
         `;
         return;
@@ -1130,6 +1219,7 @@
           <div class="task-title">${t.title}</div>
           ${t.desc ? `<div class="task-desc">${t.desc}</div>` : ''}
           <div class="task-footer">
+            <!-- DÉVERROUILLÉ POUR TOUT LE MONDE DE COCHER UN DEVOIR COMMME FAIT -->
             <button class="task-action-btn" onclick="toggleTask('${t.id}')">${t.completed ? '↩️ Annuler' : '✓ Fait'}</button>
             ${isAdmin ? `<button class="task-action-btn" style="color:#ef4444;" onclick="deleteTask('${t.id}')">🗑️ Supprimer</button>` : ''}
           </div>
@@ -1211,6 +1301,7 @@
     }
 
     function deleteTask(id) {
+      if (!isAdmin) return;
       if (confirm('Voulez-vous vraiment supprimer ce devoir ?')) {
         tasks = tasks.filter(t => t.id !== id);
         localStorage.setItem('cdt_tasks', JSON.stringify(tasks));
@@ -1219,6 +1310,7 @@
     }
 
     function editTask(id) {
+      if (!isAdmin) return;
       const task = tasks.find(t => t.id === id);
       if (!task) return;
 
@@ -1295,7 +1387,6 @@
     function handleAdminLogin(e) {
       e.preventDefault();
       const pass = document.getElementById('adminPass').value;
-      // MOT DE PASSE CORRIGÉ
       if (pass === '1ereFcahierdetexte202627') {
         isAdmin = true;
         localStorage.setItem('cdt_admin', 'true');
