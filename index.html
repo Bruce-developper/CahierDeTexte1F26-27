@@ -43,7 +43,7 @@
       --mat-amc: #c084fc;
       --mat-spc: #38bdf8;
       --mat-svt: #4ade80;
-      --mat-nsi: #818cf8;
+      --mat-nsi: #06b6d4;
     }
 
     /* THÈME CLAIR */
@@ -514,24 +514,23 @@
       backdrop-filter: blur(8px);
     }
 
-    /* FILIGRANE POUR LES JOURS PASSÉS OU APRÈS 16H40 */
-    .day-column.past-day {
-      opacity: 0.55;
-      filter: grayscale(0.35);
+    /* FILIGRANE STRICT POUR JOURS DE VACANCES SCOLAIRES EN SEMAINE OU JOURS FÉRIÉS */
+    .day-column.holiday-or-vacation {
+      opacity: 0.65;
       background-image: repeating-linear-gradient(
         -45deg,
-        rgba(255, 255, 255, 0.03),
-        rgba(255, 255, 255, 0.03) 15px,
+        rgba(255, 255, 255, 0.05),
+        rgba(255, 255, 255, 0.05) 15px,
         transparent 15px,
         transparent 30px
       );
     }
 
-    body.theme-light .day-column.past-day {
+    body.theme-light .day-column.holiday-or-vacation {
       background-image: repeating-linear-gradient(
         -45deg,
-        rgba(0, 0, 0, 0.04),
-        rgba(0, 0, 0, 0.04) 15px,
+        rgba(0, 0, 0, 0.05),
+        rgba(0, 0, 0, 0.05) 15px,
         transparent 15px,
         transparent 30px
       );
@@ -662,6 +661,12 @@
       font-size: 0.88rem;
       font-weight: 700;
       cursor: pointer;
+    }
+
+    .add-task-btn.disabled {
+      cursor: not-allowed;
+      opacity: 0.4;
+      border-style: solid;
     }
 
     .modal {
@@ -872,27 +877,27 @@
       <div class="day-column active-mobile-day" data-dayindex="0">
         <div class="day-header"><span class="day-name">Lundi <span class="today-marker"></span></span><span class="day-date" id="date-0">-</span></div>
         <div class="task-container"></div>
-        <button class="add-task-btn" onclick="openModal(0)">+ Ajouter un travail</button>
+        <button class="add-task-btn" id="add-btn-0" onclick="openModal(0)">+ Ajouter un travail</button>
       </div>
       <div class="day-column" data-dayindex="1">
         <div class="day-header"><span class="day-name">Mardi <span class="today-marker"></span></span><span class="day-date" id="date-1">-</span></div>
         <div class="task-container"></div>
-        <button class="add-task-btn" onclick="openModal(1)">+ Ajouter un travail</button>
+        <button class="add-task-btn" id="add-btn-1" onclick="openModal(1)">+ Ajouter un travail</button>
       </div>
       <div class="day-column" data-dayindex="2">
         <div class="day-header"><span class="day-name">Mercredi <span class="today-marker"></span></span><span class="day-date" id="date-2">-</span></div>
         <div class="task-container"></div>
-        <button class="add-task-btn" onclick="openModal(2)">+ Ajouter un travail</button>
+        <button class="add-task-btn" id="add-btn-2" onclick="openModal(2)">+ Ajouter un travail</button>
       </div>
       <div class="day-column" data-dayindex="3">
         <div class="day-header"><span class="day-name">Jeudi <span class="today-marker"></span></span><span class="day-date" id="date-3">-</span></div>
         <div class="task-container"></div>
-        <button class="add-task-btn" onclick="openModal(3)">+ Ajouter un travail</button>
+        <button class="add-task-btn" id="add-btn-3" onclick="openModal(3)">+ Ajouter un travail</button>
       </div>
       <div class="day-column" data-dayindex="4">
         <div class="day-header"><span class="day-name">Vendredi <span class="today-marker"></span></span><span class="day-date" id="date-4">-</span></div>
         <div class="task-container"></div>
-        <button class="add-task-btn" onclick="openModal(4)">+ Ajouter un travail</button>
+        <button class="add-task-btn" id="add-btn-4" onclick="openModal(4)">+ Ajouter un travail</button>
       </div>
     </section>
   </main>
@@ -983,18 +988,18 @@
     let activeMobileDayIndex = 0;
     let isAdmin = localStorage.getItem('cdt_admin') === 'true';
 
-    // CALENDRIER OFFICIEL VACANCES TAHITI / POLYNÉSIE 2026-2027 ET EMOJIS SPÉCIFIQUES
+    // CALENDRIER OFFICIEL TAHITI 2026-2027
     const VACANCES_TAHITI_2026_2027 = [
-      { name: "Vacances de Septembre", start: "2026-09-12", end: "2026-09-20", iconL: "🌺", iconR: "🌴" },
-      { name: "Vacances de la Toussaint", start: "2026-10-24", end: "2026-11-08", iconL: "🍂", iconR: "🎃" },
-      { name: "Vacances de Noël", start: "2026-12-12", end: "2027-01-10", iconL: "🎄", iconR: "❄️" },
-      { name: "Vacances de Février", start: "2027-02-13", end: "2027-02-21", iconL: "🌺", iconR: "🌴" },
-      { name: "Vacances de Pâques", start: "2027-03-27", end: "2027-04-11", iconL: "✝️", iconR: "🐣" },
-      { name: "Vacances de Mai", start: "2027-05-15", end: "2027-05-23", iconL: "🌺", iconR: "☀️" },
+      { name: "Vacances de Septembre", start: "2026-09-14", end: "2026-09-18", iconL: "🌺", iconR: "🌴" },
+      { name: "Vacances de la Toussaint", start: "2026-10-26", end: "2026-11-06", iconL: "🍂", iconR: "🎃" },
+      { name: "Vacances de Noël", start: "2026-12-14", end: "2027-01-08", iconL: "🎄", iconR: "❄️" },
+      { name: "Vacances de Février", start: "2027-02-15", end: "2027-02-19", iconL: "🌺", iconR: "🌴" },
+      { name: "Vacances de Pâques", start: "2027-03-29", end: "2027-04-09", iconL: "✝️", iconR: "🐣" },
+      { name: "Vacances de Mai", start: "2027-05-17", end: "2027-05-21", iconL: "🌺", iconR: "☀️" },
       { name: "Grandes Vacances (Fin des cours)", start: "2027-06-09", end: "2027-08-23", iconL: "☀️", iconR: "🌊" }
     ];
 
-    // JOURS FÉRIÉS SPÉCIFIQUES POLYNÉSIE & NATIONAUX
+    // JOURS FÉRIÉS DE TAHITI
     const JOURS_FERIES_TAHITI = [
       { date: "2026-11-01", label: "Toussaint 🍂" },
       { date: "2026-11-11", label: "Armistice 1918 🕊️" },
@@ -1011,20 +1016,21 @@
       { date: "2027-06-29", label: "Fête de l'Autonomie 🇵🇫" }
     ];
 
+    // TOUTES LES MATIÈRES (TRONC COMMUN + SPÉCIALITÉS DONT NSI)
     const ALL_MATIERES = [
-      { id: "Francais", label: "Français" },
-      { id: "Maths", label: "Mathématiques" },
-      { id: "ENS-SPC", label: "Ens. Sci (Physique)" },
-      { id: "ENS-SVT", label: "Ens. Sci (SVT)" },
-      { id: "HG", label: "Histoire-Géo" },
-      { id: "EMC", label: "EMC" },
-      { id: "Anglais", label: "Anglais LVA" },
-      { id: "SES", label: "SES" },
-      { id: "HGGSP", label: "HGGSP" },
-      { id: "AMC", label: "AMC" },
-      { id: "SPC", label: "Physique-Chimie" },
-      { id: "SVT", label: "SVT" },
-      { id: "NSI", label: "NSI" }
+      { id: "Francais", label: "Français", category: "common" },
+      { id: "Maths", label: "Mathématiques", category: "spe" },
+      { id: "ENS-SPC", label: "Ens. Sci (Physique)", category: "common" },
+      { id: "ENS-SVT", label: "Ens. Sci (SVT)", category: "common" },
+      { id: "HG", label: "Histoire-Géo", category: "common" },
+      { id: "EMC", label: "EMC", category: "common" },
+      { id: "Anglais", label: "Anglais LVA", category: "common" },
+      { id: "SES", label: "SES", category: "spe" },
+      { id: "HGGSP", label: "HGGSP", category: "spe" },
+      { id: "AMC", label: "AMC", category: "spe" },
+      { id: "SPC", label: "Physique-Chimie", category: "spe" },
+      { id: "SVT", label: "SVT", category: "spe" },
+      { id: "NSI", label: "NSI", category: "spe" }
     ];
 
     let userConfig = JSON.parse(localStorage.getItem('cdt_user_config')) || {
@@ -1107,8 +1113,6 @@
 
       const now = new Date();
       const todayStr = now.toISOString().split('T')[0];
-      const currentHour = now.getHours();
-      const currentMin = now.getMinutes();
 
       let activeVacation = null;
 
@@ -1121,32 +1125,28 @@
         document.getElementById(`tab-date-${i}`).textContent = formatDateShort(currentDate);
 
         const col = document.querySelector(`.day-column[data-dayindex="${i}"]`);
+        const addBtn = document.getElementById(`add-btn-${i}`);
         const isToday = (dateStr === todayStr);
 
-        // REGLE : NE PAS MISA A JOUR FILIGRANE SI VENDREDI AVANT LES VACANCES OU SI JOUR DE VACANCES
         const vac = checkVacation(dateStr);
         const holiday = checkHoliday(dateStr);
 
-        let isPast = currentDate < new Date(todayStr);
-        
-        // Si c'est aujourd'hui, filigrane après 16h40
-        if (isToday) {
-          if (currentHour > 16 || (currentHour === 16 && currentMin >= 40)) {
-            isPast = true;
-          }
-        }
-
-        // On retire le filigrane automatique pour les vendredis précédant les vacances s'ils ne sont pas encore passés
-        const nextDay = new Date(currentDate);
-        nextDay.setDate(nextDay.getDate() + 1);
-        const isFridayBeforeVacation = (i === 4 && checkVacation(nextDay.toISOString().split('T')[0]));
-
-        if (isFridayBeforeVacation && !isPast) {
-          isPast = false;
-        }
+        // LE FILIGRANE S'APPLIQUE SI JOUR DE VACANCES OU FERIE
+        const isOffDay = !!(vac || holiday);
 
         col.classList.toggle('today', isToday);
-        col.classList.toggle('past-day', isPast && !vac);
+        col.classList.toggle('holiday-or-vacation', isOffDay);
+
+        // BLOQUER L'AJOUT SUR LES JOURS FILIGRANÉS
+        if (isOffDay) {
+          addBtn.classList.add('disabled');
+          addBtn.disabled = true;
+          addBtn.textContent = vac ? '⛔ Vacances' : '⛔ Jour Férié';
+        } else {
+          addBtn.classList.remove('disabled');
+          addBtn.disabled = false;
+          addBtn.textContent = '+ Ajouter un travail';
+        }
 
         const marker = col.querySelector('.today-marker');
         marker.innerHTML = isToday ? '<span class="today-tag">Aujourd\'hui</span>' : '';
@@ -1156,7 +1156,6 @@
         renderTasksForDay(col, dateStr, vac, holiday);
       }
 
-      // GESTION BANIÈRE DE VACANCES ET EMOJIS PERSONNALISÉS
       const banner = document.getElementById('vacationBanner');
       if (activeVacation) {
         document.getElementById('vacationIconLeft').textContent = activeVacation.iconL;
@@ -1184,7 +1183,7 @@
           <div style="text-align:center; padding: 40px 10px; color: var(--text-muted);">
             <div style="font-size: 2.5rem; margin-bottom: 8px;">${vacation.iconL}</div>
             <strong style="display:block; color:var(--text-main); font-size: 0.95rem;">${vacation.name}</strong>
-            <span style="font-size: 0.8rem;">Reposez-vous bien !</span>
+            <span style="font-size: 0.8rem;">Période de repos</span>
           </div>
         `;
         return;
@@ -1211,17 +1210,21 @@
         const card = document.createElement('div');
         card.className = `task-card ${t.type} matiere-${t.matiere} ${t.completed ? 'completed' : ''}`;
         
+        // BOUTON SUPPRIMER RÉSERVÉ À L'ADMIN SEULEMENT
+        const deleteButtonHTML = isAdmin 
+          ? `<button class="task-action-btn" style="color:#ef4444;" onclick="deleteTask('${t.id}')">🗑️ Supprimer</button>` 
+          : '';
+
         card.innerHTML = `
           <div class="task-top-bar">
             <span class="task-badge">${t.type} • ${t.matiere}</span>
-            ${isAdmin ? `<button class="btn-edit-task" onclick="editTask('${t.id}')">✏️ Modifier</button>` : ''}
+            <button class="btn-edit-task" onclick="editTask('${t.id}')">✏️ Modifier</button>
           </div>
           <div class="task-title">${t.title}</div>
           ${t.desc ? `<div class="task-desc">${t.desc}</div>` : ''}
           <div class="task-footer">
-            <!-- DÉVERROUILLÉ POUR TOUT LE MONDE DE COCHER UN DEVOIR COMMME FAIT -->
             <button class="task-action-btn" onclick="toggleTask('${t.id}')">${t.completed ? '↩️ Annuler' : '✓ Fait'}</button>
-            ${isAdmin ? `<button class="task-action-btn" style="color:#ef4444;" onclick="deleteTask('${t.id}')">🗑️ Supprimer</button>` : ''}
+            ${deleteButtonHTML}
           </div>
         `;
         taskContainer.appendChild(card);
@@ -1257,7 +1260,14 @@
     function openModal(dayIndex) {
       const monday = getMonday(new Date());
       monday.setDate(monday.getDate() + (currentWeekOffset * 7) + dayIndex);
-      document.getElementById('selectedDate').value = monday.toISOString().split('T')[0];
+      const dateStr = monday.toISOString().split('T')[0];
+
+      if (checkVacation(dateStr) || checkHoliday(dateStr)) {
+        alert('Impossible d\'ajouter un devoir pendant les vacances ou un jour férié !');
+        return;
+      }
+
+      document.getElementById('selectedDate').value = dateStr;
       document.getElementById('editingTaskId').value = '';
       document.getElementById('taskForm').reset();
       document.getElementById('modalTaskTitleText').textContent = 'Nouveau travail à faire';
@@ -1301,7 +1311,10 @@
     }
 
     function deleteTask(id) {
-      if (!isAdmin) return;
+      if (!isAdmin) {
+        alert("Seul l'administrateur peut supprimer un devoir.");
+        return;
+      }
       if (confirm('Voulez-vous vraiment supprimer ce devoir ?')) {
         tasks = tasks.filter(t => t.id !== id);
         localStorage.setItem('cdt_tasks', JSON.stringify(tasks));
@@ -1310,7 +1323,6 @@
     }
 
     function editTask(id) {
-      if (!isAdmin) return;
       const task = tasks.find(t => t.id === id);
       if (!task) return;
 
@@ -1325,14 +1337,25 @@
       document.getElementById('taskModal').style.display = 'flex';
     }
 
+    // FILTRAGE DYNAMIQUE DES MATIÈRES SELON LES SPÉCIALITÉS SÉLECTIONNÉES
     function populateMatiereSelects() {
-      const select = document.getElementById('taskMatiere');
-      select.innerHTML = ALL_MATIERES.map(m => `<option value="${m.id}">${m.label}</option>`).join('');
+      const filteredMatieres = ALL_MATIERES.filter(m => {
+        if (m.category === 'common') return true;
+        if (m.id === userConfig.speA || m.id === userConfig.speB) return true;
+        return false;
+      });
+
+      if (userConfig.lvb) {
+        filteredMatieres.push({ id: userConfig.lvb, label: userConfig.lvb.replace('LVB_', 'LVB ') });
+      }
+
+      const taskMatiereSelect = document.getElementById('taskMatiere');
+      taskMatiereSelect.innerHTML = filteredMatieres.map(m => `<option value="${m.id}">${m.label}</option>`).join('');
 
       const speA = document.getElementById('selectSpeA');
       const speB = document.getElementById('selectSpeB');
 
-      const speOptions = ALL_MATIERES.filter(m => ['Maths', 'SPC', 'SVT', 'SES', 'HGGSP', 'NSI', 'AMC'].includes(m.id));
+      const speOptions = ALL_MATIERES.filter(m => m.category === 'spe');
 
       speA.innerHTML = speOptions.map(m => `<option value="${m.id}">${m.label}</option>`).join('');
       speB.innerHTML = speOptions.map(m => `<option value="${m.id}">${m.label}</option>`).join('');
@@ -1369,6 +1392,7 @@
       userConfig.lvb = document.getElementById('selectLVB').value;
 
       localStorage.setItem('cdt_user_config', JSON.stringify(userConfig));
+      populateMatiereSelects();
       document.getElementById('speModal').style.display = 'none';
       alert('Vos choix de spécialités ont été sauvegardés !');
     }
