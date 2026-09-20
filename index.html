@@ -66,111 +66,6 @@
       background-position: 0 0, 20px 20px;
     }
 
-    /* THÈME JUNGLE */
-    body.theme-jungle {
-      --bg-main: #04140c;
-      --bg-card: #092618;
-      --bg-surface: #0f3824;
-      --bg-input: #04140c;
-      --text-main: #f0fdf4;
-      --text-muted: #86efac;
-      --border: rgba(134, 239, 172, 0.15);
-      --primary: #15803d;
-      --primary-hover: #166534;
-      --accent-glow: rgba(34, 197, 94, 0.35);
-      --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
-      background-image: 
-        radial-gradient(circle at 10% 10%, rgba(34, 197, 94, 0.12) 0%, transparent 45%),
-        radial-gradient(circle at 90% 90%, rgba(21, 128, 61, 0.2) 0%, transparent 50%),
-        radial-gradient(rgba(134, 239, 172, 0.2) 2px, transparent 2px);
-      background-size: 100% 100%, 100% 100%, 60px 60px;
-      background-attachment: fixed;
-    }
-
-    /* THÈME OCÉAN */
-    body.theme-ocean {
-      --bg-main: #03121e;
-      --bg-card: #072136;
-      --bg-surface: #0c314f;
-      --bg-input: #03121e;
-      --text-main: #ecfeff;
-      --text-muted: #67e8f9;
-      --border: rgba(103, 232, 249, 0.15);
-      --primary: #0284c7;
-      --primary-hover: #0369a1;
-      --accent-glow: rgba(14, 165, 233, 0.35);
-      --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
-      background-image: 
-        radial-gradient(ellipse at top, rgba(14, 165, 233, 0.25) 0%, transparent 70%),
-        radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.15) 0%, transparent 40%),
-        radial-gradient(rgba(103, 232, 249, 0.18) 2px, transparent 2px);
-      background-size: 100% 100%, 100% 100%, 50px 50px;
-      background-attachment: fixed;
-    }
-
-    /* THÈME DÉSERT */
-    body.theme-desert {
-      --bg-main: #1c100b;
-      --bg-card: #2e1b12;
-      --bg-surface: #42281b;
-      --bg-input: #1c100b;
-      --text-main: #fff7ed;
-      --text-muted: #fdba74;
-      --border: rgba(253, 186, 116, 0.15);
-      --primary: #ea580c;
-      --primary-hover: #c2410c;
-      --accent-glow: rgba(249, 115, 22, 0.35);
-      --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
-      background-image: 
-        radial-gradient(circle at 50% 0%, rgba(249, 115, 22, 0.25) 0%, transparent 60%),
-        radial-gradient(circle at 10% 80%, rgba(234, 88, 12, 0.2) 0%, transparent 40%),
-        radial-gradient(rgba(253, 186, 116, 0.22) 1.5px, transparent 1.5px);
-      background-size: 100% 100%, 100% 100%, 45px 45px;
-      background-attachment: fixed;
-    }
-
-    /* THÈME GOLD RUSH */
-    body.theme-gold {
-      --bg-main: #120e07;
-      --bg-card: #211a0e;
-      --bg-surface: #332817;
-      --bg-input: #120e07;
-      --text-main: #fefce8;
-      --text-muted: #fde047;
-      --border: rgba(253, 224, 71, 0.25);
-      --primary: #ca8a04;
-      --primary-hover: #a16207;
-      --accent-glow: rgba(234, 179, 8, 0.4);
-      --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.7);
-      background-image: 
-        radial-gradient(circle at 50% 30%, rgba(234, 179, 8, 0.15) 0%, transparent 50%),
-        radial-gradient(rgba(250, 204, 21, 0.2) 1.5px, transparent 1.5px);
-      background-size: 100% 100%, 35px 35px;
-      background-attachment: fixed;
-    }
-
-    /* THÈME ESPACE */
-    body.theme-space {
-      --bg-main: #03030c;
-      --bg-card: #0a0c1e;
-      --bg-surface: #121533;
-      --bg-input: #060714;
-      --text-main: #e0e7ff;
-      --text-muted: #818cf8;
-      --border: rgba(129, 140, 248, 0.25);
-      --primary: #6366f1;
-      --primary-hover: #4f46e5;
-      --accent-glow: rgba(99, 102, 241, 0.5);
-      --card-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.85);
-      background-image: 
-        radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.2) 0%, transparent 40%),
-        radial-gradient(circle at 85% 75%, rgba(168, 85, 247, 0.18) 0%, transparent 45%),
-        radial-gradient(rgba(255, 255, 255, 0.4) 1px, transparent 1px),
-        radial-gradient(rgba(129, 140, 248, 0.3) 1.5px, transparent 1.5px);
-      background-size: 100% 100%, 100% 100%, 40px 40px, 90px 90px;
-      background-attachment: fixed;
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
@@ -227,93 +122,7 @@
       z-index: 20;
       overflow: hidden;
       backdrop-filter: blur(12px);
-      transition: transform 0.3s ease, background-color 0.4s ease, border-color 0.4s ease;
-    }
-
-    /* ÉLÉMENTS DE DÉCORATION DE BARRE LATÉRALE POUR CHAQUE THÈME */
-    .sidebar-deco {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      z-index: 1;
-      overflow: hidden;
-    }
-
-    .theme-jungle .sidebar-deco::before {
-      content: "";
-      position: absolute;
-      top: -10px;
-      right: 15px;
-      width: 50px;
-      height: 140px;
-      background: 
-        radial-gradient(circle at 10px 30px, #22c55e 6px, transparent 7px),
-        radial-gradient(circle at 35px 70px, #16a34a 8px, transparent 9px),
-        radial-gradient(circle at 15px 110px, #15803d 7px, transparent 8px);
-      border-right: 3px solid #22c55e;
-      border-bottom-right-radius: 20px;
-      opacity: 0.85;
-      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));
-    }
-
-    .theme-jungle .sidebar-deco::after {
-      content: "🦎";
-      position: absolute;
-      bottom: 80px;
-      right: 12px;
-      font-size: 2rem;
-      transform: rotate(-35deg);
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6));
-      animation: lizardWiggle 6s ease-in-out infinite;
-    }
-
-    .theme-ocean .sidebar-deco::after {
-      content: "🐬";
-      position: absolute;
-      bottom: 80px;
-      right: 12px;
-      font-size: 2rem;
-      animation: oceanFloat 5s ease-in-out infinite;
-    }
-
-    .theme-space .sidebar-deco::after {
-      content: "🚀";
-      position: absolute;
-      bottom: 80px;
-      right: 12px;
-      font-size: 2rem;
-      animation: spaceFly 8s ease-in-out infinite;
-    }
-
-    .theme-desert .sidebar-deco::after {
-      content: "🌵";
-      position: absolute;
-      bottom: 80px;
-      right: 12px;
-      font-size: 2rem;
-    }
-
-    .theme-gold .sidebar-deco::after {
-      content: "👑";
-      position: absolute;
-      bottom: 80px;
-      right: 12px;
-      font-size: 2rem;
-    }
-
-    @keyframes lizardWiggle {
-      0%, 100% { transform: rotate(-35deg) translateY(0); }
-      50% { transform: rotate(-25deg) translateY(-5px); }
-    }
-
-    @keyframes oceanFloat {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-10px) rotate(10deg); }
-    }
-
-    @keyframes spaceFly {
-      0%, 100% { transform: translateY(0) translateX(0); }
-      50% { transform: translateY(-15px) translateX(-5px); }
+      transition: transform 0.3s ease;
     }
 
     .brand {
@@ -345,8 +154,6 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      position: relative;
-      z-index: 2;
     }
 
     .nav-label {
@@ -374,7 +181,6 @@
       width: 100%;
       text-align: left;
       transition: all 0.25s ease;
-      -webkit-appearance: none;
       appearance: none;
     }
 
@@ -391,8 +197,6 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      position: relative;
-      z-index: 2;
     }
 
     .admin-link {
@@ -410,8 +214,6 @@
       flex: 1;
       padding: 36px 44px;
       max-width: 1440px;
-      position: relative;
-      z-index: 2;
     }
 
     .top-header {
@@ -441,7 +243,6 @@
       padding: 20px 24px;
       margin-bottom: 32px;
       box-shadow: var(--card-shadow);
-      backdrop-filter: blur(8px);
     }
 
     .urgent-header {
@@ -476,7 +277,6 @@
       border-radius: 14px;
       padding: 14px 20px;
       margin-bottom: 28px;
-      backdrop-filter: blur(8px);
     }
 
     .btn-control {
@@ -511,10 +311,9 @@
       position: relative;
       transition: all 0.3s;
       overflow: hidden;
-      backdrop-filter: blur(8px);
     }
 
-    /* FILIGRANE STRICT POUR JOURS DE VACANCES SCOLAIRES EN SEMAINE OU JOURS FÉRIÉS */
+    /* FILIGRANE STRICT : Uniquement utilisé pour les jours bloqués (Fériés + Veille de vacances) */
     .day-column.holiday-or-vacation {
       opacity: 0.65;
       background-image: repeating-linear-gradient(
@@ -736,11 +535,8 @@
       }
       .main-wrapper { margin-left: 0; padding: 76px 16px 30px 16px; max-width: 100%; }
       .top-header { flex-direction: column; align-items: flex-start; gap: 10px; margin-bottom: 20px; }
-      .header-title h1 { font-size: 1.5rem; }
       .week-navigation { padding: 10px; gap: 8px; margin-bottom: 16px; }
-      .btn-control { padding: 10px 12px; font-size: 0.8rem; }
-      .week-title { font-size: 0.85rem; font-weight: 700; text-align: center; }
-
+      
       .mobile-days-tabs {
         display: flex;
         gap: 8px;
@@ -782,8 +578,6 @@
   <div class="mobile-backdrop" id="mobileBackdrop" onclick="toggleMobileMenu()"></div>
 
   <aside class="sidebar" id="sidebar">
-    <div class="sidebar-deco"></div>
-
     <div class="brand">
       <div class="brand-icon">1F</div>
       <div>
@@ -805,11 +599,6 @@
       <select id="themeSelector" class="theme-select" onchange="changeTheme(this.value)">
         <option value="dark">🌙 Thème sombre</option>
         <option value="light">☀️ Thème clair</option>
-        <option value="jungle">🌿 Jungle</option>
-        <option value="ocean">🌊 Océan</option>
-        <option value="desert">🏜️ Désert</option>
-        <option value="gold">✨ Gold Rush</option>
-        <option value="space">🚀 Espace</option>
       </select>
     </div>
 
@@ -821,6 +610,7 @@
   </aside>
 
   <main class="main-wrapper">
+    <!-- Bannière de vacances (s'affiche uniquement pendant les vacances) -->
     <div class="vacation-banner" id="vacationBanner">
       <span id="vacationIconLeft">🌴</span>
       <span id="vacationMessage">Période de Vacances Scolaires à Tahiti !</span>
@@ -851,26 +641,11 @@
     </nav>
 
     <div class="mobile-days-tabs" id="mobileDaysTabs">
-      <div class="mobile-day-tab active" onclick="switchMobileDay(0)">
-        <span class="tab-name">Lun</span>
-        <span class="tab-date" id="tab-date-0">-</span>
-      </div>
-      <div class="mobile-day-tab" onclick="switchMobileDay(1)">
-        <span class="tab-name">Mar</span>
-        <span class="tab-date" id="tab-date-1">-</span>
-      </div>
-      <div class="mobile-day-tab" onclick="switchMobileDay(2)">
-        <span class="tab-name">Mer</span>
-        <span class="tab-date" id="tab-date-2">-</span>
-      </div>
-      <div class="mobile-day-tab" onclick="switchMobileDay(3)">
-        <span class="tab-name">Jeu</span>
-        <span class="tab-date" id="tab-date-3">-</span>
-      </div>
-      <div class="mobile-day-tab" onclick="switchMobileDay(4)">
-        <span class="tab-name">Ven</span>
-        <span class="tab-date" id="tab-date-4">-</span>
-      </div>
+      <div class="mobile-day-tab active" onclick="switchMobileDay(0)"><span class="tab-name">Lun</span><span class="tab-date" id="tab-date-0">-</span></div>
+      <div class="mobile-day-tab" onclick="switchMobileDay(1)"><span class="tab-name">Mar</span><span class="tab-date" id="tab-date-1">-</span></div>
+      <div class="mobile-day-tab" onclick="switchMobileDay(2)"><span class="tab-name">Mer</span><span class="tab-date" id="tab-date-2">-</span></div>
+      <div class="mobile-day-tab" onclick="switchMobileDay(3)"><span class="tab-name">Jeu</span><span class="tab-date" id="tab-date-3">-</span></div>
+      <div class="mobile-day-tab" onclick="switchMobileDay(4)"><span class="tab-name">Ven</span><span class="tab-date" id="tab-date-4">-</span></div>
     </div>
 
     <section class="timetable-grid">
@@ -988,24 +763,34 @@
     let activeMobileDayIndex = 0;
     let isAdmin = localStorage.getItem('cdt_admin') === 'true';
 
-    // CALENDRIER OFFICIEL TAHITI 2026-2027
-    const VACANCES_TAHITI_2026_2027 = [
+    // CALENDRIER DES VACANCES (Sert pour la bannière)
+    const VACANCES_TAHITI = [
       { name: "Vacances de Septembre", start: "2026-09-14", end: "2026-09-18", iconL: "🌺", iconR: "🌴" },
       { name: "Vacances de la Toussaint", start: "2026-10-26", end: "2026-11-06", iconL: "🍂", iconR: "🎃" },
       { name: "Vacances de Noël", start: "2026-12-14", end: "2027-01-08", iconL: "🎄", iconR: "❄️" },
       { name: "Vacances de Février", start: "2027-02-15", end: "2027-02-19", iconL: "🌺", iconR: "🌴" },
       { name: "Vacances de Pâques", start: "2027-03-29", end: "2027-04-09", iconL: "✝️", iconR: "🐣" },
       { name: "Vacances de Mai", start: "2027-05-17", end: "2027-05-21", iconL: "🌺", iconR: "☀️" },
-      { name: "Grandes Vacances (Fin des cours)", start: "2027-06-09", end: "2027-08-23", iconL: "☀️", iconR: "🌊" }
+      { name: "Grandes Vacances", start: "2027-06-09", end: "2027-08-23", iconL: "☀️", iconR: "🌊" }
     ];
 
-    // JOURS FÉRIÉS DE TAHITI
+    // VENDREDIS STRICTEMENT BLOQUÉS (Veille de vacances)
+    const VENDREDIS_AVANT_VACANCES = [
+      "2026-09-11", // Avant Septembre
+      "2026-10-23", // Avant Toussaint
+      "2026-12-11", // Avant Noël
+      "2027-02-12", // Avant Février
+      "2027-03-26", // Avant Pâques
+      "2027-05-14"  // Avant Mai
+    ];
+
+    // JOURS FÉRIÉS (CORRIGÉ: Matari'i i ni'a au 20 novembre 2026)
     const JOURS_FERIES_TAHITI = [
       { date: "2026-11-01", label: "Toussaint 🍂" },
       { date: "2026-11-11", label: "Armistice 1918 🕊️" },
+      { date: "2026-11-20", label: "Matari'i i ni'a 🌺" }, // <-- CORRECTION EXACTE
       { date: "2026-12-25", label: "Noël 🎄" },
       { date: "2027-01-01", label: "Jour de l'An ✨" },
-      { date: "2027-02-20", label: "Matari'i i ni'a 🌺" },
       { date: "2027-03-05", label: "Arrivée de l'Évangile ⛵" },
       { date: "2027-03-26", label: "Vendredi Saint ✝️" },
       { date: "2027-03-29", label: "Lundi de Pâques 🐣" },
@@ -1016,10 +801,10 @@
       { date: "2027-06-29", label: "Fête de l'Autonomie 🇵🇫" }
     ];
 
-    // TOUTES LES MATIÈRES (TRONC COMMUN + SPÉCIALITÉS DONT NSI)
+    // MATIÈRES (CORRIGÉ : "Maths" est maintenant dans common)
     const ALL_MATIERES = [
       { id: "Francais", label: "Français", category: "common" },
-      { id: "Maths", label: "Mathématiques", category: "spe" },
+      { id: "Maths", label: "Spé Mathématiques", category: "common" }, // <-- NE DISPARAITRA PLUS
       { id: "ENS-SPC", label: "Ens. Sci (Physique)", category: "common" },
       { id: "ENS-SVT", label: "Ens. Sci (SVT)", category: "common" },
       { id: "HG", label: "Histoire-Géo", category: "common" },
@@ -1034,8 +819,8 @@
     ];
 
     let userConfig = JSON.parse(localStorage.getItem('cdt_user_config')) || {
-      speA: 'Maths',
-      speB: 'SPC',
+      speA: 'SPC',
+      speB: 'SES',
       lvb: 'LVB_Espagnol'
     };
 
@@ -1049,14 +834,7 @@
       updateAdminStatus();
       populateMatiereSelects();
       renderWeek();
-
-      const today = new Date();
-      let dayIdx = today.getDay() - 1;
-      if (dayIdx >= 0 && dayIdx <= 4) {
-        switchMobileDay(dayIdx);
-      } else {
-        switchMobileDay(0);
-      }
+      switchMobileDay(Math.max(0, Math.min(4, new Date().getDay() - 1)));
     });
 
     function toggleMobileMenu() {
@@ -1065,21 +843,14 @@
     }
 
     function changeTheme(theme) {
-      document.body.className = '';
-      if (theme !== 'dark') {
-        document.body.classList.add('theme-' + theme);
-      }
+      document.body.className = theme === 'dark' ? '' : `theme-${theme}`;
       localStorage.setItem('cdt_theme', theme);
     }
 
     function switchMobileDay(index) {
       activeMobileDayIndex = index;
-      document.querySelectorAll('.mobile-day-tab').forEach((tab, i) => {
-        tab.classList.toggle('active', i === index);
-      });
-      document.querySelectorAll('.day-column').forEach((col, i) => {
-        col.classList.toggle('active-mobile-day', i === index);
-      });
+      document.querySelectorAll('.mobile-day-tab').forEach((tab, i) => tab.classList.toggle('active', i === index));
+      document.querySelectorAll('.day-column').forEach((col, i) => col.classList.toggle('active-mobile-day', i === index));
     }
 
     function getMonday(d) {
@@ -1093,27 +864,16 @@
       return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' });
     }
 
-    function checkVacation(dateStr) {
-      return VACANCES_TAHITI_2026_2027.find(v => dateStr >= v.start && dateStr <= v.end);
-    }
-
-    function checkHoliday(dateStr) {
-      return JOURS_FERIES_TAHITI.find(h => h.date === dateStr);
-    }
-
     function renderWeek() {
       const monday = getMonday(new Date());
       monday.setDate(monday.getDate() + (currentWeekOffset * 7));
-
       const friday = new Date(monday);
       friday.setDate(friday.getDate() + 4);
 
       document.getElementById('weekRangeTitle').textContent = 
         `Du ${monday.getDate()} ${monday.toLocaleDateString('fr-FR', {month: 'short'})} au ${friday.getDate()} ${friday.toLocaleDateString('fr-FR', {month: 'short', year: 'numeric'})}`;
 
-      const now = new Date();
-      const todayStr = now.toISOString().split('T')[0];
-
+      const todayStr = new Date().toISOString().split('T')[0];
       let activeVacation = null;
 
       for (let i = 0; i < 5; i++) {
@@ -1126,36 +886,35 @@
 
         const col = document.querySelector(`.day-column[data-dayindex="${i}"]`);
         const addBtn = document.getElementById(`add-btn-${i}`);
-        const isToday = (dateStr === todayStr);
+        
+        const vac = VACANCES_TAHITI.find(v => dateStr >= v.start && dateStr <= v.end);
+        const holiday = JOURS_FERIES_TAHITI.find(h => h.date === dateStr);
+        const isVeilleVacances = VENDREDIS_AVANT_VACANCES.includes(dateStr);
 
-        const vac = checkVacation(dateStr);
-        const holiday = checkHoliday(dateStr);
+        if (vac) activeVacation = vac;
 
-        // LE FILIGRANE S'APPLIQUE SI JOUR DE VACANCES OU FERIE
-        const isOffDay = !!(vac || holiday);
+        // ON NE BLOQUE QUE SI C'EST UN JOUR FÉRIÉ OU UN VENDREDI VEILLE DE VACANCES
+        const isBlocked = !!(holiday || isVeilleVacances);
 
-        col.classList.toggle('today', isToday);
-        col.classList.toggle('holiday-or-vacation', isOffDay);
+        col.classList.toggle('today', dateStr === todayStr);
+        col.classList.toggle('holiday-or-vacation', isBlocked);
 
-        // BLOQUER L'AJOUT SUR LES JOURS FILIGRANÉS
-        if (isOffDay) {
+        if (isBlocked) {
           addBtn.classList.add('disabled');
           addBtn.disabled = true;
-          addBtn.textContent = vac ? '⛔ Vacances' : '⛔ Jour Férié';
+          addBtn.textContent = isVeilleVacances ? '⛔ Départ Vacances' : '⛔ Jour Férié';
         } else {
           addBtn.classList.remove('disabled');
           addBtn.disabled = false;
           addBtn.textContent = '+ Ajouter un travail';
         }
 
-        const marker = col.querySelector('.today-marker');
-        marker.innerHTML = isToday ? '<span class="today-tag">Aujourd\'hui</span>' : '';
+        col.querySelector('.today-marker').innerHTML = (dateStr === todayStr) ? '<span class="today-tag">Aujourd\'hui</span>' : '';
 
-        if (vac) activeVacation = vac;
-
-        renderTasksForDay(col, dateStr, vac, holiday);
+        renderTasksForDay(col, dateStr, isVeilleVacances, holiday);
       }
 
+      // La bannière s'affiche si la semaine tombe pendant les vacances
       const banner = document.getElementById('vacationBanner');
       if (activeVacation) {
         document.getElementById('vacationIconLeft').textContent = activeVacation.iconL;
@@ -1174,16 +933,16 @@
       renderWeek();
     }
 
-    function renderTasksForDay(container, dateStr, vacation, holiday) {
+    function renderTasksForDay(container, dateStr, isVeilleVacances, holiday) {
       const taskContainer = container.querySelector('.task-container');
       taskContainer.innerHTML = '';
 
-      if (vacation) {
+      if (isVeilleVacances) {
         taskContainer.innerHTML = `
           <div style="text-align:center; padding: 40px 10px; color: var(--text-muted);">
-            <div style="font-size: 2.5rem; margin-bottom: 8px;">${vacation.iconL}</div>
-            <strong style="display:block; color:var(--text-main); font-size: 0.95rem;">${vacation.name}</strong>
-            <span style="font-size: 0.8rem;">Période de repos</span>
+            <div style="font-size: 2.5rem; margin-bottom: 8px;">🧳</div>
+            <strong style="display:block; color:var(--text-main); font-size: 0.95rem;">Veille de Vacances</strong>
+            <span style="font-size: 0.8rem;">Fin des cours !</span>
           </div>
         `;
         return;
@@ -1201,7 +960,6 @@
       }
 
       const dayTasks = tasks.filter(t => t.date === dateStr);
-
       if (dayTasks.length === 0) {
         taskContainer.innerHTML = `<div style="text-align:center; padding: 20px; color: var(--text-muted); font-size:0.82rem;">Aucun travail prévu</div>`;
       }
@@ -1210,10 +968,8 @@
         const card = document.createElement('div');
         card.className = `task-card ${t.type} matiere-${t.matiere} ${t.completed ? 'completed' : ''}`;
         
-        // BOUTON SUPPRIMER RÉSERVÉ À L'ADMIN SEULEMENT
-        const deleteButtonHTML = isAdmin 
-          ? `<button class="task-action-btn" style="color:#ef4444;" onclick="deleteTask('${t.id}')">🗑️ Supprimer</button>` 
-          : '';
+        // BOUTON SUPPRIMER UNIQUEMENT POUR L'ADMIN
+        const deleteBtn = isAdmin ? `<button class="task-action-btn" style="color:#ef4444;" onclick="deleteTask('${t.id}')">🗑️ Supprimer</button>` : '';
 
         card.innerHTML = `
           <div class="task-top-bar">
@@ -1224,7 +980,7 @@
           ${t.desc ? `<div class="task-desc">${t.desc}</div>` : ''}
           <div class="task-footer">
             <button class="task-action-btn" onclick="toggleTask('${t.id}')">${t.completed ? '↩️ Annuler' : '✓ Fait'}</button>
-            ${deleteButtonHTML}
+            ${deleteBtn}
           </div>
         `;
         taskContainer.appendChild(card);
@@ -1235,7 +991,6 @@
       const urgentList = document.getElementById('urgentList');
       const today = new Date();
       today.setHours(0,0,0,0);
-
       const in3Days = new Date(today);
       in3Days.setDate(in3Days.getDate() + 3);
 
@@ -1262,8 +1017,8 @@
       monday.setDate(monday.getDate() + (currentWeekOffset * 7) + dayIndex);
       const dateStr = monday.toISOString().split('T')[0];
 
-      if (checkVacation(dateStr) || checkHoliday(dateStr)) {
-        alert('Impossible d\'ajouter un devoir pendant les vacances ou un jour férié !');
+      if (JOURS_FERIES_TAHITI.find(h => h.date === dateStr) || VENDREDIS_AVANT_VACANCES.includes(dateStr)) {
+        alert('Action impossible sur un jour bloqué !');
         return;
       }
 
@@ -1274,27 +1029,24 @@
       document.getElementById('taskModal').style.display = 'flex';
     }
 
-    function closeModal() {
-      document.getElementById('taskModal').style.display = 'none';
-    }
+    function closeModal() { document.getElementById('taskModal').style.display = 'none'; }
 
     document.getElementById('taskForm').addEventListener('submit', (e) => {
       e.preventDefault();
       const id = document.getElementById('editingTaskId').value || Date.now().toString();
-      const date = document.getElementById('selectedDate').value;
-      const type = document.getElementById('taskType').value;
-      const matiere = document.getElementById('taskMatiere').value;
-      const title = document.getElementById('taskTitle').value;
-      const desc = document.getElementById('taskDesc').value;
+      const taskData = {
+        id,
+        date: document.getElementById('selectedDate').value,
+        type: document.getElementById('taskType').value,
+        matiere: document.getElementById('taskMatiere').value,
+        title: document.getElementById('taskTitle').value,
+        desc: document.getElementById('taskDesc').value,
+        completed: false
+      };
 
       const existingIndex = tasks.findIndex(t => t.id === id);
-      const taskData = { id, date, type, matiere, title, desc, completed: false };
-
-      if (existingIndex > -1) {
-        tasks[existingIndex] = { ...tasks[existingIndex], ...taskData };
-      } else {
-        tasks.push(taskData);
-      }
+      if (existingIndex > -1) tasks[existingIndex] = { ...tasks[existingIndex], ...taskData };
+      else tasks.push(taskData);
 
       localStorage.setItem('cdt_tasks', JSON.stringify(tasks));
       closeModal();
@@ -1325,7 +1077,6 @@
     function editTask(id) {
       const task = tasks.find(t => t.id === id);
       if (!task) return;
-
       document.getElementById('modalTaskTitleText').textContent = 'Modifier le travail';
       document.getElementById('editingTaskId').value = task.id;
       document.getElementById('selectedDate').value = task.date;
@@ -1333,29 +1084,20 @@
       document.getElementById('taskMatiere').value = task.matiere;
       document.getElementById('taskTitle').value = task.title;
       document.getElementById('taskDesc').value = task.desc;
-
       document.getElementById('taskModal').style.display = 'flex';
     }
 
-    // FILTRAGE DYNAMIQUE DES MATIÈRES SELON LES SPÉCIALITÉS SÉLECTIONNÉES
     function populateMatiereSelects() {
-      const filteredMatieres = ALL_MATIERES.filter(m => {
-        if (m.category === 'common') return true;
-        if (m.id === userConfig.speA || m.id === userConfig.speB) return true;
-        return false;
-      });
-
+      const filteredMatieres = ALL_MATIERES.filter(m => m.category === 'common' || m.id === userConfig.speA || m.id === userConfig.speB);
       if (userConfig.lvb) {
         filteredMatieres.push({ id: userConfig.lvb, label: userConfig.lvb.replace('LVB_', 'LVB ') });
       }
 
-      const taskMatiereSelect = document.getElementById('taskMatiere');
-      taskMatiereSelect.innerHTML = filteredMatieres.map(m => `<option value="${m.id}">${m.label}</option>`).join('');
-
-      const speA = document.getElementById('selectSpeA');
-      const speB = document.getElementById('selectSpeB');
+      document.getElementById('taskMatiere').innerHTML = filteredMatieres.map(m => `<option value="${m.id}">${m.label}</option>`).join('');
 
       const speOptions = ALL_MATIERES.filter(m => m.category === 'spe');
+      const speA = document.getElementById('selectSpeA');
+      const speB = document.getElementById('selectSpeB');
 
       speA.innerHTML = speOptions.map(m => `<option value="${m.id}">${m.label}</option>`).join('');
       speB.innerHTML = speOptions.map(m => `<option value="${m.id}">${m.label}</option>`).join('');
@@ -1366,14 +1108,11 @@
     }
 
     function checkMatiereVisibility() {
-      const type = document.getElementById('taskType').value;
-      document.getElementById('matiereGroup').style.display = type === 'info' ? 'none' : 'block';
+      document.getElementById('matiereGroup').style.display = document.getElementById('taskType').value === 'info' ? 'none' : 'block';
     }
 
     function openSpeModal() {
-      if (document.getElementById('sidebar').classList.contains('open')) {
-        toggleMobileMenu();
-      }
+      if (document.getElementById('sidebar').classList.contains('open')) toggleMobileMenu();
       document.getElementById('speModal').style.display = 'flex';
     }
 
@@ -1390,36 +1129,27 @@
       userConfig.speA = document.getElementById('selectSpeA').value;
       userConfig.speB = document.getElementById('selectSpeB').value;
       userConfig.lvb = document.getElementById('selectLVB').value;
-
       localStorage.setItem('cdt_user_config', JSON.stringify(userConfig));
       populateMatiereSelects();
       document.getElementById('speModal').style.display = 'none';
-      alert('Vos choix de spécialités ont été sauvegardés !');
     }
 
     function openAdminModal() {
-      if (document.getElementById('sidebar').classList.contains('open')) {
-        toggleMobileMenu();
-      }
+      if (document.getElementById('sidebar').classList.contains('open')) toggleMobileMenu();
       document.getElementById('adminModal').style.display = 'flex';
     }
 
-    function closeAdminModal() {
-      document.getElementById('adminModal').style.display = 'none';
-    }
+    function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
 
     function handleAdminLogin(e) {
       e.preventDefault();
-      const pass = document.getElementById('adminPass').value;
-      if (pass === '1ereFcahierdetexte202627') {
+      if (document.getElementById('adminPass').value === '1ereFcahierdetexte202627') {
         isAdmin = true;
         localStorage.setItem('cdt_admin', 'true');
         updateAdminStatus();
         closeAdminModal();
         renderWeek();
-      } else {
-        alert('Mot de passe incorrect !');
-      }
+      } else alert('Mot de passe incorrect !');
     }
 
     function logoutAdmin() {
