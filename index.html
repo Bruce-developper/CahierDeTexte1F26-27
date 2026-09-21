@@ -1003,9 +1003,9 @@
     const JOURS_FERIES_TAHITI = [
       { date: "2026-11-01", label: "Toussaint 🍂" },
       { date: "2026-11-11", label: "Armistice 1918 🕊️" },
+      { date: "2026-11-20", label: "Matari'i i ni'a 🌺" },
       { date: "2026-12-25", label: "Noël 🎄" },
       { date: "2027-01-01", label: "Jour de l'An ✨" },
-      { date: "2027-02-20", label: "Matari'i i ni'a 🌺" },
       { date: "2027-03-05", label: "Arrivée de l'Évangile ⛵" },
       { date: "2027-03-26", label: "Vendredi Saint ✝️" },
       { date: "2027-03-29", label: "Lundi de Pâques 🐣" },
@@ -1013,7 +1013,9 @@
       { date: "2027-05-06", label: "Ascension ✨" },
       { date: "2027-05-08", label: "Victoire 1945 🕊️" },
       { date: "2027-05-17", label: "Lundi de Pentecôte 🕊️" },
-      { date: "2027-06-29", label: "Fête de l'Autonomie 🇵🇫" }
+      { date: "2027-06-29", label: "Fête de l'Autonomie 🇵🇫" },
+      { date: "2027-07-14", label: "Fête Nationale 🎆" },
+      { date: "2027-08-15", label: "Assomption 🙏" }
     ];
 
     // TOUTES LES MATIÈRES (TRONC COMMUN + SPÉCIALITÉS DONT NSI)
@@ -1093,6 +1095,16 @@
       return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' });
     }
 
+    // Formate une date en "YYYY-MM-DD" en heure LOCALE (et non UTC comme toISOString())
+    // pour éviter le décalage d'un jour dans les fuseaux horaires négatifs (ex: Tahiti UTC-10),
+    // qui faisait apparaître certains vendredis de vacances comme des jours d'école.
+    function toDateKey(d) {
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
     function checkVacation(dateStr) {
       return VACANCES_TAHITI_2026_2027.find(v => dateStr >= v.start && dateStr <= v.end);
     }
@@ -1112,14 +1124,14 @@
         `Du ${monday.getDate()} ${monday.toLocaleDateString('fr-FR', {month: 'short'})} au ${friday.getDate()} ${friday.toLocaleDateString('fr-FR', {month: 'short', year: 'numeric'})}`;
 
       const now = new Date();
-      const todayStr = now.toISOString().split('T')[0];
+      const todayStr = toDateKey(now);
 
       let activeVacation = null;
 
       for (let i = 0; i < 5; i++) {
         const currentDate = new Date(monday);
         currentDate.setDate(currentDate.getDate() + i);
-        const dateStr = currentDate.toISOString().split('T')[0];
+        const dateStr = toDateKey(currentDate);
 
         document.getElementById(`date-${i}`).textContent = formatDateShort(currentDate);
         document.getElementById(`tab-date-${i}`).textContent = formatDateShort(currentDate);
@@ -1260,7 +1272,7 @@
     function openModal(dayIndex) {
       const monday = getMonday(new Date());
       monday.setDate(monday.getDate() + (currentWeekOffset * 7) + dayIndex);
-      const dateStr = monday.toISOString().split('T')[0];
+      const dateStr = toDateKey(monday);
 
       if (checkVacation(dateStr) || checkHoliday(dateStr)) {
         alert('Impossible d\'ajouter un devoir pendant les vacances ou un jour férié !');
