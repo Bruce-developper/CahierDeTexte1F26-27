@@ -1113,6 +1113,23 @@
       return JOURS_FERIES_TAHITI.find(h => h.date === dateStr);
     }
 
+    // Détermine si un jour doit être filigrané parce qu'il est déjà passé,
+    // ou parce que l'heure de coupure du jour même est dépassée :
+    // 16h40 du lundi au vendredi, sauf le mercredi (dayIndex 2) où la coupure est à 11h25.
+    function checkPastCutoff(dateStr, dayIndex, now) {
+      const todayStr = toDateKey(now);
+      if (dateStr < todayStr) return true;
+      if (dateStr > todayStr) return false;
+
+      const isWednesday = dayIndex === 2;
+      const cutoffHour = isWednesday ? 11 : 16;
+      const cutoffMinute = isWednesday ? 25 : 40;
+      const nowMinutes = now.getHours() * 60 + now.getMinutes();
+      const cutoffMinutes = cutoffHour * 60 + cutoffMinute;
+
+      return nowMinutes >= cutoffMinutes;
+    }
+
     function renderWeek() {
       const monday = getMonday(new Date());
       monday.setDate(monday.getDate() + (currentWeekOffset * 7));
@@ -1143,11 +1160,13 @@
         const vac = checkVacation(dateStr);
         const holiday = checkHoliday(dateStr);
 
-        // LE FILIGRANE S'APPLIQUE SI JOUR DE VACANCES OU FERIE
+        // LE FILIGRANE S'APPLIQUE SI JOUR DE VACANCES OU FERIE, OU SI LE JOUR EST PASSÉ /
+        // SI L'HEURE DE COUPURE DU JOUR MÊME EST DÉPASSÉE
         const isOffDay = !!(vac || holiday);
+        const isPastCutoff = checkPastCutoff(dateStr, i, now);
 
         col.classList.toggle('today', isToday);
-        col.classList.toggle('holiday-or-vacation', isOffDay);
+        col.classList.toggle('holiday-or-vacation', isOffDay || isPastCutoff);
 
         // BLOQUER L'AJOUT SUR LES JOURS FILIGRANÉS
         if (isOffDay) {
