@@ -983,7 +983,33 @@
     </div>
   </div>
 
+  <!-- Firebase : nécessaire pour synchroniser les devoirs entre utilisateurs -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
   <script>
+    // IMPORTANT : remplace ces valeurs par la configuration de TON projet Firebase.
+    const firebaseConfig = {
+      apiKey: "REMPLACER_API_KEY",
+      authDomain: "REMPLACER_PROJECT_ID.firebaseapp.com",
+      projectId: "REMPLACER_PROJECT_ID",
+      storageBucket: "REMPLACER_PROJECT_ID.appspot.com",
+      messagingSenderId: "REMPLACER_MESSAGING_SENDER_ID",
+      appId: "REMPLACER_APP_ID"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const tasksCollection = db.collection('tasks');
+
+    // Identifiant local de cet utilisateur : son état « Fait » reste personnel à ce navigateur.
+    let currentUserId = localStorage.getItem('cdt_user_id');
+    if (!currentUserId) {
+      currentUserId = (window.crypto && crypto.randomUUID)
+        ? crypto.randomUUID()
+        : 'user_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
+      localStorage.setItem('cdt_user_id', currentUserId);
+    }
+
     let currentWeekOffset = 0;
     let activeMobileDayIndex = 0;
     let isAdmin = localStorage.getItem('cdt_admin') === 'true';
@@ -1041,7 +1067,8 @@
       lvb: 'LVB_Espagnol'
     };
 
-    let tasks = JSON.parse(localStorage.getItem('cdt_tasks')) || [];
+    let tasks = [];
+    let tasksListenerStarted = false;
 
     document.addEventListener('DOMContentLoaded', () => {
       const currentTheme = localStorage.getItem('cdt_theme') || 'dark';
@@ -1050,7 +1077,7 @@
 
       updateAdminStatus();
       populateMatiereSelects();
-      renderWeek();
+      startSharedTasksSync();
 
       const today = new Date();
       let dayIdx = today.getDay() - 1;
@@ -1060,6 +1087,18 @@
         switchMobileDay(0);
       }
     });
+
+    function startSharedTasksSync() {
+      if (tasksListenerStarted) return;
+      tasksListenerStarted = true;
+      tasksCollection.onSnapshot((snapshot) => {
+        tasks = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+        renderWeek();
+      }, (error) => {
+        console.error('Erreur de synchronisation des devoirs :', error);
+        alert("Impossible de charger les devoirs partagés. Vérifie la configuration Firebase et les règles Firestore.");
+      });
+    }
 
     function toggleMobileMenu() {
       document.getElementById('sidebar').classList.toggle('open');
@@ -1239,7 +1278,8 @@
 
       dayTasks.forEach(t => {
         const card = document.createElement('div');
-        card.className = `task-card ${t.type} matiere-${t.matiere} ${t.completed ? 'completed' : ''}`;
+        const isCompletedByCurrentUser = Array.isArray(t.completedBy) && t.completedBy.includes(currentUserId);
+        card.className = `task-card ${t.type} matiere-${t.matiere} ${isCompletedByCurrentUser ? 'completed' : ''}`;
         
         // BOUTON SUPPRIMER RÉSERVÉ À L'ADMIN SEULEMENT
         const deleteButtonHTML = isAdmin 
@@ -1254,7 +1294,7 @@
           <div class="task-title">${t.title}</div>
           ${t.desc ? `<div class="task-desc">${t.desc}</div>` : ''}
           <div class="task-footer">
-            <button class="task-action-btn" onclick="toggleTask('${t.id}')">${t.completed ? '↩️ Annuler' : '✓ Fait'}</button>
+            <button class="task-action-btn" onclick="toggleTask('${t.id}')">${isCompletedByCurrentUser ? '↩️ Annuler' : '✓ Fait'}</button>
             ${deleteButtonHTML}
           </div>
         `;
@@ -1272,7 +1312,8 @@
 
       const imminents = tasks.filter(t => {
         const tDate = new Date(t.date);
-        return t.type === 'controle' && !t.completed && tDate >= today && tDate <= in3Days;
+        const completedByCurrentUser = Array.isArray(t.completedBy) && t.completedBy.includes(currentUserId);
+        return t.type === 'controle' && !completedByCurrentUser && tDate >= today && tDate <= in3Days;
       });
 
       if (imminents.length === 0) {
@@ -1309,7 +1350,7 @@
       document.getElementById('taskModal').style.display = 'none';
     }
 
-    document.getElementById('taskForm').addEventListener('submit', (e) => {
+    document.getElementById('taskForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const id = document.getElementById('editingTaskId').value || Date.now().toString();
       const date = document.getElementById('selectedDate').value;
@@ -1318,38 +1359,49 @@
       const title = document.getElementById('taskTitle').value;
       const desc = document.getElementById('taskDesc').value;
 
-      const existingIndex = tasks.findIndex(t => t.id === id);
-      const taskData = { id, date, type, matiere, title, desc, completed: false };
+      const existingTask = tasks.find(t => t.id === id);
+      const taskData = { date, type, matiere, title, desc, completedBy: existingTask && Array.isArray(existingTask.completedBy) ? existingTask.completedBy : [] };
 
-      if (existingIndex > -1) {
-        tasks[existingIndex] = { ...tasks[existingIndex], ...taskData };
-      } else {
-        tasks.push(taskData);
+      try {
+        await tasksCollection.doc(id).set(taskData, { merge: true });
+        closeModal();
+      } catch (error) {
+        console.error('Erreur lors de l’enregistrement du devoir :', error);
+        alert("Le devoir n'a pas pu être enregistré. Vérifie la configuration Firebase et les règles Firestore.");
       }
-
-      localStorage.setItem('cdt_tasks', JSON.stringify(tasks));
-      closeModal();
-      renderWeek();
     });
 
-    function toggleTask(id) {
+    async function toggleTask(id) {
       const task = tasks.find(t => t.id === id);
       if (task) {
-        task.completed = !task.completed;
-        localStorage.setItem('cdt_tasks', JSON.stringify(tasks));
-        renderWeek();
+        try {
+          const completedBy = Array.isArray(task.completedBy) ? [...task.completedBy] : [];
+          const userIndex = completedBy.indexOf(currentUserId);
+          if (userIndex >= 0) {
+            completedBy.splice(userIndex, 1);
+          } else {
+            completedBy.push(currentUserId);
+          }
+          await tasksCollection.doc(id).update({ completedBy });
+        } catch (error) {
+          console.error('Erreur lors de la mise à jour du devoir :', error);
+          alert("Impossible de modifier l'état du devoir partagé.");
+        }
       }
     }
 
-    function deleteTask(id) {
+    async function deleteTask(id) {
       if (!isAdmin) {
         alert("Seul l'administrateur peut supprimer un devoir.");
         return;
       }
       if (confirm('Voulez-vous vraiment supprimer ce devoir ?')) {
-        tasks = tasks.filter(t => t.id !== id);
-        localStorage.setItem('cdt_tasks', JSON.stringify(tasks));
-        renderWeek();
+        try {
+          await tasksCollection.doc(id).delete();
+        } catch (error) {
+          console.error('Erreur lors de la suppression du devoir :', error);
+          alert("Impossible de supprimer le devoir partagé.");
+        }
       }
     }
 
