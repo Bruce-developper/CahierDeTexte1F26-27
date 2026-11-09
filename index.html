@@ -1158,7 +1158,7 @@
     // TOUTES LES MATIÈRES (TRONC COMMUN + SPÉCIALITÉS DONT NSI)
     const ALL_MATIERES = [
       { id: "Francais", label: "Français", category: "common" },
-      { id: "Maths", label: "Mathématiques", category: "spe" },
+      { id: "Maths", label: "Mathématiques", category: "common" },
       { id: "ENS-SPC", label: "Ens. Sci (Physique)", category: "common" },
       { id: "ENS-SVT", label: "Ens. Sci (SVT)", category: "common" },
       { id: "HG", label: "Histoire-Géo", category: "common" },
@@ -1173,8 +1173,8 @@
     ];
 
     let userConfig = JSON.parse(localStorage.getItem('cdt_user_config')) || {
-      speA: 'Maths',
-      speB: 'SPC',
+      speA: 'SPC',
+      speB: 'SES',
       lvb: 'LVB_Espagnol'
     };
 
@@ -1549,6 +1549,12 @@
 
     // FILTRAGE DYNAMIQUE DES MATIÈRES SELON LES SPÉCIALITÉS SÉLECTIONNÉES
     function populateMatiereSelects() {
+      const validSpes = ALL_MATIERES.filter(m => m.category === 'spe').map(m => m.id);
+      if (!validSpes.includes(userConfig.speA)) userConfig.speA = validSpes[0];
+      if (!validSpes.includes(userConfig.speB) || userConfig.speB === userConfig.speA) {
+        userConfig.speB = validSpes.find(id => id !== userConfig.speA);
+      }
+
       const filteredMatieres = ALL_MATIERES.filter(m => {
         if (m.category === 'common') return true;
         if (m.id === userConfig.speA || m.id === userConfig.speB) return true;
