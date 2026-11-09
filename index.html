@@ -58,7 +58,7 @@
       --primary: #4338ca;
       --primary-hover: #3730a3;
       --accent-glow: rgba(67, 56, 202, 0.15);
-      --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+      --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04);
       background-image: 
         radial-gradient(#cbd5e1 1px, transparent 1px),
         radial-gradient(#3b82f6 1px, #f1f5f9 1px);
@@ -285,12 +285,35 @@
       animation: spaceFly 8s ease-in-out infinite;
     }
 
+    /* ESPACE : étoiles clignotantes dans la sidebar */
+    .space-star {
+      display: none;
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: white;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    body.theme-space .space-star {
+      display: block;
+      animation: twinkleStar 2.4s ease-in-out infinite;
+    }
+    @keyframes twinkleStar {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
+    }
+
     .theme-desert .sidebar-deco::after {
       content: "🌵";
       position: absolute;
       bottom: 80px;
       right: 12px;
       font-size: 2rem;
+      transition: transform 0.4s ease;
+    }
+    .theme-desert .sidebar:hover .sidebar-deco::after {
+      transform: scale(1.12) rotate(-6deg);
     }
 
     .theme-gold .sidebar-deco::after {
@@ -419,6 +442,34 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 32px;
+      position: relative;
+    }
+
+    /* JUNGLE : feuillage également dans l'en-tête + bordures vert mousse */
+    body.theme-jungle .top-header::after {
+      content: "";
+      position: absolute;
+      top: -14px;
+      right: -6px;
+      width: 64px;
+      height: 64px;
+      background:
+        radial-gradient(circle at 16px 18px, #22c55e 9px, transparent 10px),
+        radial-gradient(circle at 42px 36px, #16a34a 7px, transparent 8px);
+      opacity: 0.45;
+      pointer-events: none;
+      z-index: 0;
+    }
+    body.theme-jungle .header-title,
+    body.theme-jungle .academic-badge {
+      position: relative;
+      z-index: 1;
+    }
+    body.theme-jungle .day-column {
+      border-color: rgba(34, 197, 94, 0.25);
+    }
+    body.theme-jungle .task-card {
+      border-color: rgba(34, 197, 94, 0.18);
     }
 
     .header-title h1 { font-size: 2rem; font-weight: 800; }
@@ -514,6 +565,17 @@
       backdrop-filter: blur(8px);
     }
 
+    /* DÉSERT : léger grain de sable sur les colonnes */
+    body.theme-desert .day-column::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+      background-size: 5px 5px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
     /* FILIGRANE STRICT POUR JOURS DE VACANCES SCOLAIRES EN SEMAINE OU JOURS FÉRIÉS */
     .day-column.holiday-or-vacation {
       opacity: 0.65;
@@ -539,6 +601,15 @@
     .day-column.today {
       border-color: var(--primary);
       box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    /* SOMBRE : halo pulsé discret sur le jour actif */
+    @keyframes pulseGlowDark {
+      0%, 100% { box-shadow: 0 0 18px var(--accent-glow); }
+      50% { box-shadow: 0 0 30px var(--accent-glow); }
+    }
+    body.theme-dark .day-column.today {
+      animation: pulseGlowDark 2.6s ease-in-out infinite;
     }
 
     .day-header {
@@ -570,6 +641,29 @@
       flex-direction: column;
       gap: 12px;
       flex: 1;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* OCÉAN : vague animée en bas de chaque colonne de jour */
+    body.theme-ocean .day-column::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 22px;
+      background: repeating-linear-gradient(115deg, rgba(56, 189, 248, 0.28) 0 10px, transparent 10px 20px);
+      opacity: 0.45;
+      pointer-events: none;
+      z-index: 0;
+      animation: waveShift 6s linear infinite;
+    }
+    @keyframes waveShift {
+      0% { background-position-x: 0; }
+      100% { background-position-x: 40px; }
+    }
+    body.theme-ocean .add-task-btn {
+      position: relative;
+      z-index: 1;
     }
 
     .task-card {
@@ -616,6 +710,30 @@
 
     .task-card.devoir .task-badge { color: #f59e0b; }
     .task-card.controle .task-badge { color: #ef4444; }
+
+    /* CLAIR : accent corail pour les devoirs, pour se distinguer du bleu "Info" */
+    body.theme-light .task-card.devoir .task-badge { color: #ea580c; }
+    body.theme-light .task-card.devoir { border-left-color: #ea580c; }
+
+    /* GOLD RUSH : effet miroitant sur les cartes de contrôle/évaluation */
+    body.theme-gold .task-card.controle {
+      overflow: hidden;
+    }
+    body.theme-gold .task-card.controle::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -150%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+      animation: goldShimmer 3.4s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes goldShimmer {
+      0% { left: -150%; }
+      60%, 100% { left: 150%; }
+    }
     .task-card.info .task-badge { color: var(--primary); }
 
     .btn-edit-task {
@@ -782,7 +900,13 @@
   <div class="mobile-backdrop" id="mobileBackdrop" onclick="toggleMobileMenu()"></div>
 
   <aside class="sidebar" id="sidebar">
-    <div class="sidebar-deco"></div>
+    <div class="sidebar-deco">
+      <span class="space-star" style="top: 15%; left: 70%;"></span>
+      <span class="space-star" style="top: 35%; left: 20%; animation-delay: 0.5s;"></span>
+      <span class="space-star" style="top: 55%; left: 55%; animation-delay: 1s;"></span>
+      <span class="space-star" style="top: 70%; left: 30%; animation-delay: 1.5s;"></span>
+      <span class="space-star" style="top: 25%; left: 40%; animation-delay: 2s;"></span>
+    </div>
 
     <div class="brand">
       <div class="brand-icon">1F</div>
@@ -983,33 +1107,20 @@
     </div>
   </div>
 
-  <!-- Firebase : nécessaire pour synchroniser les devoirs entre utilisateurs -->
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
   <script>
-    // IMPORTANT : remplace ces valeurs par la configuration de TON projet Firebase.
-    const firebaseConfig = {
-      apiKey: "REMPLACER_API_KEY",
-      authDomain: "REMPLACER_PROJECT_ID.firebaseapp.com",
-      projectId: "REMPLACER_PROJECT_ID",
-      storageBucket: "REMPLACER_PROJECT_ID.appspot.com",
-      messagingSenderId: "REMPLACER_MESSAGING_SENDER_ID",
-      appId: "REMPLACER_APP_ID"
-    };
-
-    firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp({
+      apiKey: "AIzaSyBgMNFZCaKg9B7HVXV3-M9oRhH6kY1EImg",
+      authDomain: "site-1f.firebaseapp.com",
+      projectId: "site-1f",
+      storageBucket: "site-1f.firebasestorage.app",
+      messagingSenderId: "782327751651",
+      appId: "1:782327751651:web:b99dbef92ac4ab658e36d6"
+    });
     const db = firebase.firestore();
-    const tasksCollection = db.collection('tasks');
-
-    // Identifiant local de cet utilisateur : son état « Fait » reste personnel à ce navigateur.
-    let currentUserId = localStorage.getItem('cdt_user_id');
-    if (!currentUserId) {
-      currentUserId = (window.crypto && crypto.randomUUID)
-        ? crypto.randomUUID()
-        : 'user_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2);
-      localStorage.setItem('cdt_user_id', currentUserId);
-    }
-
+  </script>
+  <script>
     let currentWeekOffset = 0;
     let activeMobileDayIndex = 0;
     let isAdmin = localStorage.getItem('cdt_admin') === 'true';
@@ -1067,8 +1178,29 @@
       lvb: 'LVB_Espagnol'
     };
 
+    // Les devoirs sont partagés via Firebase (visibles par tous les élèves).
+    // L'état "Fait" reste personnel : il est gardé uniquement dans le navigateur de chacun.
     let tasks = [];
-    let tasksListenerStarted = false;
+    let completedMap = JSON.parse(localStorage.getItem('cdt_completed')) || {};
+
+    // Reprise automatique des anciens devoirs enregistrés dans ce navigateur (une seule fois, admin uniquement)
+    function migrateLocalTasks() {
+      if (!isAdmin) return;
+      const old = JSON.parse(localStorage.getItem('cdt_tasks') || '[]');
+      if (!old.length) return;
+      const batch = db.batch();
+      old.forEach(t => {
+        if (t.completed) completedMap[t.id] = true;
+        batch.set(db.collection('tasks').doc(String(t.id)), {
+          date: t.date, type: t.type, matiere: t.matiere, title: t.title, desc: t.desc || ''
+        });
+      });
+      batch.commit().then(() => {
+        localStorage.setItem('cdt_completed', JSON.stringify(completedMap));
+        localStorage.setItem('cdt_tasks_backup', JSON.stringify(old));
+        localStorage.removeItem('cdt_tasks');
+      }).catch(err => console.error('Migration impossible :', err));
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
       const currentTheme = localStorage.getItem('cdt_theme') || 'dark';
@@ -1077,7 +1209,16 @@
 
       updateAdminStatus();
       populateMatiereSelects();
-      startSharedTasksSync();
+      renderWeek();
+      migrateLocalTasks();
+
+      db.collection('tasks').onSnapshot((snapshot) => {
+        tasks = [];
+        snapshot.forEach(doc => {
+          tasks.push({ id: doc.id, ...doc.data(), completed: !!completedMap[doc.id] });
+        });
+        renderWeek();
+      }, (err) => console.error('Lecture des devoirs impossible :', err));
 
       const today = new Date();
       let dayIdx = today.getDay() - 1;
@@ -1088,28 +1229,13 @@
       }
     });
 
-    function startSharedTasksSync() {
-      if (tasksListenerStarted) return;
-      tasksListenerStarted = true;
-      tasksCollection.onSnapshot((snapshot) => {
-        tasks = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-        renderWeek();
-      }, (error) => {
-        console.error('Erreur de synchronisation des devoirs :', error);
-        alert("Impossible de charger les devoirs partagés. Vérifie la configuration Firebase et les règles Firestore.");
-      });
-    }
-
     function toggleMobileMenu() {
       document.getElementById('sidebar').classList.toggle('open');
       document.getElementById('mobileBackdrop').classList.toggle('open');
     }
 
     function changeTheme(theme) {
-      document.body.className = '';
-      if (theme !== 'dark') {
-        document.body.classList.add('theme-' + theme);
-      }
+      document.body.className = 'theme-' + theme;
       localStorage.setItem('cdt_theme', theme);
     }
 
@@ -1278,8 +1404,7 @@
 
       dayTasks.forEach(t => {
         const card = document.createElement('div');
-        const isCompletedByCurrentUser = Array.isArray(t.completedBy) && t.completedBy.includes(currentUserId);
-        card.className = `task-card ${t.type} matiere-${t.matiere} ${isCompletedByCurrentUser ? 'completed' : ''}`;
+        card.className = `task-card ${t.type} matiere-${t.matiere} ${t.completed ? 'completed' : ''}`;
         
         // BOUTON SUPPRIMER RÉSERVÉ À L'ADMIN SEULEMENT
         const deleteButtonHTML = isAdmin 
@@ -1294,7 +1419,7 @@
           <div class="task-title">${t.title}</div>
           ${t.desc ? `<div class="task-desc">${t.desc}</div>` : ''}
           <div class="task-footer">
-            <button class="task-action-btn" onclick="toggleTask('${t.id}')">${isCompletedByCurrentUser ? '↩️ Annuler' : '✓ Fait'}</button>
+            <button class="task-action-btn" onclick="toggleTask('${t.id}')">${t.completed ? '↩️ Annuler' : '✓ Fait'}</button>
             ${deleteButtonHTML}
           </div>
         `;
@@ -1312,8 +1437,7 @@
 
       const imminents = tasks.filter(t => {
         const tDate = new Date(t.date);
-        const completedByCurrentUser = Array.isArray(t.completedBy) && t.completedBy.includes(currentUserId);
-        return t.type === 'controle' && !completedByCurrentUser && tDate >= today && tDate <= in3Days;
+        return t.type === 'controle' && !t.completed && tDate >= today && tDate <= in3Days;
       });
 
       if (imminents.length === 0) {
@@ -1350,58 +1474,44 @@
       document.getElementById('taskModal').style.display = 'none';
     }
 
-    document.getElementById('taskForm').addEventListener('submit', async (e) => {
+    document.getElementById('taskForm').addEventListener('submit', (e) => {
       e.preventDefault();
-      const id = document.getElementById('editingTaskId').value || Date.now().toString();
+      const editingId = document.getElementById('editingTaskId').value;
       const date = document.getElementById('selectedDate').value;
       const type = document.getElementById('taskType').value;
       const matiere = document.getElementById('taskMatiere').value;
       const title = document.getElementById('taskTitle').value;
       const desc = document.getElementById('taskDesc').value;
 
-      const existingTask = tasks.find(t => t.id === id);
-      const taskData = { date, type, matiere, title, desc, completedBy: existingTask && Array.isArray(existingTask.completedBy) ? existingTask.completedBy : [] };
+      const taskData = { date, type, matiere, title, desc };
 
-      try {
-        await tasksCollection.doc(id).set(taskData, { merge: true });
-        closeModal();
-      } catch (error) {
-        console.error('Erreur lors de l’enregistrement du devoir :', error);
-        alert("Le devoir n'a pas pu être enregistré. Vérifie la configuration Firebase et les règles Firestore.");
-      }
+      const savePromise = editingId
+        ? db.collection('tasks').doc(editingId).update(taskData)
+        : db.collection('tasks').add(taskData);
+
+      savePromise
+        .then(() => closeModal())
+        .catch(err => alert("Erreur lors de l'enregistrement : " + err.message));
     });
 
-    async function toggleTask(id) {
+    function toggleTask(id) {
       const task = tasks.find(t => t.id === id);
       if (task) {
-        try {
-          const completedBy = Array.isArray(task.completedBy) ? [...task.completedBy] : [];
-          const userIndex = completedBy.indexOf(currentUserId);
-          if (userIndex >= 0) {
-            completedBy.splice(userIndex, 1);
-          } else {
-            completedBy.push(currentUserId);
-          }
-          await tasksCollection.doc(id).update({ completedBy });
-        } catch (error) {
-          console.error('Erreur lors de la mise à jour du devoir :', error);
-          alert("Impossible de modifier l'état du devoir partagé.");
-        }
+        task.completed = !task.completed;
+        if (task.completed) completedMap[id] = true; else delete completedMap[id];
+        localStorage.setItem('cdt_completed', JSON.stringify(completedMap));
+        renderWeek();
       }
     }
 
-    async function deleteTask(id) {
+    function deleteTask(id) {
       if (!isAdmin) {
         alert("Seul l'administrateur peut supprimer un devoir.");
         return;
       }
       if (confirm('Voulez-vous vraiment supprimer ce devoir ?')) {
-        try {
-          await tasksCollection.doc(id).delete();
-        } catch (error) {
-          console.error('Erreur lors de la suppression du devoir :', error);
-          alert("Impossible de supprimer le devoir partagé.");
-        }
+        db.collection('tasks').doc(id).delete()
+          .catch(err => alert('Erreur lors de la suppression : ' + err.message));
       }
     }
 
@@ -1500,6 +1610,7 @@
         updateAdminStatus();
         closeAdminModal();
         renderWeek();
+        migrateLocalTasks();
       } else {
         alert('Mot de passe incorrect !');
       }
