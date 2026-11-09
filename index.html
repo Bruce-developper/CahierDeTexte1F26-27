@@ -1111,12 +1111,12 @@
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
   <script>
     firebase.initializeApp({
-      apiKey: "AIzaSyBgMNFZCaKg9B7HVXV3-M9oRhH6kY1EImg",
-      authDomain: "site-1f.firebaseapp.com",
-      projectId: "site-1f",
-      storageBucket: "site-1f.firebasestorage.app",
-      messagingSenderId: "782327751651",
-      appId: "1:782327751651:web:b99dbef92ac4ab658e36d6"
+      apiKey: "AIzaSyDF7Yw-pBNz1lD6TaGa4Voc06xNGUD9N20",
+      authDomain: "cahier-de-texte-1f.firebaseapp.com",
+      projectId: "cahier-de-texte-1f",
+      storageBucket: "cahier-de-texte-1f.firebasestorage.app",
+      messagingSenderId: "172648732465",
+      appId: "1:172648732465:web:67e13608d1c489735e4210"
     });
     const db = firebase.firestore();
   </script>
@@ -1183,6 +1183,21 @@
     let tasks = [];
     let completedMap = JSON.parse(localStorage.getItem('cdt_completed')) || {};
 
+    let firebaseErrorShown = false;
+    function showFirebaseError(err) {
+      if (firebaseErrorShown) return;
+      firebaseErrorShown = true;
+      let msg = "Connexion à la base de données impossible (" + (err.code || err.message) + ").";
+      if (err.code === 'permission-denied') {
+        msg = "Firebase refuse l'accès : dans Firestore Database > onglet Règles, collez les règles indiquées puis cliquez sur Publier.";
+      } else if (err.code === 'not-found' || err.code === 'failed-precondition') {
+        msg = "La base Firestore n'existe pas encore : dans Firebase > Firestore Database, cliquez sur Créer une base de données.";
+      } else if (err.code === 'unavailable') {
+        msg = "Firebase est injoignable (connexion internet ou base de données non créée).";
+      }
+      alert("⚠️ " + msg);
+    }
+
     // Reprise automatique des anciens devoirs enregistrés dans ce navigateur (une seule fois, admin uniquement)
     function migrateLocalTasks() {
       if (!isAdmin) return;
@@ -1218,7 +1233,10 @@
           tasks.push({ id: doc.id, ...doc.data(), completed: !!completedMap[doc.id] });
         });
         renderWeek();
-      }, (err) => console.error('Lecture des devoirs impossible :', err));
+      }, (err) => {
+        console.error('Lecture des devoirs impossible :', err);
+        showFirebaseError(err);
+      });
 
       const today = new Date();
       let dayIdx = today.getDay() - 1;
@@ -1489,9 +1507,8 @@
         ? db.collection('tasks').doc(editingId).update(taskData)
         : db.collection('tasks').add(taskData);
 
-      savePromise
-        .then(() => closeModal())
-        .catch(err => alert("Erreur lors de l'enregistrement : " + err.message));
+      closeModal();
+      savePromise.catch(err => showFirebaseError(err));
     });
 
     function toggleTask(id) {
